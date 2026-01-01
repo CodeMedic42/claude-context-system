@@ -1,0 +1,220 @@
+# Repository Agent Context
+
+## Repository Summary
+
+This is a Node.js backend service that provides a REST API for managing user accounts and authentication. It serves as the authentication microservice for the larger e-commerce platform.
+
+## High-Level Repository Information
+
+- **Project Types**: Node.js Express Service, REST API
+- **Languages**: TypeScript 5.2, JavaScript (ES2022)
+- **Frameworks/Libraries**: Express 4.18, Prisma 5.0, Jest 29.5, PassportJS 0.6
+
+## Repository Structure
+
+```
+/
+├── src/                      # Main source code
+│   ├── controllers/          # Request handlers
+│   ├── services/             # Business logic layer
+│   ├── models/               # Database models (Prisma)
+│   ├── middleware/           # Express middleware
+│   ├── routes/               # API route definitions
+│   ├── utils/                # Utility functions
+│   └── server.ts             # Application entry point
+├── tests/                    # Test files
+│   ├── unit/                 # Unit tests
+│   ├── integration/          # Integration tests
+│   └── fixtures/             # Test data
+├── prisma/                   # Database schema and migrations
+│   ├── schema.prisma         # Prisma schema definition
+│   └── migrations/           # Database migrations
+├── config/                   # Configuration files
+├── docs/                     # API documentation
+├── package.json              # Dependencies and scripts
+├── tsconfig.json             # TypeScript configuration
+├── .env.example              # Environment variables template
+└── docker-compose.yml        # Local development services
+```
+
+## Services and APIs
+
+### Authentication API
+
+Base URL: `/api/v1/auth`
+
+#### Endpoints:
+
+**POST /register**
+- Creates new user account
+- Request: `{ email, password, name }`
+- Response: `{ user, token }`
+
+**POST /login**
+- Authenticates user and returns JWT
+- Request: `{ email, password }`
+- Response: `{ user, token }`
+
+**POST /logout**
+- Invalidates current session
+- Requires: Authorization header
+- Response: `{ message }`
+
+**GET /me**
+- Returns current user profile
+- Requires: Authorization header
+- Response: `{ user }`
+
+**POST /refresh**
+- Refreshes JWT token
+- Request: `{ refreshToken }`
+- Response: `{ token }`
+
+### User Management API
+
+Base URL: `/api/v1/users`
+
+**GET /users/:id**
+- Get user by ID
+- Requires: Admin role
+- Response: `{ user }`
+
+**PATCH /users/:id**
+- Update user profile
+- Requires: Owner or Admin
+- Response: `{ user }`
+
+## Databases
+
+### PostgreSQL Database
+
+**Table: users**
+- id: UUID (PK)
+- email: VARCHAR(255) UNIQUE NOT NULL
+- passwordHash: VARCHAR(255) NOT NULL
+- name: VARCHAR(100)
+- role: ENUM('user', 'admin')
+- createdAt: TIMESTAMP
+- updatedAt: TIMESTAMP
+
+**Table: refresh_tokens**
+- id: UUID (PK)
+- userId: UUID (FK → users.id)
+- token: VARCHAR(500) UNIQUE
+- expiresAt: TIMESTAMP
+- createdAt: TIMESTAMP
+
+**Table: sessions**
+- id: UUID (PK)
+- userId: UUID (FK → users.id)
+- ipAddress: VARCHAR(45)
+- userAgent: TEXT
+- lastActivity: TIMESTAMP
+
+## Environment Setup
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- Docker & Docker Compose
+- PostgreSQL 14+ (or use Docker)
+- npm or yarn package manager
+
+### System Configuration
+
+Create a `.env` file based on `.env.example`:
+
+```
+DATABASE_URL="postgresql://user:password@localhost:5432/authdb"
+JWT_SECRET="your-secret-key-here"
+JWT_EXPIRES_IN="15m"
+REFRESH_TOKEN_EXPIRES_IN="7d"
+NODE_ENV="development"
+PORT="3000"
+```
+
+### Local Services
+
+Start PostgreSQL and Redis using Docker:
+```bash
+docker-compose up -d
+```
+
+This starts:
+- PostgreSQL on port 5432
+- Redis on port 6379
+
+## Running the Application Locally
+
+### 1. Environment Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Run database migrations
+npx prisma migrate dev
+
+# Seed database (optional)
+npm run seed
+
+# Start development server
+npm run dev
+```
+
+**Access Points:**
+- **HTTP API**: http://localhost:3000
+- **API Documentation**: http://localhost:3000/api-docs
+- **Health Check**: http://localhost:3000/health
+
+## Repository Verification
+
+### Unit Tests
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+**Coverage Requirements:** Minimum 80% coverage on all src files
+
+### Linting and Code Style
+
+```bash
+# Run ESLint
+npm run lint
+
+# Fix auto-fixable issues
+npm run lint:fix
+
+# Check TypeScript types
+npm run type-check
+
+# Format code with Prettier
+npm run format
+```
+
+## Documentation
+
+- **README.md**: Quick start guide and overview
+- **docs/API.md**: Detailed API documentation
+- **docs/ARCHITECTURE.md**: System architecture and design decisions
+- **docs/DEPLOYMENT.md**: Deployment procedures
+
+**Important**: When adding new endpoints, update docs/API.md. When changing database schema, document in migration files.
+
+---
+
+# Agent File Metadata
+
+- **Date Created**: 2025-01-15T10:30:00Z
+- **Date Modified**: 2025-01-20T14:45:00Z
+- **Last Commit SHA**: a1b2c3d
+- **Template Version**: v1.2
+- **Generated By**: claude-md-manager

@@ -1,0 +1,41 @@
+{
+  "name": "claude-context-system",
+  "version": "2.0.0",
+  "description": "Automated claude.md context file manager for AI assistants - supports Claude Code and GitHub Copilot",
+  "private": true,
+  "keywords": [
+    "claude-code",
+    "github-copilot",
+    "context-management",
+    "documentation",
+    "ai-assistant",
+    "monorepo",
+    "claude.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/claude-context-system"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lerna": "^9.0.3"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "clean": "lerna clean -y",
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "build": "lerna run build",
+    "version": "lerna version",
+    "publish:commit": "lerna publish",
+    "publish:canary": "lerna publish --canary",
+    "changed": "lerna changed",
+    "diff": "lerna diff",
+    "exec": "lerna exec",
+    "plugin:install": "node plugin-setup/plugin-install.js",
+    "plugin:uninstall": "node plugin-setup/plugin-uninstall.js",
+    "plugin:template:update": "cp shared/templates/*.md claude-plugin/templates/",
+    "plugin:reinstall": "pnpm run plugin:uninstall && pnpm run plugin:template:update && pnpm run plugin:install"
+  }
+}

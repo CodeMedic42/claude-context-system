@@ -1,0 +1,19 @@
+{
+  "name": "claude-context-updater",
+  "version": "2.0.0",
+  "description": "Automated claude.md context file manager - create and update repository context documentation for AI assistants",
+  "author": {
+    "name": "Your Company"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/your-org/claude-context-system",
+  "keywords": [
+    "claude-code",
+    "github-copilot",
+    "context-management",
+    "documentation",
+    "ai-assistant",
+    "claude.md"
+  ],
+  "commands": "./commands"
+}

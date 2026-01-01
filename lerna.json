@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "version": "2.0.0",
+  "npmClient": "pnpm",
+  "command": {
+    "version": {
+      "allowBranch": ["master", "main"],
+      "conventionalCommits": false,
+      "exact": true,
+      "message": "chore(release): publish %s"
+    },
+    "publish": {
+      "ignoreChanges": [
+        "*.md",
+        "**/*.md",
+        "**/test/**",
+        "**/__tests__/**"
+      ],
+      "message": "chore(release): publish %s"
+    }
+  }
+}
