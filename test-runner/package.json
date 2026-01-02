@@ -1,6 +1,6 @@
 {
   "name": "@claude-context-system/test-runner",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Interactive test runner for Claude Context Updater plugin",
   "private": true,
   "main": "src/cli.js",
@@ -13,14 +13,14 @@
     "test": "jest"
   },
   "dependencies": {
-    "inquirer": "^8.2.6",
+    "blessed": "^0.1.81",
     "chalk": "^4.1.2",
-    "ora": "^5.4.1",
     "cli-table3": "^0.6.3",
     "date-fns": "^2.30.0",
-    "fs-extra": "^11.2.0",
     "diff": "^5.1.0",
-    "blessed": "^0.1.81"
+    "fs-extra": "^11.2.0",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1"
   },
   "devDependencies": {
     "jest": "^29.7.0"
