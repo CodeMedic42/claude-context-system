@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "npmClient": "pnpm",
   "packages": [
+    "claude-plugin",
     "test-runner"
   ],
   "command": {

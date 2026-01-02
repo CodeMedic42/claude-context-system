@@ -4,14 +4,22 @@ This document explains how version numbers and templates are managed across the 
 
 ## Version: Single Source of Truth
 
-Version number is stored in:
-
-**Claude Plugin**: `claude-plugin/.claude-plugin/plugin.json`
+**Lerna Monorepo**: `lerna.json`
 ```json
 {
   "version": "2.0.0"
 }
 ```
+
+When you run `pnpm run version`, Lerna updates:
+1. `lerna.json` (source of truth)
+2. All workspace `package.json` files:
+   - `package.json` (root)
+   - `claude-plugin/package.json`
+   - `test-runner/package.json`
+3. A `postversion` hook automatically syncs to `claude-plugin/.claude-plugin/plugin.json`
+
+**Result**: All version numbers stay in sync automatically.
 
 ## Template: Dual Locations (Automatically Synced!)
 
@@ -62,17 +70,44 @@ Both tools replace this placeholder with their version at runtime.
 
 When you need to bump the version:
 
-### For Minor/Patch Updates (e.g., 2.0.0 → 2.0.1)
+### Automated Version Bump (Recommended)
+
+Simply run Lerna's version command:
+
+```bash
+pnpm run version
+```
+
+**What happens automatically:**
+1. Lerna prompts you for version type (major/minor/patch)
+2. Updates all `package.json` files in workspace:
+   - `package.json` (root)
+   - `lerna.json`
+   - `claude-plugin/package.json`
+   - `test-runner/package.json`
+3. **Automatic sync**: The `postversion` hook in `claude-plugin/package.json` runs and syncs the version to `.claude-plugin/plugin.json`
+4. Creates a git commit and tag
+5. You just need to push:
+   ```bash
+   git push && git push --tags
+   ```
+
+**That's it!** The plugin manifest version is automatically kept in sync.
+
+### Manual Version Bump (Not Recommended)
+
+If you need to manually update versions:
 
 1. Update `claude-plugin/.claude-plugin/plugin.json`:
    ```json
    "version": "2.0.1"
    ```
 
-2. Update root `package.json` (optional, for monorepo tracking):
-   ```json
-   "version": "2.0.1"
-   ```
+2. Update all package.json files:
+   - `package.json` (root)
+   - `lerna.json`
+   - `claude-plugin/package.json`
+   - `test-runner/package.json`
 
 3. Commit and tag:
    ```bash
@@ -81,13 +116,6 @@ When you need to bump the version:
    git tag v2.0.1
    git push && git push --tags
    ```
-
-Or use Lerna to version all packages:
-   ```bash
-   pnpm run version
-   ```
-
-That's it! No need to update command files or templates.
 
 ## Updating Templates
 
@@ -161,30 +189,36 @@ diff shared/templates/claude.template.md claude-plugin/templates/claude.template
 # Should output nothing if files are identical
 ```
 
-## Automated Version Management (Future)
+## How It Works
 
-Consider adding scripts:
+The version sync automation uses a `postversion` hook:
 
+**File:** `claude-plugin/package.json`
 ```json
-// Root package.json
 {
+  "version": "2.0.0",
   "scripts": {
-    "version:check": "node scripts/check-versions.js",
-    "version:sync": "node scripts/sync-versions.js",
-    "version:bump": "npm version patch && node scripts/sync-versions.js"
+    "postversion": "node scripts/sync-plugin-version.js"
   }
 }
 ```
 
-This would ensure versions stay in sync across the monorepo.
+**File:** `claude-plugin/scripts/sync-plugin-version.js`
+- Reads version from `package.json`
+- Writes it to `.claude-plugin/plugin.json`
+- Runs automatically after Lerna updates the version
+
+This ensures the plugin manifest is always in sync with the package version.
 
 ## Summary
 
 ### Versions
-✅ **DO**: Update version in `claude-plugin/.claude-plugin/plugin.json`
-✅ **DO**: Commit and create git tag
+✅ **DO**: Run `pnpm run version` to bump versions automatically
+✅ **DO**: Let the postversion hook sync to `.claude-plugin/plugin.json`
+✅ **DO**: Push commits and tags after version bump
 ✅ **DO**: Let tools read version dynamically
 
+❌ **DON'T**: Manually edit `.claude-plugin/plugin.json` (it syncs automatically)
 ❌ **DON'T**: Hardcode versions in command files
 ❌ **DON'T**: Hardcode versions in template
 
@@ -197,5 +231,5 @@ This would ensure versions stay in sync across the monorepo.
 ❌ **DON'T**: Manually copy files (the git hook does this automatically)
 
 The system is designed so you only need to:
-- Change version in `plugin.json` when bumping versions
+- Run `pnpm run version` to bump versions - the postversion hook syncs everything!
 - Edit template in `shared/templates/` - the pre-commit hook automatically syncs it!

@@ -41,6 +41,22 @@ function main() {
     fs.mkdirSync(marketplaceManifestDir, { recursive: true });
   }
 
+  // Read version from plugin.json
+  const pluginJsonPath = path.join(PLUGIN_SOURCE, '.claude-plugin', 'plugin.json');
+  let pluginVersion;
+  try {
+    const pluginJson = JSON.parse(fs.readFileSync(pluginJsonPath, 'utf8'));
+    pluginVersion = pluginJson.version;
+    if (!pluginVersion) {
+      throw new Error('Version field is missing in plugin.json');
+    }
+  } catch (error) {
+    console.error(`\n✗ Failed to read plugin version from ${pluginJsonPath}`);
+    console.error(`  Error: ${error.message}`);
+    console.error('\nPlugin installation requires a valid .claude-plugin/plugin.json with a version field.');
+    process.exit(1);
+  }
+
   // Create marketplace.json
   const marketplaceJsonPath = path.join(marketplaceManifestDir, 'marketplace.json');
   const marketplaceJson = {
@@ -54,7 +70,7 @@ function main() {
       {
         "name": PLUGIN_NAME,
         "description": "Automated claude.md context file manager - create and update repository context documentation for AI assistants",
-        "version": "2.0.0",
+        "version": pluginVersion,
         "author": {
           "name": "Your Company"
         },
@@ -64,7 +80,7 @@ function main() {
     ]
   };
   fs.writeFileSync(marketplaceJsonPath, JSON.stringify(marketplaceJson, null, 2) + '\n', 'utf8');
-  console.log('✓ Created marketplace.json');
+  console.log(`✓ Created marketplace.json (version ${pluginVersion})`);
 
   // Create symlink
   try {

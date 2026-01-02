@@ -1,0 +1,15 @@
+{
+  "name": "@claude-context-system/plugin",
+  "version": "2.0.0",
+  "description": "Claude Code plugin for managing claude.md context files",
+  "private": true,
+  "scripts": {
+    "postversion": "node scripts/sync-plugin-version.js"
+  },
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "context-management"
+  ],
+  "license": "MIT"
+}

@@ -6,6 +6,28 @@ const { format } = require('date-fns');
 const TEST_RUNS_DIR = path.join(os.homedir(), 'claude-context-test-runs');
 const TEST_RUN_LIST_FILE = path.join(TEST_RUNS_DIR, 'test-run-list.json');
 
+/**
+ * Get the current plugin version from plugin.json
+ * @returns {string} - Version string
+ * @throws {Error} If version cannot be read
+ */
+function getPluginVersion() {
+  const pluginJsonPath = path.join(__dirname, '../../../claude-plugin/.claude-plugin/plugin.json');
+  try {
+    const pluginJson = fs.readJsonSync(pluginJsonPath);
+    if (!pluginJson.version) {
+      throw new Error('Version field is missing in plugin.json');
+    }
+    return pluginJson.version;
+  } catch (error) {
+    console.error(`\n✗ Failed to read plugin version from ${pluginJsonPath}`);
+    console.error(`  Error: ${error.message}`);
+    console.error('\nTest runner requires access to claude-plugin/.claude-plugin/plugin.json');
+    console.error('This indicates a monorepo structure issue. Please check your directory structure.');
+    throw error;
+  }
+}
+
 class TestRunManager {
   constructor() {
     this.testRunsDir = TEST_RUNS_DIR;
@@ -62,7 +84,7 @@ class TestRunManager {
       tested: false,
       notes: options.notes || '',
       tags: options.tags || [],
-      templateVersion: options.templateVersion || '2.0.0',
+      templateVersion: options.templateVersion || getPluginVersion(),
       results: null
     };
 
