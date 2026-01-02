@@ -28,17 +28,43 @@ This ensures you create ALL required files and prevents the common failure mode 
 
 Find the git repository root directory. The `claude.md` file should be created/updated at the repository root, not in the current working directory.
 
-## Step 2: Check for Existing claude.md
+## Step 2: Verify Clean Working Tree
+
+**CRITICAL:** Before proceeding, verify that the git working tree is clean (no uncommitted changes).
+
+Run `git status --short` to check for uncommitted changes.
+
+**If there are uncommitted changes:**
+Stop immediately and inform the user:
+
+"⚠️  Cannot update claude.md: Working tree has uncommitted changes.
+
+The claude.md file must reflect the exact state of a committed codebase. Running the update with uncommitted changes would create an inconsistency where:
+- The generated claude.md would reflect uncommitted changes
+- The metadata would claim it was built from a commit that doesn't include those changes
+
+Please commit or stash your changes before running this command:
+```bash
+git status
+git add -A
+git commit -m "Your commit message"
+```
+
+Then run the command again."
+
+**If the working tree is clean:** Proceed to **Step 3: Check for Existing claude.md**.
+
+## Step 3: Check for Existing claude.md
 
 Check if `claude.md` exists at the repository root.
 
 ### If claude.md Does NOT Exist:
-Proceed to **Step 3: Create New claude.md**.
+Proceed to **Step 4: Create New claude.md**.
 
 ### If claude.md DOES Exist:
-Proceed to **Step 4: Detect Template-Based File**.
+Proceed to **Step 5: Detect Template-Based File**.
 
-## Step 3: Create New claude.md
+## Step 4: Create New claude.md
 
 Locate the template file using the following search order:
 1. **User override** (optional): Check for `~/.claude/templates/claude.template.md` in the user's home directory
@@ -69,7 +95,7 @@ After populating the content, add the Agent File Metadata section at the end wit
 
 Once complete, inform the user that `claude.md` has been created at the repository root.
 
-## Step 4: Detect Template-Based File
+## Step 5: Detect Template-Based File
 
 Check if the existing `claude.md` file contains an "Agent File Metadata" section (this indicates it was built from the template).
 
@@ -86,7 +112,7 @@ Would you like me to proceed?"
 **If the user says YES**:
 1. Backup the existing file: `mv claude.md claude.md.backup`
 2. Read and analyze the existing claude.md.backup file to extract useful information
-3. Proceed to **Step 3: Create New claude.md**, incorporating:
+3. Proceed to **Step 4: Create New claude.md**, incorporating:
    - Information gathered from thorough repository analysis
    - Relevant content from the claude.md.backup file
    - Prioritize accuracy from repo analysis, but preserve valuable existing documentation where applicable
@@ -95,13 +121,13 @@ Would you like me to proceed?"
 **If the user says NO or cancels**: Do nothing and exit.
 
 ### If Agent File Metadata Section EXISTS:
-The file was built from the template. Proceed to **Step 5: Update Existing Template-Based File**.
+The file was built from the template. Proceed to **Step 6: Update Existing Template-Based File**.
 
-## Step 5: Update Existing Template-Based File
+## Step 6: Update Existing Template-Based File
 
 The existing `claude.md` was built from the template and needs to be updated.
 
-### 5.1: Check Template Version
+### 6.1: Check Template Version
 
 Extract the template version from the "Agent File Metadata" section of the existing `claude.md`.
 
@@ -117,7 +143,7 @@ Compare the existing file's template version with the current plugin version:
 - If versions differ, note that a template upgrade is needed
 - If versions match, template structure should be the same
 
-### 5.2: Analyze Git Changes
+### 6.2: Analyze Git Changes
 
 Extract the "Last commit SHA built from" value from the Agent File Metadata section.
 
@@ -135,7 +161,7 @@ Analyze these changes to determine which sections of `claude.md` might need upda
 - Documentation updates
 - Configuration changes affecting environment setup
 
-### 5.3: Smart Merge with Preservation
+### 6.3: Smart Merge with Preservation
 
 Update the `claude.md` file using the following approach:
 
@@ -161,7 +187,7 @@ Update the `claude.md` file using the following approach:
    - Last commit SHA built from: <{current git HEAD commit SHA}>
    - Template Version: <{Read from ../../.claude-plugin/plugin.json - use the "version" field}>
 
-### 5.4: Present Update Summary
+### 6.4: Present Update Summary
 
 After updating the file, present a summary to the user showing:
 - Which sections were updated and why
