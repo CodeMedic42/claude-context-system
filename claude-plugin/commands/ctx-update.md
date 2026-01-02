@@ -54,7 +54,7 @@ Once the template file is located, read it.
 Create a new `claude.md` file by:
 
 1. Using the template structure as the foundation
-2. Treating text within curly brackets `{...}` as instructions/prompts for what content should be populated in each section
+2. Treating text within angle brackets and curly brackets `<{...}>` as instructions/prompts for what content should be populated in each section
 3. Thoroughly analyzing the repository to gather information for each section
 4. Populating all sections based on the template instructions
 5. Removing sections that the template indicates should be removed if not applicable (e.g., "If there are no services defined then remove this section")
@@ -62,10 +62,10 @@ Create a new `claude.md` file by:
 7. Do NOT create sections that are not defined in the template
 
 After populating the content, add the Agent File Metadata section at the end with:
-- Date Created: {current timestamp}
-- Date Modified: {current timestamp}
-- Last commit SHA built from: {current git HEAD commit SHA}
-- Template Version: {Read from plugin.json at ../../.claude-plugin/plugin.json - use the "version" field}
+- Date Created: <{current timestamp}>
+- Date Modified: <{current timestamp}>
+- Last commit SHA built from: <{current git HEAD commit SHA}>
+- Template Version: <{Read from plugin.json at ../../.claude-plugin/plugin.json - use the "version" field}>
 
 Once complete, inform the user that `claude.md` has been created at the repository root.
 
@@ -150,16 +150,16 @@ Update the `claude.md` file using the following approach:
 3. **Update Content Based on Repository Changes**:
    - Update sections affected by the git changes identified in 5.2
    - For complex changes, add comments or notes indicating what changed rather than overwriting user descriptions
-   - If a section appears to still contain placeholder text `{...}`, update it with actual content
+   - If a section appears to still contain placeholder text `<{...}>`, update it with actual content
 
 4. **Handle Conflicts**:
    - If you detect conflicts between user customizations and necessary updates, present the conflict to the user and ask how they want to proceed
    - Flag sections where you're uncertain whether content is outdated
 
 5. **Update Metadata**:
-   - Date Modified: {current timestamp}
-   - Last commit SHA built from: {current git HEAD commit SHA}
-   - Template Version: {Read from ../../.claude-plugin/plugin.json - use the "version" field}
+   - Date Modified: <{current timestamp}>
+   - Last commit SHA built from: <{current git HEAD commit SHA}>
+   - Template Version: <{Read from ../../.claude-plugin/plugin.json - use the "version" field}>
 
 ### 5.4: Present Update Summary
 
@@ -174,6 +174,6 @@ After updating the file, present a summary to the user showing:
 - **Do not make assumptions**: If you're unsure about information, ask the user
 - **Preserve user work**: Be conservative about overwriting content that appears to be user-written
 - **Be thorough**: When analyzing the repository, examine all relevant files and configurations
-- **Follow template instructions**: Text in `{...}` in the template are instructions, not literal content
+- **Follow template instructions**: Text in `<{...}>` in the template are instructions, not literal content
 - **Repository root**: Always work with `claude.md` at the repository root, regardless of where the command is run
 - **Template source**: The bundled template is the default. Users can optionally override by creating `~/.claude/templates/claude.template.md`

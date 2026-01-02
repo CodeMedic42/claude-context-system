@@ -13,6 +13,10 @@ pnpm-debug.log*
 pnpm-lock.yaml
 .pnpm-store/
 
+# Test coverage
+coverage/
+*.lcov
+
 # OS files
 .DS_Store
 Thumbs.db

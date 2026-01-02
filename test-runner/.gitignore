@@ -1,0 +1,11 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore generated files
+*.log
+
+# Ignore OS files
+.DS_Store
+
+# Ignore local npm config
+.npmrc

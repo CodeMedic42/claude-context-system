@@ -2,6 +2,9 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "2.0.0",
   "npmClient": "pnpm",
+  "packages": [
+    "test-runner"
+  ],
   "command": {
     "version": {
       "allowBranch": ["master", "main"],

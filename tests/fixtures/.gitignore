@@ -1,0 +1,11 @@
+# Ignore generated claude.md files in fixtures
+# These should be generated fresh during testing
+claude.md
+**/claude.md
+**/*.claude.md
+
+# Ignore git repos in fixtures
+**/.git/
+
+# Ignore node_modules in fixtures
+**/node_modules/
