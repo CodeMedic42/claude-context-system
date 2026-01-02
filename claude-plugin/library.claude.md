@@ -15,7 +15,7 @@ The Claude Context Updater Plugin is a Claude Code plugin that automates the cre
 ### Package Details
 
 - **Package name**: claude-context-updater
-- **Current version**: 2.0.0
+- **Current version**: 2.1.0
 - **Package manager**: Claude Code plugin system
 - **Registry**: Claude Code plugin marketplace (or direct git installation)
 
@@ -467,6 +467,6 @@ This plugin is framework-agnostic and works with repositories using any programm
 # Library File Metadata
 
 - Date Created: 2026-01-02T09:06:00Z
-- Date Modified: 2026-01-02T09:06:00Z
-- Last commit SHA built from: b01b8d1c101fc897799c28d72b86edd2671ec723
-- Template Version: 2.0.0
+- Date Modified: 2026-01-02T13:45:00Z
+- Last commit SHA built from: fad03eb4e1133109a8329fe9a12b8cca68708b88
+- Template Version: 2.1.0

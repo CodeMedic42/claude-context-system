@@ -23,18 +23,24 @@ claude-context-system/
 ├── .husky/                     # Git hooks for automation
 │   └── _/                      # Husky internal files
 ├── .npmrc                      # npm configuration
+├── CLAUDE.md                   # Repository context for Claude (this file)
 ├── README.md                   # Main repository documentation
+├── TESTING.md                  # Testing strategy documentation
 ├── VERSION_MANAGEMENT.md       # Version management guidelines
 ├── claude-plugin/              # Claude Code plugin package
 │   ├── .claude-plugin/         # Plugin manifest
 │   │   └── plugin.json         # Plugin metadata and version
 │   ├── README.md               # Plugin documentation
+│   ├── library.claude.md       # Plugin library documentation
+│   ├── package.json            # Plugin package configuration
 │   ├── commands/               # Plugin command definitions
 │   │   ├── ctx-update.md       # Create/update claude.md command
 │   │   └── ctx-rule.md         # Manage reusable rules command
 │   ├── examples/               # Example usage and files
 │   │   └── .claude/            # Example Claude settings
 │   ├── rules/                  # Reusable rule templates
+│   ├── scripts/                # Plugin utility scripts
+│   │   └── sync-plugin-version.js # Version sync script
 │   ├── templates/              # Template files for generation
 │   │   ├── claude.template.md  # Main context template
 │   │   ├── service.template.md # Service documentation template
@@ -49,6 +55,7 @@ claude-context-system/
 │   ├── README.md               # Full documentation guide
 │   ├── QUICK_START.md          # Quick reference guide
 │   └── claude-guide.md         # Claude Code specific guide
+├── jest.config.js              # Jest testing configuration
 ├── lerna.json                  # Lerna configuration
 ├── node_modules/               # Installed dependencies (ignored)
 ├── package.json                # Root workspace configuration
@@ -57,13 +64,44 @@ claude-context-system/
 │   └── plugin-uninstall.js     # Uninstallation script
 ├── pnpm-lock.yaml              # pnpm lockfile (ignored)
 ├── pnpm-workspace.yaml         # pnpm workspace configuration
-└── shared/                     # Shared components
-    └── templates/              # Shared template files
-        ├── claude.template.md  # Main context template
-        ├── service.template.md # Service documentation template
-        ├── client.template.md  # Client documentation template
-        ├── library.template.md # Library documentation template
-        └── database.template.md# Database documentation template
+├── shared/                     # Shared components
+│   └── templates/              # Shared template files
+│       ├── claude.template.md  # Main context template
+│       ├── service.template.md # Service documentation template
+│       ├── client.template.md  # Client documentation template
+│       ├── library.template.md # Library documentation template
+│       └── database.template.md# Database documentation template
+├── test-runner/                # Interactive test runner CLI
+│   ├── .gitignore              # Test runner ignore patterns
+│   ├── README.md               # Test runner documentation
+│   ├── package.json            # Test runner dependencies
+│   └── src/                    # Test runner source code
+│       ├── cli.js              # Main CLI entry point
+│       ├── commands/           # Test runner commands
+│       │   ├── clean-runs.js   # Clean old test runs
+│       │   ├── compare-runs.js # Compare test runs
+│       │   ├── list-runs.js    # List test runs
+│       │   ├── new-run.js      # Create new test run
+│       │   └── test-run.js     # Run tests on existing run
+│       └── lib/                # Test runner utilities
+│           ├── fixture-selector.js # Fixture selection UI
+│           ├── parallel-cli-runner.js # Parallel CLI execution
+│           ├── test-run-manager.js # Test run management
+│           └── token-tracker.js # Token usage tracking
+└── tests/                      # Test suite
+    ├── README.md               # Test documentation
+    ├── QUICKSTART.md           # Test quick start guide
+    ├── fixtures/               # Test fixtures
+    │   ├── .gitignore          # Fixture ignore patterns
+    │   ├── library-package/    # TypeScript library fixture
+    │   ├── react-client-only/  # React client fixture
+    │   └── simple-node-service/# Node service fixture
+    ├── lib/                    # Test utilities
+    │   ├── ClaudeMdMetadata.js # Claude.md parser/validator
+    │   └── testHelpers.js      # Test helper functions
+    ├── library-package.test.js # Library fixture tests
+    ├── react-client-only.test.js # React fixture tests
+    └── simple-node-service.test.js # Service fixture tests
 ```
 
 ## Code Organization Patterns
@@ -74,11 +112,15 @@ claude-context-system/
   - `copilot-instructions/` - GitHub Copilot prompts for equivalent functionality
   - `shared/` - Shared templates and utilities used by both tools
   - `plugin-setup/` - Developer scripts for local plugin installation
+  - `test-runner/` - Interactive CLI tool for automated plugin testing
+  - `tests/` - Test suite with fixtures and Jest tests
   - `docs/` - Comprehensive documentation
 - **Common patterns**:
   - Templates are maintained in `shared/templates/` and synced to `claude-plugin/templates/` via git hooks
   - Both Claude Code plugin and Copilot instructions use the same templates to ensure consistency
   - Plugin commands are defined in markdown files in `claude-plugin/commands/`
+  - Version synchronization between `claude-plugin/package.json` and `plugin.json` via postversion script
+  - Test fixtures represent real-world project types and are used for automated validation
 - **Naming conventions**:
   - Template files use `.template.md` extension
   - Command files use kebab-case (e.g., `ctx-update.md`, `ctx-rule.md`)
@@ -140,13 +182,62 @@ pnpm run plugin:reinstall
 
 # Copy shared templates to plugin directory
 pnpm run plugin:template:update
+
+# Start interactive test runner
+pnpm run start:test-runner
+
+# Run tests
+pnpm test
+
+# Watch mode for tests during development
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
 ```
 
 ## Repository Verification
 
 ### Unit Tests
 
-Currently no automated test suite is configured. Testing is done manually using the plugin commands in real repositories.
+The repository includes a comprehensive test suite for plugin validation:
+
+```bash
+# Run all Jest tests
+pnpm test
+
+# Watch mode for development
+pnpm test:watch
+
+# Generate coverage report
+pnpm test:coverage
+
+# Verbose test output
+pnpm test:verbose
+```
+
+**Interactive Test Runner:**
+
+The test-runner provides automated plugin testing with fixtures:
+
+```bash
+# Start interactive test runner
+pnpm run start:test-runner
+```
+
+Features:
+- Create new test runs with selected fixtures
+- Run Claude CLI automatically in bypass mode
+- Track token usage and costs
+- Compare test runs
+- Parallel execution support
+
+**Test Structure:**
+- Test fixtures in `tests/fixtures/` (simple-node-service, library-package, react-client-only)
+- ClaudeMdMetadata class for parsing and validating generated files
+- Jest tests validate sections, sub-files, metadata, and content quality
+
+See `TESTING.md` for comprehensive testing documentation.
 
 ### Linting and Code Style
 
@@ -161,18 +252,24 @@ Note: Individual packages may not have linting configured yet. Run this command 
 
 **Key Documentation Files:**
 - `README.md` - Main repository overview and quick start
+- `TESTING.md` - Testing strategy and automated test runner documentation
 - `docs/README.md` - Comprehensive guide
 - `docs/QUICK_START.md` - Quick reference for getting started
 - `docs/claude-guide.md` - Claude Code plugin specific documentation
 - `claude-plugin/README.md` - Plugin-specific documentation
+- `claude-plugin/library.claude.md` - Library documentation for the plugin itself
 - `copilot-instructions/README.md` - GitHub Copilot usage guide
 - `VERSION_MANAGEMENT.md` - Guidelines for version management
+- `tests/README.md` - Test suite documentation
+- `tests/QUICKSTART.md` - Quick start guide for testing
+- `test-runner/README.md` - Test runner CLI documentation
 
 **When to Update Documentation:**
 - When adding new plugin commands, update `claude-plugin/README.md` and `docs/claude-guide.md`
 - When modifying templates, update relevant documentation to reflect changes
 - When changing installation process, update `README.md` and `docs/QUICK_START.md`
 - When adding new features, update all affected documentation files
+- When adding new test fixtures or testing features, update `TESTING.md` and test documentation
 
 ## Restricted Actions
 
@@ -181,6 +278,6 @@ Note: Individual packages may not have linting configured yet. Run this command 
 # Agent File Metadata
 
 - Date Created: 2026-01-02T09:04:00Z
-- Date Modified: 2026-01-02T09:04:00Z
-- Last commit SHA built from: b01b8d1c101fc897799c28d72b86edd2671ec723
-- Template Version: 2.0.0
+- Date Modified: 2026-01-02T13:45:00Z
+- Last commit SHA built from: fad03eb4e1133109a8329fe9a12b8cca68708b88
+- Template Version: 2.1.0
