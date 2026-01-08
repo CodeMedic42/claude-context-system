@@ -1,3 +1,4 @@
 packages:
-  - 'claude-plugin'
+  - 'claude-context-plugin'
   - 'test-runner'
+  - 'copilot-context-cli'

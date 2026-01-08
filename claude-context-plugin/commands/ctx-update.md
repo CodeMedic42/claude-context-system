@@ -2,6 +2,8 @@
 
 You are tasked with managing the repository's `claude.md` file using the agent template system.
 
+**EXECUTION MODE: This command runs automatically and non-interactively. Do NOT ask for user confirmation before creating or updating files. Proceed with all file creation and updates automatically.**
+
 **IMPORTANT: Do NOT use MCP repo-context tools (get_repo_overview, search_repo_context, etc.) for this task. This command must analyze the repository directly by reading files, not by consulting external knowledge bases. You will gather all information by examining the actual codebase.**
 
 **TODO TRACKING REQUIREMENT - MANDATORY:**
@@ -23,6 +25,8 @@ When creating multiple files of the same type (services, clients, libraries, dat
 This ensures you create ALL required files and prevents the common failure mode of documenting items inline instead of in separate files.
 
 **WHY THIS MATTERS:** The template requires separate files for services, clients, libraries, and databases. TodoWrite tracking prevents you from skipping files or taking shortcuts.
+
+**IMPORTANT: Use TodoWrite for tracking, but DO NOT stop to ask for user approval. After creating the todo list, immediately proceed to create all the files.**
 
 ## Step 1: Locate Repository Root
 
@@ -66,12 +70,9 @@ Proceed to **Step 5: Detect Template-Based File**.
 
 ## Step 4: Create New claude.md
 
-Locate the template file using the following search order:
-1. **User override** (optional): Check for `~/.claude/templates/claude.template.md` in the user's home directory
-2. **Bundled template**: Use the template bundled with this plugin at `../templates/claude.template.md` (relative to this command file)
-3. If neither is found, this indicates a plugin installation problem - inform the user
+Locate the bundled template file at `../templates/claude.template.md` (relative to this command file).
 
-**Note:** The bundled template is the default. Users can optionally create a custom template override at `~/.claude/templates/claude.template.md` if they want to customize the template format.
+If the template is not found, this indicates a plugin installation problem - inform the user.
 
 Once the template file is located, read it.
 
@@ -100,16 +101,8 @@ Once complete, inform the user that `claude.md` has been created at the reposito
 Check if the existing `claude.md` file contains an "Agent File Metadata" section (this indicates it was built from the template).
 
 ### If NO Agent File Metadata Section:
-The file was not built from the template. Inform the user:
+The file was not built from the template. Proceed automatically to recreate it:
 
-"I found an existing claude.md file that was not built using the agent template system. I can create a new claude.md file based on the template by:
-1. Thoroughly reviewing the repository
-2. Incorporating relevant information from your existing claude.md file
-3. Backing up the existing file to claude.md.backup
-
-Would you like me to proceed?"
-
-**If the user says YES**:
 1. Backup the existing file: `mv claude.md claude.md.backup`
 2. Read and analyze the existing claude.md.backup file to extract useful information
 3. Proceed to **Step 4: Create New claude.md**, incorporating:
@@ -117,8 +110,6 @@ Would you like me to proceed?"
    - Relevant content from the claude.md.backup file
    - Prioritize accuracy from repo analysis, but preserve valuable existing documentation where applicable
 4. Inform user: "New claude.md created by combining repository analysis with content from your existing file. Previous file backed up to claude.md.backup"
-
-**If the user says NO or cancels**: Do nothing and exit.
 
 ### If Agent File Metadata Section EXISTS:
 The file was built from the template. Proceed to **Step 6: Update Existing Template-Based File**.
@@ -131,10 +122,9 @@ The existing `claude.md` was built from the template and needs to be updated.
 
 Extract the template version from the "Agent File Metadata" section of the existing `claude.md`.
 
-Locate and read the current template file using the following search order:
-1. **User override** (optional): Check for `~/.claude/templates/claude.template.md` in the user's home directory
-2. **Bundled template**: Use the template bundled with this plugin at `../templates/claude.template.md` (relative to this command file)
-3. If neither is found, this indicates a plugin installation problem - inform the user
+Locate and read the bundled template file at `../templates/claude.template.md` (relative to this command file).
+
+If the template is not found, this indicates a plugin installation problem - inform the user.
 
 Read the current plugin version from `../../.claude-plugin/plugin.json` (the "version" field).
 
@@ -202,4 +192,4 @@ After updating the file, present a summary to the user showing:
 - **Be thorough**: When analyzing the repository, examine all relevant files and configurations
 - **Follow template instructions**: Text in `<{...}>` in the template are instructions, not literal content
 - **Repository root**: Always work with `claude.md` at the repository root, regardless of where the command is run
-- **Template source**: The bundled template is the default. Users can optionally override by creating `~/.claude/templates/claude.template.md`
+- **Template source**: Only the bundled template at `../templates/claude.template.md` is used

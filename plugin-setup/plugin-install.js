@@ -11,7 +11,7 @@ const PLUGINS_DIR = path.join(CLAUDE_DIR, 'plugins');
 const LOCAL_MARKETPLACE_DIR = path.join(PLUGINS_DIR, 'local-marketplace');
 const LOCAL_MARKETPLACE_PLUGINS_DIR = path.join(LOCAL_MARKETPLACE_DIR, 'plugins');
 const PLUGIN_SYMLINK = path.join(LOCAL_MARKETPLACE_PLUGINS_DIR, PLUGIN_NAME);
-const PLUGIN_SOURCE = path.join(__dirname, '..', 'claude-plugin');
+const PLUGIN_SOURCE = path.join(__dirname, '..', 'claude-context-plugin');
 
 function main() {
   console.log('Installing claude-context-updater plugin locally...\n');
