@@ -56,29 +56,27 @@ git commit -m "Your commit message"
 
 Then run the command again."
 
-**If the working tree is clean:** Proceed to **Step 3: Check for Existing claude.md**.
+**If the working tree is clean:** Proceed to **Step 3: Check for Existing Context File**.
 
-## Step 3: Check for Existing claude.md
+## Step 3: Check for Existing Context File
 
-Check if `claude.md` exists at the repository root.
+Check if a context file exists at the repository root. Check for both `CLAUDE.md` and `claude.md` (case-insensitive check - either name is valid).
 
-### If claude.md Does NOT Exist:
-Proceed to **Step 4: Create New claude.md**.
+### If No Context File Exists:
+Proceed to **Step 4: Create New CLAUDE.md**.
 
-### If claude.md DOES Exist:
+### If a Context File Exists:
 Proceed to **Step 5: Detect Template-Based File**.
 
-## Step 4: Create New claude.md
+## Step 4: Create New CLAUDE.md
 
-Locate the bundled template file at `../templates/claude.template.md` (relative to this command file).
+Locate the bundled template file at `../templates/CLAUDE.TEMPLATE.md` (relative to this command file).
 
 If the template is not found, this indicates a plugin installation problem - inform the user.
 
 Once the template file is located, read it.
 
-**IMPORTANT: The output filename MUST be `claude.md` (lowercase). Do NOT use `CLAUDE.md` (uppercase) regardless of the template filename casing.**
-
-Create a new `claude.md` file by:
+Create a new `CLAUDE.md` file by:
 
 1. Using the template structure as the foundation
 2. Treating text within angle brackets and curly brackets `<{...}>` as instructions/prompts for what content should be populated in each section
@@ -94,35 +92,40 @@ After populating the content, add the Agent File Metadata section at the end wit
 - Last commit SHA built from: <{current git HEAD commit SHA}>
 - Template Version: <{Read from plugin.json at ../../.claude-plugin/plugin.json - use the "version" field}>
 
-Once complete, inform the user that `claude.md` has been created at the repository root.
+Once complete, inform the user that `CLAUDE.md` has been created at the repository root.
 
 ## Step 5: Detect Template-Based File
 
-Check if the existing `claude.md` file contains an "Agent File Metadata" section (this indicates it was built from the template).
+Check if the existing context file contains an "Agent File Metadata" section (this indicates it was built from the template).
+
+**Note:** The file could be named `CLAUDE.md` or `claude.md` - preserve whatever name the user has.
 
 ### If NO Agent File Metadata Section:
 The file was not built from the template. Proceed automatically to recreate it:
 
-1. Backup the existing file: `mv claude.md claude.md.backup`
-2. Read and analyze the existing claude.md.backup file to extract useful information
-3. Proceed to **Step 4: Create New claude.md**, incorporating:
+1. Determine the existing filename (either CLAUDE.md or claude.md)
+2. Backup the existing file: `mv <existing-name> <existing-name>.backup`
+3. Read and analyze the backup file to extract useful information
+4. Proceed to **Step 4: Create New CLAUDE.md**, incorporating:
    - Information gathered from thorough repository analysis
-   - Relevant content from the claude.md.backup file
+   - Relevant content from the backup file
    - Prioritize accuracy from repo analysis, but preserve valuable existing documentation where applicable
-4. Inform user: "New claude.md created by combining repository analysis with content from your existing file. Previous file backed up to claude.md.backup"
+5. Inform user: "New CLAUDE.md created by combining repository analysis with content from your existing file. Previous file backed up to <existing-name>.backup"
 
 ### If Agent File Metadata Section EXISTS:
 The file was built from the template. Proceed to **Step 6: Update Existing Template-Based File**.
 
 ## Step 6: Update Existing Template-Based File
 
-The existing `claude.md` was built from the template and needs to be updated.
+The existing context file was built from the template and needs to be updated.
+
+**IMPORTANT:** Preserve the existing filename - do NOT rename the file. If the user has `CLAUDE.md`, keep it as `CLAUDE.md`. If they have `claude.md`, keep it as `claude.md`.
 
 ### 6.1: Check Template Version
 
-Extract the template version from the "Agent File Metadata" section of the existing `claude.md`.
+Extract the template version from the "Agent File Metadata" section of the existing context file.
 
-Locate and read the bundled template file at `../templates/claude.template.md` (relative to this command file).
+Locate and read the bundled template file at `../templates/CLAUDE.TEMPLATE.md` (relative to this command file).
 
 If the template is not found, this indicates a plugin installation problem - inform the user.
 
@@ -191,5 +194,6 @@ After updating the file, present a summary to the user showing:
 - **Preserve user work**: Be conservative about overwriting content that appears to be user-written
 - **Be thorough**: When analyzing the repository, examine all relevant files and configurations
 - **Follow template instructions**: Text in `<{...}>` in the template are instructions, not literal content
-- **Repository root**: Always work with `claude.md` at the repository root, regardless of where the command is run
-- **Template source**: Only the bundled template at `../templates/claude.template.md` is used
+- **Repository root**: Always work with the context file at the repository root, regardless of where the command is run
+- **Preserve filenames**: When updating existing files, preserve the filename (CLAUDE.md or claude.md) - do not rename
+- **Template source**: Only the bundled template at `../templates/CLAUDE.TEMPLATE.md` is used
