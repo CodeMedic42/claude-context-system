@@ -13,8 +13,8 @@ COPILOT_PLUGIN_COMMANDS_DIR="copilot-context-cli/commands"
 # TEMPLATE VALIDATION - Prevent direct edits to plugin template directories
 # ============================================================================
 
-# Check if any claude-plugin template was modified directly
-if git diff --cached --name-only | grep -q "^$CLAUDE_PLUGIN_TEMPLATES_DIR/.*\.md$"; then
+# Check if any claude-plugin template was modified directly (not added or renamed)
+if git diff --cached --diff-filter=M --name-only | grep -q "^$CLAUDE_PLUGIN_TEMPLATES_DIR/.*\.md$"; then
     echo "❌ ERROR: You modified files in $CLAUDE_PLUGIN_TEMPLATES_DIR/ directly!"
     echo ""
     echo "Plugin templates should NOT be edited directly."
@@ -32,8 +32,8 @@ if git diff --cached --name-only | grep -q "^$CLAUDE_PLUGIN_TEMPLATES_DIR/.*\.md
     exit 1
 fi
 
-# Check if any copilot-context-manager template was modified directly
-if git diff --cached --name-only | grep -q "^$COPILOT_PLUGIN_TEMPLATES_DIR/.*\.md$"; then
+# Check if any copilot-context-cli template was modified directly (not added or renamed)
+if git diff --cached --diff-filter=M --name-only | grep -q "^$COPILOT_PLUGIN_TEMPLATES_DIR/.*\.md$"; then
     echo "❌ ERROR: You modified files in $COPILOT_PLUGIN_TEMPLATES_DIR/ directly!"
     echo ""
     echo "Plugin templates should NOT be edited directly."
@@ -55,8 +55,8 @@ fi
 # COMMAND VALIDATION - Prevent direct edits to plugin command directories
 # ============================================================================
 
-# Check if any claude-plugin command was modified directly
-if git diff --cached --name-only | grep -q "^$CLAUDE_PLUGIN_COMMANDS_DIR/.*\.md$"; then
+# Check if any claude-plugin command was modified directly (not added or renamed)
+if git diff --cached --diff-filter=M --name-only | grep -q "^$CLAUDE_PLUGIN_COMMANDS_DIR/.*\.md$"; then
     echo "❌ ERROR: You modified files in $CLAUDE_PLUGIN_COMMANDS_DIR/ directly!"
     echo ""
     echo "Plugin commands should NOT be edited directly."
@@ -74,8 +74,8 @@ if git diff --cached --name-only | grep -q "^$CLAUDE_PLUGIN_COMMANDS_DIR/.*\.md$
     exit 1
 fi
 
-# Check if any copilot-context-manager command was modified directly
-if git diff --cached --name-only | grep -q "^$COPILOT_PLUGIN_COMMANDS_DIR/.*\.md$"; then
+# Check if any copilot-context-cli command was modified directly (not added or renamed)
+if git diff --cached --diff-filter=M --name-only | grep -q "^$COPILOT_PLUGIN_COMMANDS_DIR/.*\.md$"; then
     echo "❌ ERROR: You modified files in $COPILOT_PLUGIN_COMMANDS_DIR/ directly!"
     echo ""
     echo "Plugin commands should NOT be edited directly."

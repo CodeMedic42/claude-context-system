@@ -38,6 +38,7 @@
     "changed": "lerna changed",
     "diff": "lerna diff",
     "exec": "lerna exec",
+    "sync": "pnpm run plugin:sync && pnpm run copilot:sync",
     "plugin:install": "node plugin-setup/plugin-install.js",
     "plugin:uninstall": "node plugin-setup/plugin-uninstall.js",
     "plugin:template:update": "cp shared/templates/*.md claude-context-plugin/templates/ && cp shared/templates/*.md copilot-context-cli/templates/",
