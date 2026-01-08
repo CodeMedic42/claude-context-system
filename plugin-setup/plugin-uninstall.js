@@ -41,7 +41,11 @@ function main() {
   }
 
   const target = fs.readlinkSync(PLUGIN_SYMLINK);
-  if (target !== PLUGIN_SOURCE) {
+
+  // Check if symlink points to our plugin (current or old path after rename)
+  const isOurPlugin = target === PLUGIN_SOURCE || !fs.existsSync(target);
+
+  if (!isOurPlugin) {
     console.log('\n✗ Plugin symlink exists but points to a different location:');
     console.log(`  Symlink: ${PLUGIN_SYMLINK}`);
     console.log(`  Current target: ${target}`);
@@ -55,6 +59,9 @@ function main() {
     fs.unlinkSync(PLUGIN_SYMLINK);
     console.log('\n✓ Removed plugin symlink');
     console.log(`  ${PLUGIN_SYMLINK}`);
+    if (target !== PLUGIN_SOURCE) {
+      console.log(`  (Old target was: ${target})`);
+    }
   } catch (error) {
     console.error('\nError removing symlink:', error.message);
     process.exit(1);
