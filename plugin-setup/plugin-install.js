@@ -60,26 +60,26 @@ function main() {
   // Create marketplace.json
   const marketplaceJsonPath = path.join(marketplaceManifestDir, 'marketplace.json');
   const marketplaceJson = {
-    "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-    "name": "local",
-    "description": "Local development plugins",
-    "owner": {
-      "name": "Local Development"
+    $schema: 'https://anthropic.com/claude-code/marketplace.schema.json',
+    name: 'local',
+    description: 'Local development plugins',
+    owner: {
+      name: 'Local Development',
     },
-    "plugins": [
+    plugins: [
       {
-        "name": PLUGIN_NAME,
-        "description": "Automated claude.md context file manager - create and update repository context documentation for AI assistants",
-        "version": pluginVersion,
-        "author": {
-          "name": "Your Company"
+        name: PLUGIN_NAME,
+        description: 'Automated claude.md context file manager - create and update repository context documentation for AI assistants',
+        version: pluginVersion,
+        author: {
+          name: 'Your Company',
         },
-        "source": `./plugins/${PLUGIN_NAME}`,
-        "category": "productivity"
-      }
-    ]
+        source: `./plugins/${PLUGIN_NAME}`,
+        category: 'productivity',
+      },
+    ],
   };
-  fs.writeFileSync(marketplaceJsonPath, JSON.stringify(marketplaceJson, null, 2) + '\n', 'utf8');
+  fs.writeFileSync(marketplaceJsonPath, `${JSON.stringify(marketplaceJson, null, 2)}\n`, 'utf8');
   console.log(`✓ Created marketplace.json (version ${pluginVersion})`);
 
   // Create symlink
@@ -106,7 +106,7 @@ function main() {
   try {
     execSync(`claude plugin install ${PLUGIN_NAME}@local`, { stdio: 'inherit' });
     console.log('\n✓ Plugin installed successfully!');
-    console.log(`\nYou can now use: /${PLUGIN_NAME}:ctx-update`);
+    console.log(`\nYou can now use: /${PLUGIN_NAME}`);
   } catch (error) {
     console.error('\n✗ Failed to install plugin. Try manually:');
     console.error(`  claude plugin install ${PLUGIN_NAME}@local`);

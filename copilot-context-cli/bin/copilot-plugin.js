@@ -17,19 +17,19 @@ function isCopilotInstalled() {
 // Check if user is logged in to copilot
 function isCopilotLoggedIn() {
   try {
-    const result = execSync('copilot -p "echo test"', { 
+    const result = execSync('copilot -p "echo test"', {
       stdio: 'pipe',
       encoding: 'utf8',
-      timeout: 5000
+      timeout: 5000,
     });
     // If we get output without auth errors, user is logged in
     return true;
   } catch (error) {
     const output = error.stderr || error.stdout || '';
     // Check for common auth error messages
-    if (output.includes('not logged in') || 
-        output.includes('authenticate') || 
-        output.includes('login')) {
+    if (output.includes('not logged in')
+      || output.includes('authenticate')
+      || output.includes('login')) {
       return false;
     }
     // If it's a different error, assume logged in (command might have failed for other reasons)
@@ -59,14 +59,14 @@ const command = process.argv[2];
 if (!command) {
   console.error('Usage: copilot-plugin <command-name>');
   console.error('\nAvailable commands:');
-  
+
   const commandsDir = path.join(__dirname, '..', 'commands');
   const files = fs.readdirSync(commandsDir);
-  
+
   files
-    .filter(f => f.endsWith('.md'))
-    .forEach(f => console.error(`  - ${f.replace('.md', '')}`));
-  
+    .filter((f) => f.endsWith('.md'))
+    .forEach((f) => console.error(`  - ${f.replace('.md', '')}`));
+
   process.exit(1);
 }
 
@@ -84,12 +84,12 @@ if (!fs.existsSync(commandPath)) {
 const commandContent = fs.readFileSync(commandPath, 'utf8');
 const copilotArgs = [
   '-p', commandContent,
-  '--allow-all-tools',  // Allow tools without confirmation for automated execution
-  '--allow-all-paths'   // Allow file access without configuration
+  '--allow-all-tools', // Allow tools without confirmation for automated execution
+  '--allow-all-paths', // Allow file access without configuration
 ];
 
 const copilot = spawn('copilot', copilotArgs, {
-  stdio: 'inherit'
+  stdio: 'inherit',
   // Don't use shell: true as it tries to interpret markdown content as shell commands
 });
 

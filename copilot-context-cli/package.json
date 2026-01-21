@@ -7,7 +7,6 @@
     "copilot-plugin": "./bin/copilot-plugin.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "template:update": "cp -r ../shared/templates/* ./templates/",
     "command:update": "cp -r ../shared/commands/* ./commands/",
     "sync": "npm run template:update && npm run command:update"
