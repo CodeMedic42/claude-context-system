@@ -3,7 +3,8 @@
   "version": "2.1.0",
   "npmClient": "pnpm",
   "packages": [
-    "claude-plugin",
+    "claude-context-plugin",
+    "copilot-context-cli",
     "test-runner"
   ],
   "command": {
