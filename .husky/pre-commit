@@ -1,138 +1,95 @@
 #!/bin/sh
 
-# Auto-sync shared templates and commands to plugin bundles when shared files change
+# Simple pre-commit check: Ensure plugin directories match shared directory
 
-SHARED_TEMPLATES_DIR="shared/templates"
-SHARED_COMMANDS_DIR="shared/commands"
-CLAUDE_PLUGIN_TEMPLATES_DIR="claude-context-plugin/templates"
-CLAUDE_PLUGIN_COMMANDS_DIR="claude-context-plugin/commands"
-COPILOT_PLUGIN_TEMPLATES_DIR="copilot-context-cli/templates"
-COPILOT_PLUGIN_COMMANDS_DIR="copilot-context-cli/commands"
+check_directory_sync() {
+    local shared_dir="$1"
+    local plugin_dir="$2"
+    local errors_found=0
 
-# ============================================================================
-# TEMPLATE VALIDATION - Prevent direct edits to plugin template directories
-# ============================================================================
+    # Check all files in shared directory
+    if [ -d "$shared_dir" ]; then
+        find "$shared_dir" -type f | while read -r shared_file; do
+            relative_path="${shared_file#$shared_dir/}"
+            plugin_file="$plugin_dir/$relative_path"
 
-# Check if any claude-plugin template was modified directly (not added or renamed)
-if git diff --cached --diff-filter=M --name-only | grep -q "^$CLAUDE_PLUGIN_TEMPLATES_DIR/.*\.md$"; then
-    echo "❌ ERROR: You modified files in $CLAUDE_PLUGIN_TEMPLATES_DIR/ directly!"
+            # Check if file exists in plugin directory (case-insensitive)
+            if [ ! -f "$plugin_file" ]; then
+                # Try case-insensitive match
+                plugin_file_lower=$(find "$plugin_dir" -maxdepth 1 -type f -iname "$(basename "$relative_path")" 2>/dev/null | head -n 1)
+                if [ -z "$plugin_file_lower" ]; then
+                    echo "  ❌ Missing file: $plugin_file"
+                    errors_found=1
+                    continue
+                fi
+                plugin_file="$plugin_file_lower"
+            fi
+
+            # Compare file contents
+            if ! cmp -s "$shared_file" "$plugin_file"; then
+                echo "  ❌ Content mismatch: $plugin_file"
+                errors_found=1
+            fi
+        done
+        [ $errors_found -eq 1 ] && return 1
+    fi
+
+    # Check for extra files in plugin directory that don't exist in shared
+    if [ -d "$plugin_dir" ]; then
+        find "$plugin_dir" -type f | while read -r plugin_file; do
+            relative_path="${plugin_file#$plugin_dir/}"
+            shared_file="$shared_dir/$relative_path"
+
+            # Check if file exists in shared directory (case-insensitive)
+            if [ ! -f "$shared_file" ]; then
+                # Try case-insensitive match
+                shared_file_lower=$(find "$shared_dir" -maxdepth 1 -type f -iname "$(basename "$relative_path")" 2>/dev/null | head -n 1)
+                if [ -z "$shared_file_lower" ]; then
+                    echo "  ❌ Extra file not in shared: $plugin_file"
+                    errors_found=1
+                fi
+            fi
+        done
+        [ $errors_found -eq 1 ] && return 1
+    fi
+
+    return 0
+}
+
+has_errors=0
+
+# Check claude-context-plugin/commands
+echo "Checking claude-context-plugin/commands..."
+if ! check_directory_sync "shared/commands" "claude-context-plugin/commands"; then
+    has_errors=1
+fi
+
+# Check claude-context-plugin/templates
+echo "Checking claude-context-plugin/templates..."
+if ! check_directory_sync "shared/templates" "claude-context-plugin/templates"; then
+    has_errors=1
+fi
+
+# Check copilot-context-cli/commands
+echo "Checking copilot-context-cli/commands..."
+if ! check_directory_sync "shared/commands" "copilot-context-cli/commands"; then
+    has_errors=1
+fi
+
+# Check copilot-context-cli/templates
+echo "Checking copilot-context-cli/templates..."
+if ! check_directory_sync "shared/templates" "copilot-context-cli/templates"; then
+    has_errors=1
+fi
+
+if [ $has_errors -eq 1 ]; then
     echo ""
-    echo "Plugin templates should NOT be edited directly."
-    echo "They are automatically synced from shared templates."
+    echo "❌ ERROR: The contents of claude-context-plugin and copilot-context-cli do not match the shared folder."
     echo ""
-    echo "Please:"
-    echo "  1. Undo changes to files in $CLAUDE_PLUGIN_TEMPLATES_DIR/"
-    echo "  2. Make your changes to files in $SHARED_TEMPLATES_DIR/ instead"
-    echo "  3. Commit again - the pre-commit hook will sync automatically"
-    echo ""
-    echo "To undo the plugin template changes:"
-    echo "  git restore --staged $CLAUDE_PLUGIN_TEMPLATES_DIR/"
-    echo "  git restore $CLAUDE_PLUGIN_TEMPLATES_DIR/"
+    echo "Please run: pnpm run sync"
     echo ""
     exit 1
 fi
 
-# Check if any copilot-context-cli template was modified directly (not added or renamed)
-if git diff --cached --diff-filter=M --name-only | grep -q "^$COPILOT_PLUGIN_TEMPLATES_DIR/.*\.md$"; then
-    echo "❌ ERROR: You modified files in $COPILOT_PLUGIN_TEMPLATES_DIR/ directly!"
-    echo ""
-    echo "Plugin templates should NOT be edited directly."
-    echo "They are automatically synced from shared templates."
-    echo ""
-    echo "Please:"
-    echo "  1. Undo changes to files in $COPILOT_PLUGIN_TEMPLATES_DIR/"
-    echo "  2. Make your changes to files in $SHARED_TEMPLATES_DIR/ instead"
-    echo "  3. Commit again - the pre-commit hook will sync automatically"
-    echo ""
-    echo "To undo the plugin template changes:"
-    echo "  git restore --staged $COPILOT_PLUGIN_TEMPLATES_DIR/"
-    echo "  git restore $COPILOT_PLUGIN_TEMPLATES_DIR/"
-    echo ""
-    exit 1
-fi
-
-# ============================================================================
-# COMMAND VALIDATION - Prevent direct edits to plugin command directories
-# ============================================================================
-
-# Check if any claude-plugin command was modified directly (not added or renamed)
-if git diff --cached --diff-filter=M --name-only | grep -q "^$CLAUDE_PLUGIN_COMMANDS_DIR/.*\.md$"; then
-    echo "❌ ERROR: You modified files in $CLAUDE_PLUGIN_COMMANDS_DIR/ directly!"
-    echo ""
-    echo "Plugin commands should NOT be edited directly."
-    echo "They are automatically synced from shared commands."
-    echo ""
-    echo "Please:"
-    echo "  1. Undo changes to files in $CLAUDE_PLUGIN_COMMANDS_DIR/"
-    echo "  2. Make your changes to files in $SHARED_COMMANDS_DIR/ instead"
-    echo "  3. Commit again - the pre-commit hook will sync automatically"
-    echo ""
-    echo "To undo the plugin command changes:"
-    echo "  git restore --staged $CLAUDE_PLUGIN_COMMANDS_DIR/"
-    echo "  git restore $CLAUDE_PLUGIN_COMMANDS_DIR/"
-    echo ""
-    exit 1
-fi
-
-# Check if any copilot-context-cli command was modified directly (not added or renamed)
-if git diff --cached --diff-filter=M --name-only | grep -q "^$COPILOT_PLUGIN_COMMANDS_DIR/.*\.md$"; then
-    echo "❌ ERROR: You modified files in $COPILOT_PLUGIN_COMMANDS_DIR/ directly!"
-    echo ""
-    echo "Plugin commands should NOT be edited directly."
-    echo "They are automatically synced from shared commands."
-    echo ""
-    echo "Please:"
-    echo "  1. Undo changes to files in $COPILOT_PLUGIN_COMMANDS_DIR/"
-    echo "  2. Make your changes to files in $SHARED_COMMANDS_DIR/ instead"
-    echo "  3. Commit again - the pre-commit hook will sync automatically"
-    echo ""
-    echo "To undo the plugin command changes:"
-    echo "  git restore --staged $COPILOT_PLUGIN_COMMANDS_DIR/"
-    echo "  git restore $COPILOT_PLUGIN_COMMANDS_DIR/"
-    echo ""
-    exit 1
-fi
-
-# ============================================================================
-# TEMPLATE SYNC - Auto-sync shared templates to both plugins
-# ============================================================================
-
-# Check if any shared template was modified - if so, sync all to both plugins
-if git diff --cached --name-only | grep -q "^$SHARED_TEMPLATES_DIR/.*\.md$"; then
-    echo "📋 Detected changes to $SHARED_TEMPLATES_DIR/"
-    echo "🔄 Syncing templates to plugin directories..."
-
-    # Copy all .md files from shared to claude-plugin
-    cp "$SHARED_TEMPLATES_DIR"/*.md "$CLAUDE_PLUGIN_TEMPLATES_DIR/"
-    git add "$CLAUDE_PLUGIN_TEMPLATES_DIR"/*.md
-    echo "✅ Templates synced to $CLAUDE_PLUGIN_TEMPLATES_DIR/"
-
-    # Copy all .md files from shared to copilot-context-manager
-    cp "$SHARED_TEMPLATES_DIR"/*.md "$COPILOT_PLUGIN_TEMPLATES_DIR/"
-    git add "$COPILOT_PLUGIN_TEMPLATES_DIR"/*.md
-    echo "✅ Templates synced to $COPILOT_PLUGIN_TEMPLATES_DIR/"
-
-    echo "✅ All templates synced and staged"
-fi
-
-# ============================================================================
-# COMMAND SYNC - Auto-sync shared commands to both plugins
-# ============================================================================
-
-# Check if any shared command was modified - if so, sync all to both plugins
-if git diff --cached --name-only | grep -q "^$SHARED_COMMANDS_DIR/.*\.md$"; then
-    echo "📋 Detected changes to $SHARED_COMMANDS_DIR/"
-    echo "🔄 Syncing commands to plugin directories..."
-
-    # Copy all .md files from shared to claude-plugin
-    cp "$SHARED_COMMANDS_DIR"/*.md "$CLAUDE_PLUGIN_COMMANDS_DIR/"
-    git add "$CLAUDE_PLUGIN_COMMANDS_DIR"/*.md
-    echo "✅ Commands synced to $CLAUDE_PLUGIN_COMMANDS_DIR/"
-
-    # Copy all .md files from shared to copilot-context-manager
-    cp "$SHARED_COMMANDS_DIR"/*.md "$COPILOT_PLUGIN_COMMANDS_DIR/"
-    git add "$COPILOT_PLUGIN_COMMANDS_DIR"/*.md
-    echo "✅ Commands synced to $COPILOT_PLUGIN_COMMANDS_DIR/"
-
-    echo "✅ All commands synced and staged"
-fi
+echo "✅ All directories are in sync"
+exit 0

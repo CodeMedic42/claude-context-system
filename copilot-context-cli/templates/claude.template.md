@@ -42,24 +42,24 @@ This section defines MANDATORY rules for documenting projects in this repository
 
 ⛔ **ABSOLUTE PROHIBITION - NO EXCEPTIONS - NO EXCUSES**
 
-You are ABSOLUTELY FORBIDDEN from writing project details inline in this claude.md file for ANY of the four project-type sections (Services, Clients, Libraries, Databases).
+You are ABSOLUTELY FORBIDDEN from writing project details inline in this CLAUDE.md file for ANY of the four project-type sections (Services, Clients, Libraries, Databases).
 
 **WHAT THIS MEANS:**
-- If you identify a service, you MUST create a separate service.claude.md file
-- If you identify a client, you MUST create a separate client.claude.md file
-- If you identify a library, you MUST create a separate library.claude.md file
-- If you identify a database, you MUST create a separate database.claude.md file
+- If you identify a service, you MUST create a separate SERVICE.CLAUDE.md file
+- If you identify a client, you MUST create a separate CLIENT.CLAUDE.md file
+- If you identify a library, you MUST create a separate LIBRARY.CLAUDE.md file
+- If you identify a database, you MUST create a separate DATABASE.CLAUDE.md file
 
 **WHAT IS FORBIDDEN:**
-- Writing installation instructions in claude.md
-- Writing API endpoint lists in claude.md
-- Writing usage examples in claude.md
-- Writing configuration details in claude.md
-- Writing ANY project-specific details in claude.md
+- Writing installation instructions in CLAUDE.md
+- Writing API endpoint lists in CLAUDE.md
+- Writing usage examples in CLAUDE.md
+- Writing configuration details in CLAUDE.md
+- Writing ANY project-specific details in CLAUDE.md
 
 **ONLY PERMITTED FORMAT IN CLAUDE.MD:**
 ```markdown
-- **Project Name**: @file ./path/to/type.claude.md
+- **Project Name**: @file ./path/to/type.CLAUDE.md
 ```
 
 **WHY THIS RULE EXISTS:**
@@ -80,9 +80,9 @@ If you write inline documentation, you will have FAILED this task. The user will
 If you identify N projects of a given type, you MUST create exactly N separate files. You CANNOT skip any. You CANNOT combine multiple projects into one file. You CANNOT write summaries instead of full files.
 
 **WHAT THIS MEANS:**
-- Identify 8 libraries? Create 8 library.claude.md files
-- Identify 3 services? Create 3 service.claude.md files
-- Identify 1 database? Create 1 database.claude.md file
+- Identify 8 libraries? Create 8 LIBRARY.CLAUDE.md files
+- Identify 3 services? Create 3 SERVICE.CLAUDE.md files
+- Identify 1 database? Create 1 DATABASE.CLAUDE.md file
 
 **PROHIBITED SHORTCUTS:**
 - ❌ "I'll document these 6 libraries inline to save time" - FORBIDDEN
@@ -179,8 +179,8 @@ When documenting ANY of the four project-type sections, you MUST use TodoWrite t
 **BEFORE creating files:**
 1. Count the number of projects identified (e.g., "8 libraries")
 2. Create a SEPARATE todo item for EACH file that will be created
-   - ✅ CORRECT: "Create library.claude.md for @company/utils"
-   - ✅ CORRECT: "Create library.claude.md for @company/api-client"
+   - ✅ CORRECT: "Create LIBRARY.CLAUDE.md for @company/utils"
+   - ✅ CORRECT: "Create LIBRARY.CLAUDE.md for @company/api-client"
    - ❌ WRONG: "Create all library files" (too vague)
 
 **WHILE creating files:**
@@ -203,10 +203,10 @@ TodoWrite creates a concrete accountability trail. It prevents the failure mode 
 A single project can belong to MULTIPLE types. Evaluate each project independently for EACH type.
 
 **COMMON HYBRID EXAMPLES:**
-- **Next.js with API routes**: Create BOTH client.claude.md (frontend) AND service.claude.md (API routes)
-- **CLI tool as npm package**: Create BOTH client.claude.md (CLI) AND library.claude.md (importable API)
-- **Backend with admin UI**: Create BOTH service.claude.md (API) AND client.claude.md (UI)
-- **Library with Storybook**: Create BOTH library.claude.md (components) AND client.claude.md (Storybook)
+- **Next.js with API routes**: Create BOTH CLIENT.CLAUDE.md (frontend) AND SERVICE.CLAUDE.md (API routes)
+- **CLI tool as npm package**: Create BOTH CLIENT.CLAUDE.md (CLI) AND LIBRARY.CLAUDE.md (importable API)
+- **Backend with admin UI**: Create BOTH SERVICE.CLAUDE.md (API) AND CLIENT.CLAUDE.md (UI)
+- **Library with Storybook**: Create BOTH LIBRARY.CLAUDE.md (components) AND CLIENT.CLAUDE.md (Storybook)
 
 **KEY PRINCIPLE:**
 Creating a file for one type does NOT exempt that project from other types. Evaluate independently.
@@ -230,7 +230,7 @@ Scan the repository and identify ALL projects that match the criteria for this t
 [... list ALL identified projects ...]
 
 **IF ZERO PROJECTS:**
-If you identified exactly ZERO projects of this type, remove this entire section from claude.md and skip to the next section.
+If you identified exactly ZERO projects of this type, remove this entire section from CLAUDE.md and skip to the next section.
 
 **IF ONE OR MORE PROJECTS:**
 You MUST create that exact number of files. Proceed to Step 1.5.
@@ -248,15 +248,15 @@ Before creating any files, present the complete scope to the user for approval.
 ```
 📊 SCOPE OVERVIEW FOR THIS SECTION
 
-Total files to create: ___ [type].claude.md files
+Total files to create: ___ [type].CLAUDE.md files
 
 Estimated time: ___ minutes to ___ hours
 (Based on ___-___ minutes per file × ___ files)
 
 Files that will be created:
-1. ./path/to/project1/[type].claude.md
-2. ./path/to/project2/[type].claude.md
-3. ./path/to/project3/[type].claude.md
+1. ./path/to/project1/[type].CLAUDE.md
+2. ./path/to/project2/[type].CLAUDE.md
+3. ./path/to/project3/[type].CLAUDE.md
 [... list ALL file paths ...]
 
 This is comprehensive documentation work that will:
@@ -285,7 +285,7 @@ Do you want to proceed with creating these files now?
 Create ONE todo item for EACH file you will create:
 
 ```
-✍️ Create [type].claude.md for [project name]
+✍️ Create [type].CLAUDE.md for [project name]
 ```
 
 Do this for ALL projects identified in Step 1. Do NOT proceed until all todos are created.
@@ -312,7 +312,7 @@ For EACH project identified in Step 1:
 
 1. ☐ Mark the TodoWrite item as `in_progress`
 2. ☐ Read the corresponding template file
-3. ☐ Create the file at the identified path (use lowercase filename: `service.claude.md`, `client.claude.md`, etc.)
+3. ☐ Create the file at the identified path (use uppercase filename: `SERVICE.CLAUDE.md`, `CLIENT.CLAUDE.md`, etc.)
 4. ☐ Populate using the template instructions
 5. ☐ Ensure file is comprehensive (150+ lines with all template sections)
 6. ☐ Mark the TodoWrite item as `completed`
@@ -332,7 +332,7 @@ For EACH project identified in Step 1:
   - If NO: STOP - Go back to Step 4 and create missing files
 
 **Inline Documentation Check:**
-- **Did you write ANY project details in this claude.md file?** YES / NO
+- **Did you write ANY project details in this CLAUDE.md file?** YES / NO
   - If YES: STOP - You VIOLATED the rules. Delete inline docs and create proper files
 - **Are ALL project details in separate files?** YES / NO
   - If NO: STOP - Move all details to separate files
@@ -347,17 +347,17 @@ For EACH project identified in Step 1:
 
 ### STEP 6: CREATE REFERENCES
 
-After ALL files are created, add @file references to this claude.md file.
+After ALL files are created, add @file references to this CLAUDE.md file.
 
 **ONLY PERMITTED FORMAT:**
 ```markdown
-- **<{Project Name}>**: @file ./relative/path/to/[type].claude.md
+- **<{Project Name}>**: @file ./relative/path/to/[type].CLAUDE.md
 ```
 
 **EXAMPLES:**
-- **User API**: @file ./services/user-api/service.claude.md
-- **Admin Dashboard**: @file ./apps/admin/client.claude.md
-- **@company/utils**: @file ./packages/utils/library.claude.md
+- **User API**: @file ./services/user-api/SERVICE.CLAUDE.md
+- **Admin Dashboard**: @file ./apps/admin/CLIENT.CLAUDE.md
+- **@company/utils**: @file ./packages/utils/LIBRARY.CLAUDE.md
 
 **NO OTHER CONTENT PERMITTED** - Only @file references
 
@@ -379,7 +379,7 @@ After ALL files are created, add @file references to this claude.md file.
 - Is every file 150+ lines with full template coverage? YES / NO (If NO: STOP - expand files)
 
 **4. No Inline Documentation:**
-- **Does claude.md contain ANY project-specific details?** YES / NO
+- **Does CLAUDE.md contain ANY project-specific details?** YES / NO
   - Examples: installation instructions, API endpoints, usage examples, configuration
   - If YES: STOP - You FAILED. Delete all inline documentation
 
@@ -414,15 +414,15 @@ After ALL files are created, add @file references to this claude.md file.
 ```markdown
 ## Libraries and Plugins
 
-- **@company/utils (Utility Library)**: @file ./packages/utils/library.claude.md
+- **@company/utils (Utility Library)**: @file ./packages/utils/LIBRARY.CLAUDE.md
 ```
 
 **WRONG - SKIPPING FILES:**
 ```markdown
 ## Services and APIs
 
-- **User API**: @file ./services/user-api/service.claude.md
-- **Payment API**: @file ./services/payment-api/service.claude.md
+- **User API**: @file ./services/user-api/SERVICE.CLAUDE.md
+- **Payment API**: @file ./services/payment-api/SERVICE.CLAUDE.md
 [Identified 8 services but only created 2 files - WRONG!]
 ```
 
@@ -430,10 +430,10 @@ After ALL files are created, add @file references to this claude.md file.
 ```markdown
 ## Services and APIs
 
-- **User API**: @file ./services/user-api/service.claude.md
-- **Payment API**: @file ./services/payment-api/service.claude.md
-- **Auth Service**: @file ./services/auth/service.claude.md
-- **Notification Service**: @file ./services/notifications/service.claude.md
+- **User API**: @file ./services/user-api/SERVICE.CLAUDE.md
+- **Payment API**: @file ./services/payment-api/SERVICE.CLAUDE.md
+- **Auth Service**: @file ./services/auth/SERVICE.CLAUDE.md
+- **Notification Service**: @file ./services/notifications/SERVICE.CLAUDE.md
 [... all 8 services have @file references...]
 ```
 
@@ -450,7 +450,7 @@ After ALL files are created, add @file references to this claude.md file.
 <{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
 
 <{TEMPLATE FILE: Use service.template.md when creating service files}>
-<{OUTPUT FILENAME: service.claude.md (lowercase)}>
+<{OUTPUT FILENAME: SERVICE.CLAUDE.md (uppercase)}>
 
 ---
 
@@ -470,7 +470,7 @@ After ALL files are created, add @file references to this claude.md file.
 
 ### What is NOT a Service?
 
-<{Do NOT create service.claude.md for these:}>
+<{Do NOT create SERVICE.CLAUDE.md for these:}>
 - Frontend web applications (React, Vue, Angular, Svelte SPAs)
 - Static site generators (Next.js, Gatsby, Hugo) unless they have backend API routes
 - Mobile applications (iOS, Android, React Native)
@@ -495,7 +495,7 @@ After ALL files are created, add @file references to this claude.md file.
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a client.claude.md, library.claude.md, or database.claude.md for a project, that same project may ALSO be a service. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a service. Evaluate each project independently for EACH type. Many projects are hybrids.}>
 
 <{Common hybrid scenarios:}>
 - **Next.js/Nuxt with API routes**: Has BOTH client (frontend) AND service (API routes)
@@ -509,15 +509,15 @@ After ALL files are created, add @file references to this claude.md file.
 
 <{After completing the 7-step workflow, list services here using ONLY @file references:}>
 
-- **<{Service Name}>**: @file ./relative/path/to/service/service.claude.md
+- **<{Service Name}>**: @file ./relative/path/to/service/SERVICE.CLAUDE.md
 
 <{Example:}>
-- **User Management API**: @file ./apps/user-service/service.claude.md
-- **Payment Processing Service**: @file ./services/payment-api/service.claude.md
+- **User Management API**: @file ./apps/user-service/SERVICE.CLAUDE.md
+- **Payment Processing Service**: @file ./services/payment-api/SERVICE.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO backend services in this repository (you identified exactly ZERO), then remove this entire "Services and APIs" section from the claude.md file.}>
+<{SPECIAL CASE: If there are truly NO backend services in this repository (you identified exactly ZERO), then remove this entire "Services and APIs" section from the CLAUDE.md file.}>
 
 ═══════════════════════════════════════════════════════════
 
@@ -528,7 +528,7 @@ After ALL files are created, add @file references to this claude.md file.
 <{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
 
 <{TEMPLATE FILE: Use client.template.md when creating client files}>
-<{OUTPUT FILENAME: client.claude.md (lowercase)}>
+<{OUTPUT FILENAME: CLIENT.CLAUDE.md (uppercase)}>
 
 ---
 
@@ -547,7 +547,7 @@ After ALL files are created, add @file references to this claude.md file.
 
 ### What is NOT a Client?
 
-<{Do NOT create client.claude.md for these:}>
+<{Do NOT create CLIENT.CLAUDE.md for these:}>
 - Backend services/APIs (these go in Services section)
 - Libraries or packages (these go in Libraries section)
 - Build tools or development utilities
@@ -569,7 +569,7 @@ After ALL files are created, add @file references to this claude.md file.
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a service.claude.md, library.claude.md, or database.claude.md for a project, that same project may ALSO be a client. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, LIBRARY.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a client. Evaluate each project independently for EACH type. Many projects are hybrids.}>
 
 <{Common hybrid scenarios:}>
 - **Next.js/Nuxt with API routes**: Has BOTH client (frontend) AND service (API routes)
@@ -584,16 +584,16 @@ After ALL files are created, add @file references to this claude.md file.
 
 <{After completing the 7-step workflow, list clients here using ONLY @file references:}>
 
-- **<{Client Name}>**: @file ./relative/path/to/client/client.claude.md
+- **<{Client Name}>**: @file ./relative/path/to/client/CLIENT.CLAUDE.md
 
 <{Example:}>
-- **Admin Dashboard (Web)**: @file ./apps/admin-dashboard/client.claude.md
-- **Mobile App (iOS/Android)**: @file ./apps/mobile/client.claude.md
-- **Developer CLI**: @file ./tools/cli/client.claude.md
+- **Admin Dashboard (Web)**: @file ./apps/admin-dashboard/CLIENT.CLAUDE.md
+- **Mobile App (iOS/Android)**: @file ./apps/mobile/CLIENT.CLAUDE.md
+- **Developer CLI**: @file ./tools/cli/CLIENT.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO user interaction clients in this repository (e.g., it's a pure backend service, library, or database repo), then remove this entire "User Interaction Clients" section from the claude.md file.}>
+<{SPECIAL CASE: If there are truly NO user interaction clients in this repository (e.g., it's a pure backend service, library, or database repo), then remove this entire "User Interaction Clients" section from the CLAUDE.md file.}>
 
 ═══════════════════════════════════════════════════════════
 
@@ -604,7 +604,7 @@ After ALL files are created, add @file references to this claude.md file.
 <{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
 
 <{TEMPLATE FILE: Use library.template.md when creating library files}>
-<{OUTPUT FILENAME: library.claude.md (lowercase)}>
+<{OUTPUT FILENAME: LIBRARY.CLAUDE.md (uppercase)}>
 
 ---
 
@@ -625,7 +625,7 @@ After ALL files are created, add @file references to this claude.md file.
 
 ### What is NOT a Library?
 
-<{Do NOT create library.claude.md for these:}>
+<{Do NOT create LIBRARY.CLAUDE.md for these:}>
 - Backend services/APIs (these go in Services section)
 - Frontend applications (these go in Clients section)
 - Internal code shared within this repo only (not published as a package)
@@ -648,7 +648,7 @@ After ALL files are created, add @file references to this claude.md file.
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a service.claude.md, client.claude.md, or database.claude.md for a project, that same project may ALSO be a library. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a library. Evaluate each project independently for EACH type. Many projects are hybrids.}>
 
 <{Common hybrid scenarios:}>
 - **CLI tool published as npm package**: Has BOTH client (CLI interface) AND library (importable API)
@@ -663,16 +663,16 @@ After ALL files are created, add @file references to this claude.md file.
 
 <{After completing the 7-step workflow, list libraries here using ONLY @file references:}>
 
-- **<{Library Name}>**: @file ./relative/path/to/library/library.claude.md
+- **<{Library Name}>**: @file ./relative/path/to/library/LIBRARY.CLAUDE.md
 
 <{Example:}>
-- **@company/utils (Utility Library)**: @file ./packages/utils/library.claude.md
-- **@company/ui-components (Component Library)**: @file ./packages/ui-components/library.claude.md
-- **custom-webpack-plugin (Build Plugin)**: @file ./tools/webpack-plugin/library.claude.md
+- **@company/utils (Utility Library)**: @file ./packages/utils/LIBRARY.CLAUDE.md
+- **@company/ui-components (Component Library)**: @file ./packages/ui-components/LIBRARY.CLAUDE.md
+- **custom-webpack-plugin (Build Plugin)**: @file ./tools/webpack-plugin/LIBRARY.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO libraries or plugins in this repository (you identified exactly ZERO), then remove this entire "Libraries and Plugins" section from the claude.md file.}>
+<{SPECIAL CASE: If there are truly NO libraries or plugins in this repository (you identified exactly ZERO), then remove this entire "Libraries and Plugins" section from the CLAUDE.md file.}>
 
 ═══════════════════════════════════════════════════════════
 
@@ -683,7 +683,7 @@ After ALL files are created, add @file references to this claude.md file.
 <{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
 
 <{TEMPLATE FILE: Use database.template.md when creating database files}>
-<{OUTPUT FILENAME: database.claude.md (lowercase)}>
+<{OUTPUT FILENAME: DATABASE.CLAUDE.md (uppercase)}>
 
 ---
 
@@ -691,7 +691,7 @@ After ALL files are created, add @file references to this claude.md file.
 
 <{A "database" is a data store with a defined schema, structure, or data model that is DEFINED in this repository.}>
 
-<{NOTE: Most services will reference external databases - document those in service.claude.md. Only create database.claude.md if the schema/migrations are DEFINED in this repository.}>
+<{NOTE: Most services will reference external databases - document those in SERVICE.CLAUDE.md. Only create DATABASE.CLAUDE.md if the schema/migrations are DEFINED in this repository.}>
 
 <{Databases include:}>
 - Relational databases (PostgreSQL, MySQL, SQL Server schemas)
@@ -706,8 +706,8 @@ After ALL files are created, add @file references to this claude.md file.
 
 ### What is NOT a Database?
 
-<{Do NOT create database.claude.md for these:}>
-- External databases used by services (document in service.claude.md instead)
+<{Do NOT create DATABASE.CLAUDE.md for these:}>
+- External databases used by services (document in SERVICE.CLAUDE.md instead)
 - In-memory caches without persistent schema
 - File-based storage without schema
 
@@ -721,13 +721,13 @@ After ALL files are created, add @file references to this claude.md file.
 - ✅ Prisma schema or TypeORM entities → IS a database (defines structure)
 - ❌ Redis used for caching only → NOT a database (unless has defined data structures)
 - ❌ S3 bucket for file storage → NOT a database (file storage)
-- ⚠️ Service connects to external PostgreSQL → Document in service.claude.md, not separate database file
+- ⚠️ Service connects to external PostgreSQL → Document in SERVICE.CLAUDE.md, not separate database file
 
 ---
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a service.claude.md, client.claude.md, or library.claude.md for a project, that same project may ALSO define database schemas. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, or LIBRARY.CLAUDE.md for a project, that same project may ALSO define database schemas. Evaluate each project independently for EACH type. Many projects are hybrids.}>
 
 <{Common hybrid scenarios:}>
 - **Backend service with embedded schema**: Has BOTH service (API) AND database (schema/migrations in same project)
@@ -741,16 +741,16 @@ After ALL files are created, add @file references to this claude.md file.
 
 <{After completing the 7-step workflow, list databases here using ONLY @file references:}>
 
-- **<{Database Name}>**: @file ./relative/path/to/database/database.claude.md
+- **<{Database Name}>**: @file ./relative/path/to/database/DATABASE.CLAUDE.md
 
 <{Example:}>
-- **User Management Database (PostgreSQL)**: @file ./database/user-db/database.claude.md
-- **Analytics Database (MongoDB)**: @file ./database/analytics/database.claude.md
-- **Main Application Database**: @file ./prisma/database.claude.md
+- **User Management Database (PostgreSQL)**: @file ./database/user-db/DATABASE.CLAUDE.md
+- **Analytics Database (MongoDB)**: @file ./database/analytics/DATABASE.CLAUDE.md
+- **Main Application Database**: @file ./prisma/DATABASE.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO database schemas defined in this repository (e.g., services connect to external databases without defining schema here, or it's a frontend-only repo), then remove this entire "Databases" section from the claude.md file.}>
+<{SPECIAL CASE: If there are truly NO database schemas defined in this repository (e.g., services connect to external databases without defining schema here, or it's a frontend-only repo), then remove this entire "Databases" section from the CLAUDE.md file.}>
 
 ═══════════════════════════════════════════════════════════
 
