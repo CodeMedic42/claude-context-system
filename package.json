@@ -18,19 +18,21 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
-    "lerna": "^9.0.3"
+    "lerna": "^9.0.3",
+    "node-pty": "^1.1.0",
+    "picocolors": "^1.1.1"
   },
   "scripts": {
     "prepare": "husky",
     "clean": "lerna clean -y",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:verbose": "jest --verbose",
-    "start:test-runner": "cd test-runner && npm start",
-    "lint": "lerna run lint",
+    "contest": "node tests/cli/bin/contest.js",
+    "lint": "eslint . --ext .js,.jsx",
+    "lint:fix": "eslint . --ext .js,.jsx --fix",
     "build": "lerna run build",
     "version": "lerna version",
     "publish:commit": "lerna publish",
@@ -48,5 +50,14 @@
     "copilot:template:update": "cp shared/templates/*.md copilot-context-cli/templates/",
     "copilot:command:update": "cp shared/commands/*.md copilot-context-cli/commands/",
     "copilot:sync": "pnpm run copilot:template:update && pnpm run copilot:command:update"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^14.0.2",
+    "fs-extra": "^11.3.3",
+    "inquirer": "^8.2.7",
+    "lodash": "^4.17.21",
+    "open": "^8.4.2",
+    "strip-ansi": "^6.0.1"
   }
 }
