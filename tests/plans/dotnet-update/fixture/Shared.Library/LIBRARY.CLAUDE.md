@@ -508,7 +508,7 @@ Internal library - contact development team through standard channels.
 
 *(Leave blank initially - user should review and populate with project-specific restrictions)*
 
-# Library File Metadata
+# Agent File Metadata
 
 - Date Created: 2026-01-09T22:05:00Z
 - Date Modified: 2026-01-09T22:05:00Z

@@ -1,26 +1,26 @@
 # Repository Agent Context
 
-## Repository Summary
+## Repository Overview
 
-<{Brief description of what this service does and its purpose within the organization}>
+~:Brief description of what this service does and its purpose within the organization:~
 
 ## High-Level Repository Information
 
-- **Project Types**: <{List all project types, e.g. Node express service, Node Front End client, .Net service, etc. }>
-- **Languages**: <{List all languages used in this repository, e.g. Java 17, .Net 9, Javascript, go, python, etc.}>
-- **Frameworks/Libraries**: <{Key frameworks, libraries, and versions}>
+- **Project Types**: ~:List all project types, e.g. Node express service, Node Front End client, .Net service, etc. :~
+- **Languages**: ~:List all languages used in this repository, e.g. Java 17, .Net 9, Javascript, go, python, etc.:~
+- **Frameworks/Libraries**: ~:Key frameworks, libraries, and versions:~
 
 ## Repository Structure
 
-<{Create an ascii based directory tree of the repository structure. Be sure to add a 5 word max comment for each file/directory describing it. Ignore any files or directories which are specified via any .gitingore files.}>
+~:Create an ascii based directory tree of the repository structure. Be sure to add a 5 word max comment for each file/directory describing it. Ignore any files or directories which are specified via any .gitingore files.:~
 
 ## Code Organization Patterns
 
-<{Describe the high-level architectural patterns and code organization used in this repository}>
-- **Architecture**: <{e.g., "Monorepo with multiple services", "Single application", "Microservices", "Modular monolith"}>
-- **Project organization**: <{Describe how projects/modules are organized}>
-- **Common patterns**: <{Describe any architectural patterns used across projects - e.g., "All services use layered architecture", "Shared libraries in /packages"}>
-- **Naming conventions**: <{Describe file/folder naming conventions}>
+~:Describe the high-level architectural patterns and code organization used in this repository:~
+- **Architecture**: ~:e.g., "Monorepo with multiple services", "Single application", "Microservices", "Modular monolith":~
+- **Project organization**: ~:Describe how projects/modules are organized:~
+- **Common patterns**: ~:Describe any architectural patterns used across projects - e.g., "All services use layered architecture", "Shared libraries in /packages":~
+- **Naming conventions**: ~:Describe file/folder naming conventions:~
 
 ═══════════════════════════════════════════════════════════
 # PROJECT DOCUMENTATION RULES
@@ -34,7 +34,7 @@ This section defines MANDATORY rules for documenting projects in this repository
 3. Libraries and Plugins
 4. Databases
 
-<{If you add a 5th project type in the future, these same rules apply to it as well.}>
+~:If you add a 5th project type in the future, these same rules apply to it as well.:~
 
 ---
 
@@ -351,7 +351,7 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 **ONLY PERMITTED FORMAT:**
 ```markdown
-- **<{Project Name}>**: @file ./relative/path/to/[type].CLAUDE.md
+- **~:Project Name:~**: @file ./relative/path/to/[type].CLAUDE.md
 ```
 
 **EXAMPLES:**
@@ -406,7 +406,7 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 - **@company/utils (Utility Library)**: Version 1.0.0
   - Installation: npm install @company/utils
   - Core Features: formatDate, parseJSON, validateEmail
-  - Usage: import <{ formatDate }> from '@company/utils'
+  - Usage: import ~: formatDate :~ from '@company/utils'
   - API Reference: [detailed documentation...]
 ```
 
@@ -438,7 +438,7 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 ```
 
 ═══════════════════════════════════════════════════════════
-<{END OF PROJECT DOCUMENTATION RULES}>
+~:END OF PROJECT DOCUMENTATION RULES:~
 ═══════════════════════════════════════════════════════════
 
 **YOU MUST FOLLOW ALL RULES ABOVE FOR EACH OF THE FOLLOWING SECTIONS:**
@@ -447,18 +447,18 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 ## Services and APIs
 ═══════════════════════════════════════════════════════════
 
-<{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
+~:⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.:~
 
-<{TEMPLATE FILE: Use service.template.md when creating service files}>
-<{OUTPUT FILENAME: SERVICE.CLAUDE.md (uppercase)}>
+~:TEMPLATE FILE: Use service.template.md when creating service files:~
+~:OUTPUT FILENAME: SERVICE.CLAUDE.md (uppercase):~
 
 ---
 
 ### What IS a Service?
 
-<{A "service" is a backend application that exposes HTTP/network endpoints for OTHER applications to consume.}>
+~:A "service" is a backend application that exposes HTTP/network endpoints for OTHER applications to consume.:~
 
-<{Services include:}>
+~:Services include::~
 - REST APIs (Express, FastAPI, Spring Boot, ASP.NET Core, etc.)
 - GraphQL servers (Apollo Server, Hasura, etc.)
 - gRPC services
@@ -470,7 +470,7 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### What is NOT a Service?
 
-<{Do NOT create SERVICE.CLAUDE.md for these:}>
+~:Do NOT create SERVICE.CLAUDE.md for these::~
 - Frontend web applications (React, Vue, Angular, Svelte SPAs)
 - Static site generators (Next.js, Gatsby, Hugo) unless they have backend API routes
 - Mobile applications (iOS, Android, React Native)
@@ -495,9 +495,9 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a service. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+~:IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a service. Evaluate each project independently for EACH type. Many projects are hybrids.:~
 
-<{Common hybrid scenarios:}>
+~:Common hybrid scenarios::~
 - **Next.js/Nuxt with API routes**: Has BOTH client (frontend) AND service (API routes)
 - **Backend service with admin UI**: Has BOTH service (API) AND client (admin dashboard)
 - **Monorepo with full-stack apps**: Individual apps may have BOTH client AND service
@@ -507,17 +507,17 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Section Output Format
 
-<{After completing the 7-step workflow, list services here using ONLY @file references:}>
+~:After completing the 7-step workflow, list services here using ONLY @file references::~
 
-- **<{Service Name}>**: @file ./relative/path/to/service/SERVICE.CLAUDE.md
+- **~:Service Name:~**: @file ./relative/path/to/service/SERVICE.CLAUDE.md
 
-<{Example:}>
+~:Example::~
 - **User Management API**: @file ./apps/user-service/SERVICE.CLAUDE.md
 - **Payment Processing Service**: @file ./services/payment-api/SERVICE.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO backend services in this repository (you identified exactly ZERO), then remove this entire "Services and APIs" section from the CLAUDE.md file.}>
+~:SPECIAL CASE: If there are truly NO backend services in this repository (you identified exactly ZERO), then remove this entire "Services and APIs" section from the CLAUDE.md file.:~
 
 ═══════════════════════════════════════════════════════════
 
@@ -525,18 +525,18 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 ## User Interaction Clients
 ═══════════════════════════════════════════════════════════
 
-<{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
+~:⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.:~
 
-<{TEMPLATE FILE: Use client.template.md when creating client files}>
-<{OUTPUT FILENAME: CLIENT.CLAUDE.md (uppercase)}>
+~:TEMPLATE FILE: Use client.template.md when creating client files:~
+~:OUTPUT FILENAME: CLIENT.CLAUDE.md (uppercase):~
 
 ---
 
 ### What IS a Client?
 
-<{A "client" is an application that provides an interactive interface for users to interact with the system.}>
+~:A "client" is an application that provides an interactive interface for users to interact with the system.:~
 
-<{Clients include:}>
+~:Clients include::~
 - Web frontend applications (React, Vue, Angular, Svelte SPAs)
 - Mobile applications (iOS, Android, React Native, Flutter)
 - Desktop applications (Electron, Tauri, native apps)
@@ -547,7 +547,7 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### What is NOT a Client?
 
-<{Do NOT create CLIENT.CLAUDE.md for these:}>
+~:Do NOT create CLIENT.CLAUDE.md for these::~
 - Backend services/APIs (these go in Services section)
 - Libraries or packages (these go in Libraries section)
 - Build tools or development utilities
@@ -569,9 +569,9 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, LIBRARY.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a client. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+~:IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, LIBRARY.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a client. Evaluate each project independently for EACH type. Many projects are hybrids.:~
 
-<{Common hybrid scenarios:}>
+~:Common hybrid scenarios::~
 - **Next.js/Nuxt with API routes**: Has BOTH client (frontend) AND service (API routes)
 - **CLI tool published as npm package**: Has BOTH client (CLI interface) AND library (importable package)
 - **Component library with Storybook**: Has BOTH library (components) AND client (Storybook UI)
@@ -582,18 +582,18 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Section Output Format
 
-<{After completing the 7-step workflow, list clients here using ONLY @file references:}>
+~:After completing the 7-step workflow, list clients here using ONLY @file references::~
 
-- **<{Client Name}>**: @file ./relative/path/to/client/CLIENT.CLAUDE.md
+- **~:Client Name:~**: @file ./relative/path/to/client/CLIENT.CLAUDE.md
 
-<{Example:}>
+~:Example::~
 - **Admin Dashboard (Web)**: @file ./apps/admin-dashboard/CLIENT.CLAUDE.md
 - **Mobile App (iOS/Android)**: @file ./apps/mobile/CLIENT.CLAUDE.md
 - **Developer CLI**: @file ./tools/cli/CLIENT.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO user interaction clients in this repository (e.g., it's a pure backend service, library, or database repo), then remove this entire "User Interaction Clients" section from the CLAUDE.md file.}>
+~:SPECIAL CASE: If there are truly NO user interaction clients in this repository (e.g., it's a pure backend service, library, or database repo), then remove this entire "User Interaction Clients" section from the CLAUDE.md file.:~
 
 ═══════════════════════════════════════════════════════════
 
@@ -601,18 +601,18 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 ## Libraries and Plugins
 ═══════════════════════════════════════════════════════════
 
-<{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
+~:⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.:~
 
-<{TEMPLATE FILE: Use library.template.md when creating library files}>
-<{OUTPUT FILENAME: LIBRARY.CLAUDE.md (uppercase)}>
+~:TEMPLATE FILE: Use library.template.md when creating library files:~
+~:OUTPUT FILENAME: LIBRARY.CLAUDE.md (uppercase):~
 
 ---
 
 ### What IS a Library?
 
-<{A "library" is a reusable package or module that other projects can import and use.}>
+~:A "library" is a reusable package or module that other projects can import and use.:~
 
-<{Libraries/Plugins include:}>
+~:Libraries/Plugins include::~
 - Shared utility libraries (helper functions, common code)
 - UI component libraries (reusable components)
 - SDKs (Software Development Kits for external services)
@@ -625,7 +625,7 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### What is NOT a Library?
 
-<{Do NOT create LIBRARY.CLAUDE.md for these:}>
+~:Do NOT create LIBRARY.CLAUDE.md for these::~
 - Backend services/APIs (these go in Services section)
 - Frontend applications (these go in Clients section)
 - Internal code shared within this repo only (not published as a package)
@@ -648,9 +648,9 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a library. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+~:IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, or DATABASE.CLAUDE.md for a project, that same project may ALSO be a library. Evaluate each project independently for EACH type. Many projects are hybrids.:~
 
-<{Common hybrid scenarios:}>
+~:Common hybrid scenarios::~
 - **CLI tool published as npm package**: Has BOTH client (CLI interface) AND library (importable API)
 - **Framework with CLI**: Has BOTH library (framework API) AND client (CLI commands)
 - **SDK with example app**: Has BOTH library (SDK) AND client (example/demo app)
@@ -661,18 +661,18 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Section Output Format
 
-<{After completing the 7-step workflow, list libraries here using ONLY @file references:}>
+~:After completing the 7-step workflow, list libraries here using ONLY @file references::~
 
-- **<{Library Name}>**: @file ./relative/path/to/library/LIBRARY.CLAUDE.md
+- **~:Library Name:~**: @file ./relative/path/to/library/LIBRARY.CLAUDE.md
 
-<{Example:}>
+~:Example::~
 - **@company/utils (Utility Library)**: @file ./packages/utils/LIBRARY.CLAUDE.md
 - **@company/ui-components (Component Library)**: @file ./packages/ui-components/LIBRARY.CLAUDE.md
 - **custom-webpack-plugin (Build Plugin)**: @file ./tools/webpack-plugin/LIBRARY.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO libraries or plugins in this repository (you identified exactly ZERO), then remove this entire "Libraries and Plugins" section from the CLAUDE.md file.}>
+~:SPECIAL CASE: If there are truly NO libraries or plugins in this repository (you identified exactly ZERO), then remove this entire "Libraries and Plugins" section from the CLAUDE.md file.:~
 
 ═══════════════════════════════════════════════════════════
 
@@ -680,20 +680,20 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 ## Databases
 ═══════════════════════════════════════════════════════════
 
-<{⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.}>
+~:⚠️ FOLLOW THE UNIVERSAL WORKFLOW: Follow the 7-step universal workflow defined in PROJECT DOCUMENTATION RULES section above. All rules from that section apply to this section.:~
 
-<{TEMPLATE FILE: Use database.template.md when creating database files}>
-<{OUTPUT FILENAME: DATABASE.CLAUDE.md (uppercase)}>
+~:TEMPLATE FILE: Use database.template.md when creating database files:~
+~:OUTPUT FILENAME: DATABASE.CLAUDE.md (uppercase):~
 
 ---
 
 ### What IS a Database?
 
-<{A "database" is a data store with a defined schema, structure, or data model that is DEFINED in this repository.}>
+~:A "database" is a data store with a defined schema, structure, or data model that is DEFINED in this repository.:~
 
-<{NOTE: Most services will reference external databases - document those in SERVICE.CLAUDE.md. Only create DATABASE.CLAUDE.md if the schema/migrations are DEFINED in this repository.}>
+~:NOTE: Most services will reference external databases - document those in SERVICE.CLAUDE.md. Only create DATABASE.CLAUDE.md if the schema/migrations are DEFINED in this repository.:~
 
-<{Databases include:}>
+~:Databases include::~
 - Relational databases (PostgreSQL, MySQL, SQL Server schemas)
 - Document databases (MongoDB collections and schemas)
 - Key-value stores (Redis data structures)
@@ -706,7 +706,7 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### What is NOT a Database?
 
-<{Do NOT create DATABASE.CLAUDE.md for these:}>
+~:Do NOT create DATABASE.CLAUDE.md for these::~
 - External databases used by services (document in SERVICE.CLAUDE.md instead)
 - In-memory caches without persistent schema
 - File-based storage without schema
@@ -727,9 +727,9 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Hybrid Projects
 
-<{IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, or LIBRARY.CLAUDE.md for a project, that same project may ALSO define database schemas. Evaluate each project independently for EACH type. Many projects are hybrids.}>
+~:IMPORTANT NOTE: Projects can serve multiple purposes. Even if you already created a SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, or LIBRARY.CLAUDE.md for a project, that same project may ALSO define database schemas. Evaluate each project independently for EACH type. Many projects are hybrids.:~
 
-<{Common hybrid scenarios:}>
+~:Common hybrid scenarios::~
 - **Backend service with embedded schema**: Has BOTH service (API) AND database (schema/migrations in same project)
 - **ORM/Prisma in monorepo**: Has database schema definitions alongside service and client
 - **Database migration project with CLI**: Has BOTH database (schema) AND client (migration CLI tool)
@@ -739,37 +739,37 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 
 ### Section Output Format
 
-<{After completing the 7-step workflow, list databases here using ONLY @file references:}>
+~:After completing the 7-step workflow, list databases here using ONLY @file references::~
 
-- **<{Database Name}>**: @file ./relative/path/to/database/DATABASE.CLAUDE.md
+- **~:Database Name:~**: @file ./relative/path/to/database/DATABASE.CLAUDE.md
 
-<{Example:}>
+~:Example::~
 - **User Management Database (PostgreSQL)**: @file ./database/user-db/DATABASE.CLAUDE.md
 - **Analytics Database (MongoDB)**: @file ./database/analytics/DATABASE.CLAUDE.md
 - **Main Application Database**: @file ./prisma/DATABASE.CLAUDE.md
 
 ---
 
-<{SPECIAL CASE: If there are truly NO database schemas defined in this repository (e.g., services connect to external databases without defining schema here, or it's a frontend-only repo), then remove this entire "Databases" section from the CLAUDE.md file.}>
+~:SPECIAL CASE: If there are truly NO database schemas defined in this repository (e.g., services connect to external databases without defining schema here, or it's a frontend-only repo), then remove this entire "Databases" section from the CLAUDE.md file.:~
 
 ═══════════════════════════════════════════════════════════
 
 ## Environment Setup
-<{Provide any information needed to setup a working development environment.}>
+~:Provide any information needed to setup a working development environment.:~
 
 ### Prerequisites
-<{Provide information such as what resources are needed to be installed such as Node, Go, Python, Docker. Include any build tools, runtimes, or support tools.}>
+~:Provide information such as what resources are needed to be installed such as Node, Go, Python, Docker. Include any build tools, runtimes, or support tools.:~
 
 ### System Configuration
-<{Provide any environment variables or system paths that need to be set.}>
+~:Provide any environment variables or system paths that need to be set.:~
 
 ### External Dependencies
-<{List any external services, databases, or programs which need to be running locally before being able to work with this repository. For example: Docker containers for PostgreSQL, Redis, message queues, etc.}>
+~:List any external services, databases, or programs which need to be running locally before being able to work with this repository. For example: Docker containers for PostgreSQL, Redis, message queues, etc.:~
 
 ## Running the Application Locally
 
 ### 1. Environment Setup
-<{ Any commands needed to execute setup the repo to be used, e.g. "./gradlew clean build", or "npm install"}>
+~: Any commands needed to execute setup the repo to be used, e.g. "./gradlew clean build", or "npm install":~
 
 {
 	Provide access to any urls where the program(s) might be running at. For example
@@ -782,16 +782,16 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 ## Repository Verification
 
 ### Unit Tests
-<{Provide the commands needed to run tests, e.g. "./gradlew clean test", or "npm run test"}>
+~:Provide the commands needed to run tests, e.g. "./gradlew clean test", or "npm run test":~
 
 ### Linting and Code Style
-<{Provide the commands needed to run linting, e.g. "./gradlew check", or "npm run lint"}>
+~:Provide the commands needed to run linting, e.g. "./gradlew check", or "npm run lint":~
 
 ## Documentation
-<{Provide any required documentation, e.g. README.md, etc. Be sure to indicate the need to keep these update to date when code is changed.}>
+~:Provide any required documentation, e.g. README.md, etc. Be sure to indicate the need to keep these update to date when code is changed.:~
 
 ## Restricted Actions
-<{Define a list of actions which any ai agent are not allowed to do when working in this repo. You will leave this section blank. After you have created or modified the agent file you will remind the user to review this section and update it as necessary.}>
+~:Define a list of actions which any ai agent are not allowed to do when working in this repo. You will leave this section blank. After you have created or modified the agent file you will remind the user to review this section and update it as necessary.:~
 
 # Agent File Metadata
 {
@@ -800,5 +800,5 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 	- Date Created: timestamp
 	- Date Modified: timestamp
 	- Last commit SHA built from: GIT SHA
-	- Template Version: <{version from plugin.json}>
+	- Template Version: ~:version from plugin.json:~
 }

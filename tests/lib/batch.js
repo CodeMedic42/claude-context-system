@@ -136,8 +136,8 @@ async function executeTool(
   }
 
   // Verify that context files were created
-  const claudeMdUpper = path.join(batch.batchDir, 'CLAUDE.md');
-  const claudeMdLower = path.join(batch.batchDir, 'claude.md');
+  const claudeMdUpper = path.join(batch.fixtureDir, 'CLAUDE.md');
+  const claudeMdLower = path.join(batch.fixtureDir, 'claude.md');
 
   if (!fs.existsSync(claudeMdUpper) && !fs.existsSync(claudeMdLower)) {
     throw new Error(
@@ -146,7 +146,7 @@ async function executeTool(
     );
   }
 
-  return true;
+  return { success: true };
 }
 
 async function runTool({
@@ -161,16 +161,16 @@ async function runTool({
     plan.hooks.beforeToolExecution(batch.batchDir);
 
     // Run the tool
-    await executeTool({ tool, batch, command: plan.testCommand });
+    const result = await executeTool({ tool, batch, command: plan.testCommand });
 
     console.log('  Running afterToolExecution hook...');
     plan.hooks.afterToolExecution(batch.batchDir);
 
     console.log('  ✓ Generated successfully');
 
-    return { success: true };
+    return result;
   } catch (error) {
-    console.error(`  ✗ Generation failed: ${plan} (${tool})`);
+    console.error(`  ✗ Generation failed: ${plan.id} (${tool.id})`);
     console.error(`    Error: ${error}`);
 
     return { success: false, error: error.message };
@@ -228,18 +228,15 @@ class Batch {
     try {
       await setupFixture({ plan: this.plan, batch: this });
 
-      await runTool({
+      const result = await runTool({
         plan: this.plan,
         tool: this.tool,
         batch: this,
       });
 
-      this.generationResult = {
-        success: true,
-        error: null,
-      };
+      this.generationResult = result;
     } catch (error) {
-      console.error(`  ✗ Generation failed: ${this.plan.id} (${this.tool.id})`);
+      console.error(`  ✗ Generation failed: plan: ${this.plan.id}, tool: ${this.tool.id}`);
       console.error(`    Error: ${error.message}`);
 
       this.generationResult = {
@@ -393,6 +390,22 @@ class Batch {
         resolve(testResult);
       });
     });
+  }
+
+  async execute() {
+    const generationResult = await this.generate();
+
+    if (!generationResult.success) {
+      return {
+        success: false,
+        passed: 0,
+        failed: 0,
+      };
+    }
+
+    const result = await this.test();
+
+    return result;
   }
 }
 

@@ -164,9 +164,39 @@ The existing context file was built from the template and needs to be updated.
 
 Extract the template version from the "Agent File Metadata" section of the existing context file.
 
+**CRITICAL TEMPLATE VERIFICATION:**
+
 Locate and read the bundled template file at `../templates/CLAUDE.TEMPLATE.md` (relative to this command file).
 
-If the template is not found, this indicates a plugin installation problem - inform the user.
+**If the template file is NOT found:**
+
+STOP IMMEDIATELY. This indicates a plugin installation problem. Inform the user:
+
+"❌ ERROR: Template files not found.
+
+The context file templates could not be located. This indicates a plugin installation issue.
+
+Expected location: `../templates/CLAUDE.TEMPLATE.md` (relative to the command file)
+
+**DO NOT PROCEED:**
+- DO NOT guess what the template should contain
+- DO NOT update any context files
+- DO NOT attempt to generate content without the template
+
+Please reinstall the plugin or verify the installation:
+```bash
+# For local development
+pnpm run plugin:install
+
+# Or verify plugin files are present
+ls ~/.claude/plugins/local-marketplace/plugins/claude-context-updater/templates/
+```
+
+Aborting update."
+
+Then **EXIT IMMEDIATELY without modifying any files**.
+
+**If the template file IS found:**
 
 Read the current plugin version from `../.claude-plugin/plugin.json` (relative to this command file, the "version" field).
 
@@ -226,53 +256,342 @@ When analyzing git changes, specifically flag patterns that indicate new project
 **Directory Renames/Moves:**
 - `R  old-name/ new-name/` - Check if projects were renamed and update @file references accordingly
 
-### 4.3: Identify and Create New Project Files
+### 4.3: Identify Project Type Changes and Synchronize Context Files
 
-After analyzing git changes in Step 4.2, scan for NEW projects that need documentation. Use the pattern recognition from Step 4.2 to identify candidates.
+**This uses the SAME three-phase process as the create command, but with comparison logic to detect changes.**
 
-**For each project type, check if new projects exist:**
+After analyzing git changes in Step 4.2, you need to identify what has changed about the projects themselves. Projects can be added, removed, change types, or gain/lose types.
 
-1. **New Services**:
-   - Look for git changes matching service patterns (server.js, Dockerfile, Express/FastAPI dependencies)
-   - Check if SERVICE.CLAUDE.md already exists for each service
-   - If service exists but no documentation file → FLAG for creation
+---
 
-2. **New Clients**:
-   - Look for git changes matching client patterns (CLI tools with bin/, frontend apps, mobile apps)
-   - Check if CLIENT.CLAUDE.md already exists for each client
-   - If client exists but no documentation file → FLAG for creation
+#### Phase 1: Identify All Current Projects
 
-3. **New Libraries**:
-   - Look for git changes matching library patterns (packages/* with package.json, reusable modules)
-   - Check if LIBRARY.CLAUDE.md already exists for each library
-   - If library exists but no documentation file → FLAG for creation
+Use the same project identification logic from the create command:
 
-4. **New Databases**:
-   - Look for git changes matching database patterns (migrations/, prisma schema, ORM entities)
-   - Check if DATABASE.CLAUDE.md already exists for each database
-   - If database exists but no documentation file → FLAG for creation
+**A "project" is a distinct, cohesive unit of code with a clear boundary and purpose.**
 
-**Verification Method:**
+**Look for these project indicators:**
 
-For each candidate project identified:
-- Determine where its documentation file SHOULD be located
-- Check if that file exists: `ls <expected-path>/[type].CLAUDE.md`
-- If file does NOT exist → Add to "New Projects to Create" list
+1. **Separate directories** with their own dependency manifests:
+   - `package.json` (Node.js)
+   - `pom.xml` (Java/Maven)
+   - `Cargo.toml` (Rust)
+   - `.csproj` (C#)
+   - `pyproject.toml` / `setup.py` (Python)
+   - `go.mod` (Go)
 
-**If ZERO new projects are identified:**
-- Continue to Step 4.4 (Smart Merge with Preservation)
-- Proceed with structural updates
+2. **Distinct deployable units**:
+   - Separate Docker images
+   - Independent deployment artifacts
+   - Different cloud functions/lambdas
 
-**If ONE OR MORE new projects are identified:**
-- Create TodoWrite items for ALL identified projects
-- Proceed AUTOMATICALLY to create all project files:
-  - Use the appropriate template for each type (SERVICE.TEMPLATE.md, CLIENT.TEMPLATE.md, etc.)
-  - Create each file in the appropriate location
-  - Mark each todo as in_progress when starting, completed when finishing
-  - Do NOT skip any files
-  - Do NOT ask for user approval
-- Update main CLAUDE.md with @file references for new projects
-- Then proceed to Step 4.4 for remaining structural updates
+3. **Clear ownership domains**:
+   - Different teams or areas of responsibility
+   - Separate READMEs or documentation
+   - Isolated concerns (auth service vs payment service)
+
+4. **Monorepo framework indicators**:
+   - If Lerna, Nx, Turborepo, or similar is detected, use its workspace/package configuration to identify projects
+   - Check `lerna.json`, `nx.json`, `pnpm-workspace.yaml`, or `workspaces` field in package.json
+
+**IMPORTANT**:
+- The repository root itself can be a project if it's not subdivided into multiple projects
+- Test fixtures and example code in `tests/`, `examples/`, `__fixtures__/` should generally be SKIPPED unless they're substantial standalone projects
+
+**Output of Phase 1:** Create a list of ALL projects that currently exist in the repository with their root directories.
+
+---
+
+#### Phase 2: Categorize Each Current Project by Type(s)
+
+**For EACH project identified in Phase 1, determine which type(s) CURRENTLY apply.**
+
+**CRITICAL**: A project can have **MULTIPLE types**. Ask all four questions for each project.
+
+**Question 1: Is it a SERVICE?** (Programmatic Interface)
+- ❓ Does it expose HTTP/REST/GraphQL/SOAP/gRPC endpoints?
+- ❓ Does it process requests from other programs?
+- ❓ Does it run as a background worker, daemon, or service?
+- ❓ Does it have API routes, controllers, or request handlers?
+- ❓ Does it listen on a port for network connections?
+
+**If YES** → This project needs a **SERVICE.CLAUDE.md** file
+
+**Question 2: Is it a CLIENT?** (User Interface)
+- ❓ Does it have a user-facing interface (visual or command-line)?
+- ❓ Is it a website, mobile app, desktop app, or CLI tool?
+- ❓ Does a human interact with it directly?
+- ❓ Does it have pages, screens, views, or interactive commands?
+- ❓ Does it render UI components or handle user input?
+
+**If YES** → This project needs a **CLIENT.CLAUDE.md** file
+
+**Question 3: Is it a LIBRARY?** (Reusable Code)
+- ❓ Is it published or publishable as a package (npm, PyPI, crates.io, Maven, etc.)?
+- ❓ Is it imported as a dependency by other projects?
+- ❓ Does it provide reusable functions, classes, or components?
+- ❓ Does it have a public API meant for other code to consume?
+- ❓ Does it have a `main`, `exports`, or `lib` entry point for importing?
+
+**If YES** → This project needs a **LIBRARY.CLAUDE.md** file
+
+**Question 4: Is it a DATABASE?** (Data Schema/Procedures)
+- ❓ Does it define database schemas or table structures?
+- ❓ Does it contain migrations (Liquibase, Flyway, Alembic, TypeORM, etc.)?
+- ❓ Does it have stored procedures, functions, views, or triggers?
+- ❓ Does it manage database structure as code (Prisma, SQLAlchemy, etc.)?
+- ❓ Is database schema its primary purpose?
+
+**If YES** → This project needs a **DATABASE.CLAUDE.md** file
+
+**Output of Phase 2:** For each project, a list of types that CURRENTLY apply based on the current codebase state.
+
+---
+
+#### Phase 3: Compare Current State with Existing Context Files and Synchronize
+
+**For each project identified in Phase 1:**
+
+**Step 1: Determine what context files SHOULD exist** based on Phase 2 categorization
+
+**Step 2: Scan what context files CURRENTLY exist** in that project's directory
+```bash
+ls <project-dir>/*.CLAUDE.md 2>/dev/null
+```
+
+**Step 3: Compare and create synchronization plan**
+
+For each of the four types (SERVICE, CLIENT, LIBRARY, DATABASE):
+
+```
+Should file exist? (from Phase 2)  |  File exists? (from scan)  |  Action
+-----------------------------------|----------------------------|------------------
+YES                                |  YES                       |  UPDATE file
+YES                                |  NO                        |  CREATE file
+NO                                 |  YES                       |  DELETE file
+NO                                 |  NO                        |  No action
+```
+
+**Examples:**
+
+```
+Example 1: Type removed
+Project: packages/api/
+Phase 2: SERVICE ✓, CLIENT ✗, LIBRARY ✗, DATABASE ✗
+Existing files: SERVICE.CLAUDE.md ✓, CLIENT.CLAUDE.md ✓
+
+Comparison:
+SERVICE.CLAUDE.md:  SHOULD exist ✓, EXISTS ✓  → UPDATE
+CLIENT.CLAUDE.md:   SHOULD exist ✗, EXISTS ✓  → DELETE (type no longer applies)
+
+Actions: Update SERVICE.CLAUDE.md, Delete CLIENT.CLAUDE.md
+```
+
+```
+Example 2: Type added
+Project: packages/utils/
+Phase 2: LIBRARY ✓, CLIENT ✓, SERVICE ✗, DATABASE ✗
+Existing files: LIBRARY.CLAUDE.md ✓
+
+Comparison:
+LIBRARY.CLAUDE.md:  SHOULD exist ✓, EXISTS ✓  → UPDATE
+CLIENT.CLAUDE.md:   SHOULD exist ✓, EXISTS ✗  → CREATE (new type detected)
+
+Actions: Update LIBRARY.CLAUDE.md, Create CLIENT.CLAUDE.md
+```
+
+```
+Example 3: New project
+Project: packages/new-service/
+Phase 2: SERVICE ✓, DATABASE ✓, CLIENT ✗, LIBRARY ✗
+Existing files: (none)
+
+Comparison:
+SERVICE.CLAUDE.md:  SHOULD exist ✓, EXISTS ✗  → CREATE
+DATABASE.CLAUDE.md: SHOULD exist ✓, EXISTS ✗  → CREATE
+
+Actions: Create SERVICE.CLAUDE.md, Create DATABASE.CLAUDE.md
+```
+
+```
+Example 4: Project removed
+Git changes show: D packages/old-project/
+Existing files in current repo: (project directory doesn't exist)
+
+Action: Delete ALL context files that referenced this project, remove @file references
+```
+
+---
+
+#### Synchronization Execution
+
+**Step 1: Create TodoWrite List for ALL Changes**
+
+Across ALL projects, create todos for every action:
+- "Update SERVICE.CLAUDE.md for api"
+- "Delete CLIENT.CLAUDE.md for api (type removed)"
+- "Create CLIENT.CLAUDE.md for utils (type added)"
+- "Update LIBRARY.CLAUDE.md for utils"
+- "Create SERVICE.CLAUDE.md for new-service"
+- "Create DATABASE.CLAUDE.md for new-service"
+
+**Use TodoWrite to add ALL todos BEFORE making any changes.**
+
+---
+
+**Step 2: Process DELETIONS First**
+
+For any context files that should be DELETED:
+
+1. **Mark todo as in_progress**
+2. **Delete the file** from the project directory:
+   ```bash
+   rm <project-dir>/<TYPE>.CLAUDE.md
+   ```
+3. **Remove the @file reference** from main CLAUDE.md
+4. **Mark todo as completed**
+
+---
+
+**Step 3: CREATE New Files**
+
+For any context files that should be CREATED:
+
+1. **Mark todo as in_progress**
+2. **Use the appropriate template**:
+   - SERVICE.CLAUDE.md → Use SERVICE.TEMPLATE.md
+   - CLIENT.CLAUDE.md → Use CLIENT.TEMPLATE.md
+   - LIBRARY.CLAUDE.md → Use LIBRARY.TEMPLATE.md
+   - DATABASE.CLAUDE.md → Use DATABASE.TEMPLATE.md
+3. **Create the file** in the project's root directory
+4. **Add @file reference** to main CLAUDE.md in the correct type section:
+   - Services → "## Services and APIs"
+   - Clients → "## User Interaction Clients"
+   - Libraries → "## Libraries and Plugins"
+   - Databases → "## Databases"
+5. **Mark todo as completed**
+
+---
+
+**Step 4: UPDATE Existing Files**
+
+For any context files that should be UPDATED:
+
+1. **Mark todo as in_progress**
+2. **Apply the same preservation logic** from Step 4.4 (preserve user-added sections - see Step 4.4.1-4.4.3 below)
+3. **Update content** based on git changes that affect this specific project
+4. **Update metadata**:
+   - Date Modified: ~:current timestamp:~
+   - Last commit SHA built from: ~:current git HEAD commit SHA - use `git rev-parse HEAD`:~
+   - Keep Date Created and Template Version unchanged
+5. **Mark todo as completed**
+
+---
+
+#### Special Cases
+
+**Case 1: Project Directory Removed**
+
+If git changes show a project directory was deleted (`D old-project/`):
+- Add todos to delete ALL its context files (SERVICE, CLIENT, LIBRARY, DATABASE if they existed)
+- Remove ALL @file references from main CLAUDE.md
+- Process these in Step 2 (Deletions)
+
+**Case 2: Project Renamed/Moved**
+
+If git changes show `R old-path/ new-path/`:
+- Add todos to move context files to new location
+- Update @file references in main CLAUDE.md to point to new paths
+- Update internal cross-references if files reference each other
+
+**Case 3: Empty Type Sections in CLAUDE.md**
+
+After all synchronization is complete:
+- Check each type section (Services, Clients, Libraries, Databases)
+- If a section has NO @file references, REMOVE the entire section
+- Example: If all DATABASE.CLAUDE.md files were deleted, remove "## Databases" section
+
+**Case 4: No Changes Detected**
+
+If Phase 3 comparison shows:
+- No files to create
+- No files to delete
+- Only updates to existing files based on git changes
+
+Then proceed directly to Step 4.4 to update content in existing files.
+
+---
+
+#### Example Complete Flow
+
+```
+Phase 1: Identified Current Projects
+- ./packages/api/
+- ./packages/web/
+- ./packages/utils/
+- ./packages/new-service/ (NEW)
+
+Phase 2: Current Types
+- ./packages/api/     → SERVICE ✓ (was: SERVICE ✓, CLIENT ✓ in old docs)
+- ./packages/web/     → SERVICE ✓, CLIENT ✓ (unchanged)
+- ./packages/utils/   → LIBRARY ✓, CLIENT ✓ (was: LIBRARY ✓ only)
+- ./packages/new-service/ → SERVICE ✓, DATABASE ✓ (NEW PROJECT)
+
+Phase 3: Comparison Results
+
+packages/api/:
+  Should have: SERVICE.CLAUDE.md
+  Has: SERVICE.CLAUDE.md ✓, CLIENT.CLAUDE.md ✓
+  Actions: UPDATE SERVICE.CLAUDE.md, DELETE CLIENT.CLAUDE.md
+
+packages/web/:
+  Should have: SERVICE.CLAUDE.md, CLIENT.CLAUDE.md
+  Has: SERVICE.CLAUDE.md ✓, CLIENT.CLAUDE.md ✓
+  Actions: UPDATE both
+
+packages/utils/:
+  Should have: LIBRARY.CLAUDE.md, CLIENT.CLAUDE.md
+  Has: LIBRARY.CLAUDE.md ✓
+  Actions: UPDATE LIBRARY.CLAUDE.md, CREATE CLIENT.CLAUDE.md
+
+packages/new-service/:
+  Should have: SERVICE.CLAUDE.md, DATABASE.CLAUDE.md
+  Has: (none - new project)
+  Actions: CREATE SERVICE.CLAUDE.md, CREATE DATABASE.CLAUDE.md
+
+TodoWrite List:
+✓ Delete CLIENT.CLAUDE.md for api (type removed)
+✓ Create CLIENT.CLAUDE.md for utils (type added)
+✓ Create SERVICE.CLAUDE.md for new-service
+✓ Create DATABASE.CLAUDE.md for new-service
+✓ Update SERVICE.CLAUDE.md for api
+✓ Update SERVICE.CLAUDE.md for web
+✓ Update CLIENT.CLAUDE.md for web
+✓ Update LIBRARY.CLAUDE.md for utils
+
+Execution Order:
+1. Deletions: Delete packages/api/CLIENT.CLAUDE.md
+2. Creations: Create packages/utils/CLIENT.CLAUDE.md, packages/new-service/SERVICE.CLAUDE.md, packages/new-service/DATABASE.CLAUDE.md
+3. Updates: Update all remaining files
+
+Final State:
+packages/
+├── api/
+│   └── SERVICE.CLAUDE.md        (updated)
+├── web/
+│   ├── SERVICE.CLAUDE.md        (updated)
+│   └── CLIENT.CLAUDE.md         (updated)
+├── utils/
+│   ├── LIBRARY.CLAUDE.md        (updated)
+│   └── CLIENT.CLAUDE.md         (created)
+└── new-service/
+    ├── SERVICE.CLAUDE.md        (created)
+    └── DATABASE.CLAUDE.md       (created)
+```
+
+---
+
+After completing Phase 3 synchronization, proceed to Step 4.4 to update the main CLAUDE.md file content.
 
 ### 4.4: Smart Merge with Preservation
 
@@ -288,7 +607,7 @@ Before making any changes, identify which sections are user-added (not in the te
 
 1. **Parse both files into sections:**
    - Read the existing `CLAUDE.md` file and extract all `##` (h2) section headers
-   - Read the template file and extract all `##` section headers (ignoring placeholder text `<{...}>`)
+   - Read the template file and extract all `##` section headers (ignoring placeholder text `~:...:~`)
 
 2. **Compare section lists:**
    - For each `##` section in the existing file, check if a section with the SAME NAME exists in the template
@@ -356,12 +675,12 @@ After preserving user sections:
 2. **Update Content Based on Repository Changes**:
    - Update sections affected by the git changes identified in 4.2
    - For complex changes, add comments or notes indicating what changed rather than overwriting user descriptions
-   - If a section appears to still contain placeholder text `<{...}>`, update it with actual content
+   - If a section appears to still contain placeholder text `~:...:~`, update it with actual content
 
 3. **Update Metadata**:
-   - Date Modified: <{current timestamp}>
-   - Last commit SHA built from: <{current git HEAD commit SHA}>
-   - Template Version: <{Read from ../.claude-plugin/plugin.json (relative to command file) - use the "version" field}>
+   - Date Modified: ~:current timestamp:~
+   - Last commit SHA built from: ~:current git HEAD commit SHA - use `git rev-parse HEAD` to get the FULL 40-character SHA, NOT the short 7-character version:~
+   - Template Version: ~:Read from ../.claude-plugin/plugin.json (relative to command file) - use the "version" field:~
 
 **VERIFICATION STEP:**
 
@@ -477,7 +796,7 @@ These files now include Agent File Metadata and will be properly managed going f
 - **Preserve user work**: Be conservative about overwriting content that appears to be user-written. When in doubt, keep existing content and only update what's demonstrably outdated by git changes
 - **Updates are NOT regenerations**: This command updates existing files, it does not regenerate them. Updates must preserve user content and only modify what needs updating based on repository changes
 - **Be thorough**: When analyzing the repository, examine all relevant files and configurations
-- **Follow template instructions**: Text in `<{...}>` in the template are instructions, not literal content
+- **Follow template instructions**: Text within the ~:...:~ pattern in the template are instructions, not literal content
 - **Repository root**: Always work with the context file at the repository root, regardless of where the command is run
 - **Preserve filenames**: When updating existing files, preserve the filename (CLAUDE.md or CLAUDE.md) - do not rename
 - **Template source**: Only the bundled template at `../templates/CLAUDE.TEMPLATE.md` is used

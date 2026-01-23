@@ -196,7 +196,7 @@ Not applicable - tool is distributed as source code (requires Node.js runtime).
 
 <!-- Leave blank initially - user should review and populate -->
 
-# Client File Metadata
+# Agent File Metadata
 
 - Date Created: 2026-01-22T15:35:00Z
 - Date Modified: 2026-01-22T15:35:00Z

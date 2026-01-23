@@ -33,7 +33,7 @@ program
 program
   .command('open')
   .description('Interactively explore results from a test run')
-  .requiredOption('-r, --run <number>', 'Run number to open')
+  .option('-r, --run <number>', 'Run number to open (if not provided, shows interactive list)')
   .action(openCommand);
 
 // List command

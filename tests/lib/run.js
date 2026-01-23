@@ -184,10 +184,13 @@ class Run {
     let totalFailed = 0;
 
     await forEachAsync(this.batches, async (batch) => {
-      const generationResult = await batch.generate();
-      allSuccess = allSuccess && generationResult.success;
+      const testResult = await batch.execute();
 
-      const testResult = await batch.test();
+      // const generationResult = await batch.generate();
+      // allSuccess = allSuccess && generationResult.success;
+
+      // const testResult = await batch.test();
+
       allSuccess = allSuccess && testResult.success;
 
       // Accumulate totals

@@ -1,0 +1,101 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug claude:dotnet-update Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/run-tests.js",
+      "args": [
+        "plan=dotnet-update",
+        "tool=plugin"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Debug copilot:library-package Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/run-tests.js",
+      "args": [
+        "plan=library-package",
+        "tool=cli"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Debug Any Test Plan",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/run-tests.js",
+      "args": [],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Debug Contest Rerun 12",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/cli/bin/contest.js",
+      "args": [
+        "rerun",
+        "--run",
+        "13"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Debug claude:library-package Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/cli/bin/contest.js",
+      "args": [
+        "test",
+        "--tools",
+        "plugin",
+        "--plans",
+        "library-package"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    }
+  ]
+}

@@ -395,7 +395,7 @@ Not applicable - plugin is used via Claude Code IDE, not integrated into other f
 
 <!-- Leave blank initially - user should review and populate -->
 
-# Library File Metadata
+# Agent File Metadata
 
 - Date Created: 2026-01-22T15:30:00Z
 - Date Modified: 2026-01-22T15:30:00Z

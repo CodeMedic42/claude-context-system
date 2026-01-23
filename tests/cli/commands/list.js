@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const chalk = require('chalk');
+const { forEach } = require('lodash');
 
 /**
  * Get all test runs, sorted by run number
@@ -14,7 +15,7 @@ function getAllRuns(runRootDir) {
   const entries = fs.readdirSync(runRootDir);
   const runs = [];
 
-  entries.forEach((entry) => {
+  forEach(entries, (entry) => {
     const runDir = path.join(runRootDir, entry);
     const resultsFile = path.join(runDir, 'results.json');
 
@@ -37,7 +38,7 @@ function getAllRuns(runRootDir) {
   });
 
   // Sort by run number descending
-  runs.sort((a, b) => b.runNumber - a.runNumber);
+  runs.sort((a, b) => a.runNumber - b.runNumber);
 
   return runs;
 }
@@ -46,7 +47,9 @@ function getAllRuns(runRootDir) {
  * Format run info for display
  */
 function formatRunInfo(run) {
-  const { runNumber, planIds, toolIds, createdAt } = run;
+  const {
+    runNumber, planIds, toolIds, createdAt,
+  } = run;
   const timestamp = createdAt.toLocaleString();
 
   console.log(chalk.bold(`\nRun ${String(runNumber).padStart(3, '0')}:`));
@@ -78,7 +81,7 @@ async function listCommand(options) {
 
     if (runs.length > limit) {
       console.log(chalk.gray(`\n... and ${runs.length - limit} more runs`));
-      console.log(chalk.gray(`Use --limit to show more`));
+      console.log(chalk.gray('Use --limit to show more'));
     }
 
     console.log(chalk.gray(`\nRun directory: ${runRootDir}`));

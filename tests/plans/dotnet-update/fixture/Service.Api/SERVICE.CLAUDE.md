@@ -262,7 +262,7 @@ Access Swagger UI at: https://localhost:5001/swagger (Development environment on
 
 *(Leave blank initially - user should review and populate with project-specific restrictions)*
 
-# Service File Metadata
+# Agent File Metadata
 
 - Date Created: 2026-01-09T22:05:00Z
 - Date Modified: 2026-01-09T22:05:00Z

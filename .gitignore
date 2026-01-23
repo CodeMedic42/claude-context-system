@@ -22,7 +22,8 @@ coverage/
 Thumbs.db
 
 # Editor files
-.vscode/
+.vscode/*
+!.vscode/launch.json
 .idea/
 *.swp
 *.swo

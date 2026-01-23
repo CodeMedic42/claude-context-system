@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const chalk = require('chalk');
+const inquirer = require('inquirer');
 const openApp = require('open');
 const {
   selectBatch,
@@ -18,6 +19,81 @@ const { formatJestOutput, extractTestSummary, formatTestSummary } = require('../
 function getRunDir(runNumber) {
   const runRootDir = path.join(os.homedir(), 'claude-context-test-runs');
   return path.join(runRootDir, String(runNumber).padStart(3, '0'));
+}
+
+/**
+ * Get all test runs, sorted by timestamp (latest first)
+ */
+function getAllRuns() {
+  const runRootDir = path.join(os.homedir(), 'claude-context-test-runs');
+
+  if (!fs.existsSync(runRootDir)) {
+    return [];
+  }
+
+  const entries = fs.readdirSync(runRootDir);
+  const runs = [];
+
+  entries.forEach((entry) => {
+    const runDir = path.join(runRootDir, entry);
+    const resultsFile = path.join(runDir, 'results.json');
+
+    if (fs.existsSync(resultsFile)) {
+      try {
+        const results = JSON.parse(fs.readFileSync(resultsFile, 'utf8'));
+        const stats = fs.statSync(runDir);
+
+        runs.push({
+          runNumber: results.runNumber,
+          planIds: results.planIds,
+          toolIds: results.toolIds,
+          createdAt: stats.birthtime,
+          runDir,
+        });
+      } catch (error) {
+        // Skip invalid results files
+      }
+    }
+  });
+
+  // Sort by creation time descending (latest first)
+  runs.sort((a, b) => b.createdAt - a.createdAt);
+
+  return runs;
+}
+
+/**
+ * Interactively select a test run
+ */
+async function selectRun(runs) {
+  if (runs.length === 0) {
+    throw new Error('No test runs found');
+  }
+
+  const choices = runs.map((run) => {
+    const timestamp = run.createdAt.toLocaleString();
+    const runLabel = String(run.runNumber).padStart(3, '0');
+    const toolsLabel = run.toolIds.join(', ');
+    const plansLabel = run.planIds.join(', ');
+
+    return {
+      name: `Run ${runLabel} - ${timestamp} - Tools: ${toolsLabel} - Plans: ${plansLabel}`,
+      value: run.runNumber,
+      short: `Run ${runLabel}`,
+    };
+  });
+
+  const answers = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'runNumber',
+      message: 'Select a test run to explore:',
+      choices,
+      pageSize: 15,
+    },
+  ]);
+
+  return answers.runNumber;
 }
 
 /**
@@ -152,10 +228,26 @@ async function handleBatchActions(batch) {
  */
 async function openCommand(options) {
   try {
-    const runNumber = parseInt(options.run, 10);
+    let runNumber;
 
-    if (isNaN(runNumber) || runNumber < 1) {
-      throw new Error('Run number must be a positive integer');
+    // If no run number provided, show interactive selection
+    if (!options.run) {
+      const runs = getAllRuns();
+
+      if (runs.length === 0) {
+        console.log(chalk.yellow('No test runs found.'));
+        const runRootDir = path.join(os.homedir(), 'claude-context-test-runs');
+        console.log(chalk.gray(`Run directory: ${runRootDir}`));
+        return;
+      }
+
+      runNumber = await selectRun(runs);
+    } else {
+      runNumber = parseInt(options.run, 10);
+
+      if (Number.isNaN(runNumber) || runNumber < 1) {
+        throw new Error('Run number must be a positive integer');
+      }
     }
 
     const runDir = getRunDir(runNumber);
