@@ -800,5 +800,5 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 	- Date Created: timestamp
 	- Date Modified: timestamp
 	- Last commit SHA built from: GIT SHA
-	- Template Version: ~:version from plugin.json:~
+	- Template Version: 2.0.0
 }

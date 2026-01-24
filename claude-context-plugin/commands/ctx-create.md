@@ -507,7 +507,7 @@ After populating all content and creating all project files, add the Agent File 
 - Date Created: ~:current timestamp:~
 - Date Modified: ~:current timestamp:~
 - Last commit SHA built from: ~:current git HEAD commit SHA - use `git rev-parse HEAD` to get the FULL 40-character SHA, NOT the short 7-character version:~
-- Template Version: ~:Read from plugin.json at ../.claude-plugin/plugin.json (relative to this command file) - use the "version" field:~
+- Template Version: ~:Extract from the template file you just read - look for "Template Version:" in the "Agent File Metadata" section at the end:~
 
 Once complete, inform the user:
 - That `CLAUDE.md` has been created at the repository root

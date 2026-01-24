@@ -136,7 +136,7 @@ Reply with YES to proceed, or NO to cancel."
 
 **CRITICAL TEMPLATE VERIFICATION:**
 
-First, locate the bundled template file at `../templates/CLAUDE.TEMPLATE.md` (relative to this command file).
+First, locate the bundled template file at `${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md` (relative to this command file).
 
 **If the template file is NOT found:**
 
@@ -146,7 +146,7 @@ STOP IMMEDIATELY. This indicates a plugin installation problem. Inform the user:
 
 The context file templates could not be located. This indicates a plugin installation issue.
 
-Expected location: `../templates/CLAUDE.TEMPLATE.md` (relative to the command file)
+Expected location: `${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md` (relative to the command file)
 
 **DO NOT PROCEED:**
 - DO NOT guess what the template should contain
@@ -507,7 +507,7 @@ After populating all content and creating all project files, add the Agent File 
 - Date Created: ~:current timestamp:~
 - Date Modified: ~:current timestamp:~
 - Last commit SHA built from: ~:current git HEAD commit SHA - use `git rev-parse HEAD` to get the FULL 40-character SHA, NOT the short 7-character version:~
-- Template Version: ~:Read from plugin.json at ../.claude-plugin/plugin.json (relative to this command file) - use the "version" field:~
+- Template Version: ~:Extract from the template file you just read - look for "Template Version:" in the "Agent File Metadata" section at the end:~
 
 Once complete, inform the user:
 - That `CLAUDE.md` has been created at the repository root
@@ -519,7 +519,7 @@ Once complete, inform the user:
 - **Be thorough**: When analyzing the repository, examine all relevant files and configurations
 - **Follow template instructions**: Text in `~:...:~` in the template are instructions, not literal content
 - **Repository root**: Always work with the context file at the repository root, regardless of where the command is run
-- **Template source**: Only the bundled template at `../templates/CLAUDE.TEMPLATE.md` is used
+- **Template source**: Only the bundled template at `${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md` is used
 - **NEVER ask for user approval or confirmation**: Proceed automatically to create ALL files without any prompts or questions. Do NOT ask "Do you want to proceed" or similar questions
 - **TodoWrite for accountability**: Track every single file creation to ensure nothing is skipped
 - **Separate files are mandatory**: Never document projects inline in CLAUDE.md - always create separate files and use @file references

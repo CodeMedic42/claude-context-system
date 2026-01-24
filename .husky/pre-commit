@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Auto-sync shared files to plugin and CLI before checking
+echo "🔄 Auto-syncing shared files to plugin and CLI..."
+pnpm run sync
+
 # Simple pre-commit check: Ensure plugin directories match shared directory
 
 check_directory_sync() {
@@ -7,9 +11,9 @@ check_directory_sync() {
     local plugin_dir="$2"
     local errors_found=0
 
-    # Check all files in shared directory
+    # Check all files in shared directory (excluding README.md)
     if [ -d "$shared_dir" ]; then
-        find "$shared_dir" -type f | while read -r shared_file; do
+        find "$shared_dir" -type f -name "*.md" ! -name "README.md" | while read -r shared_file; do
             relative_path="${shared_file#$shared_dir/}"
             plugin_file="$plugin_dir/$relative_path"
 
@@ -34,9 +38,9 @@ check_directory_sync() {
         [ $errors_found -eq 1 ] && return 1
     fi
 
-    # Check for extra files in plugin directory that don't exist in shared
+    # Check for extra files in plugin directory that don't exist in shared (excluding README.md)
     if [ -d "$plugin_dir" ]; then
-        find "$plugin_dir" -type f | while read -r plugin_file; do
+        find "$plugin_dir" -type f -name "*.md" ! -name "README.md" | while read -r plugin_file; do
             relative_path="${plugin_file#$plugin_dir/}"
             shared_file="$shared_dir/$relative_path"
 
@@ -58,21 +62,12 @@ check_directory_sync() {
 
 has_errors=0
 
-# Check claude-context-plugin/commands
-echo "Checking claude-context-plugin/commands..."
-if ! check_directory_sync "shared/commands" "claude-context-plugin/commands"; then
-    has_errors=1
-fi
+# Only check templates (commands are processed and won't match byte-for-byte)
+# Templates should be identical across all locations
 
 # Check claude-context-plugin/templates
 echo "Checking claude-context-plugin/templates..."
 if ! check_directory_sync "shared/templates" "claude-context-plugin/templates"; then
-    has_errors=1
-fi
-
-# Check copilot-context-cli/commands
-echo "Checking copilot-context-cli/commands..."
-if ! check_directory_sync "shared/commands" "copilot-context-cli/commands"; then
     has_errors=1
 fi
 
@@ -81,6 +76,10 @@ echo "Checking copilot-context-cli/templates..."
 if ! check_directory_sync "shared/templates" "copilot-context-cli/templates"; then
     has_errors=1
 fi
+
+echo "ℹ️  Note: Command files are not checked as they are processed during sync"
+echo "   - Plugin commands: placeholders replaced at sync time"
+echo "   - CLI commands: placeholders replaced at runtime"
 
 if [ $has_errors -eq 1 ]; then
     echo ""

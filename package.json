@@ -40,16 +40,13 @@
     "changed": "lerna changed",
     "diff": "lerna diff",
     "exec": "lerna exec",
-    "sync": "pnpm run plugin:sync && pnpm run copilot:sync",
+    "sync": "pnpm run version:sync && pnpm run plugin:sync && pnpm run copilot:sync",
+    "version:sync": "node plugin-setup/sync-version.js",
     "plugin:install": "node plugin-setup/plugin-install.js",
     "plugin:uninstall": "node plugin-setup/plugin-uninstall.js",
-    "plugin:template:update": "cp shared/templates/*.md claude-context-plugin/templates/ && cp shared/templates/*.md copilot-context-cli/templates/",
-    "plugin:command:update": "cp shared/commands/*.md claude-context-plugin/commands/ && cp shared/commands/*.md copilot-context-cli/commands/",
-    "plugin:sync": "pnpm run plugin:template:update && pnpm run plugin:command:update",
+    "plugin:sync": "node plugin-setup/sync-plugin.js",
     "plugin:reinstall": "pnpm run plugin:uninstall && pnpm run plugin:sync && pnpm run plugin:install",
-    "copilot:template:update": "cp shared/templates/*.md copilot-context-cli/templates/",
-    "copilot:command:update": "cp shared/commands/*.md copilot-context-cli/commands/",
-    "copilot:sync": "pnpm run copilot:template:update && pnpm run copilot:command:update"
+    "copilot:sync": "node plugin-setup/sync-copilot.js"
   },
   "dependencies": {
     "chalk": "^4.1.2",

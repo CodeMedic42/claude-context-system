@@ -166,7 +166,7 @@ Extract the template version from the "Agent File Metadata" section of the exist
 
 **CRITICAL TEMPLATE VERIFICATION:**
 
-Locate and read the bundled template file at `../templates/CLAUDE.TEMPLATE.md` (relative to this command file).
+Locate and read the bundled template file at `${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md` (relative to this command file).
 
 **If the template file is NOT found:**
 
@@ -176,7 +176,7 @@ STOP IMMEDIATELY. This indicates a plugin installation problem. Inform the user:
 
 The context file templates could not be located. This indicates a plugin installation issue.
 
-Expected location: `../templates/CLAUDE.TEMPLATE.md` (relative to the command file)
+Expected location: `${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md` (relative to the command file)
 
 **DO NOT PROCEED:**
 - DO NOT guess what the template should contain
@@ -198,9 +198,9 @@ Then **EXIT IMMEDIATELY without modifying any files**.
 
 **If the template file IS found:**
 
-Read the current plugin version from `../.claude-plugin/plugin.json` (relative to this command file, the "version" field).
+Read the current template version from the template file you located in step 1. Extract the version from the "Agent File Metadata" section at the end - look for the line "- Template Version: X.Y.Z".
 
-Compare the existing file's template version with the current plugin version:
+Compare the existing file's template version with the current template version:
 
 - If versions differ, note that a template upgrade is needed
 - If versions match, template structure should be the same
@@ -680,7 +680,7 @@ After preserving user sections:
 3. **Update Metadata**:
    - Date Modified: ~:current timestamp:~
    - Last commit SHA built from: ~:current git HEAD commit SHA - use `git rev-parse HEAD` to get the FULL 40-character SHA, NOT the short 7-character version:~
-   - Template Version: ~:Read from ../.claude-plugin/plugin.json (relative to command file) - use the "version" field:~
+   - Template Version: ~:Extract from the template file you read in step 1 - look for "Template Version:" in the "Agent File Metadata" section at the end:~
 
 **VERIFICATION STEP:**
 
@@ -799,6 +799,6 @@ These files now include Agent File Metadata and will be properly managed going f
 - **Follow template instructions**: Text within the ~:...:~ pattern in the template are instructions, not literal content
 - **Repository root**: Always work with the context file at the repository root, regardless of where the command is run
 - **Preserve filenames**: When updating existing files, preserve the filename (CLAUDE.md or CLAUDE.md) - do not rename
-- **Template source**: Only the bundled template at `../templates/CLAUDE.TEMPLATE.md` is used
+- **Template source**: Only the bundled template at `${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md` is used
 - **No user prompts**: All file creation and updates happen automatically without asking for approval
 - **TodoWrite for accountability**: Track every single new file creation to ensure nothing is skipped

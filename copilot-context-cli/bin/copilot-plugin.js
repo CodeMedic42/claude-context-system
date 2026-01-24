@@ -81,7 +81,16 @@ if (!fs.existsSync(commandPath)) {
 // Read the command file content and pass it as the prompt
 // Note: 'execute <URL>' works with remote URLs, but not with local file paths
 // So we read the content and pass it directly
-const commandContent = fs.readFileSync(commandPath, 'utf8');
+let commandContent = fs.readFileSync(commandPath, 'utf8');
+
+// Replace placeholders with absolute paths to installed templates/rules
+// This ensures templates can be found regardless of where the CLI is run from
+const templatesPath = path.join(__dirname, '..', 'templates');
+const rulesPath = path.join(__dirname, '..', 'rules');
+commandContent = commandContent
+  .replace(/\$\{TEMPLATE_PATH\}/g, templatesPath)
+  .replace(/\$\{RULES_PATH\}/g, rulesPath);
+
 const copilotArgs = [
   '-p', commandContent,
   '--allow-all-tools', // Allow tools without confirmation for automated execution

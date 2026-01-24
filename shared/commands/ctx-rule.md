@@ -24,9 +24,9 @@ Manage reusable rule files in `.claude/rules/` that can be sourced from built-in
    - **If URL**: Use WebFetch to download the content from $2
    - **If file path**: Use Read tool to read the content from $2
    - **If built-in rule name**:
-     - Construct the path: `../rules/$2.md` (relative to this command file)
+     - Construct the path: `${RULES_PATH}/$2.md` (relative to this command file)
      - Use Read tool to read the content from that path
-     - **If file not found**: Report error "Built-in rule '$2' not found. Available rules: {list files in ../rules/}" and exit
+     - **If file not found**: Report error "Built-in rule '$2' not found. Available rules: {list files in ${RULES_PATH}/}" and exit
 
 3. Validate the content has proper frontmatter:
    - Parse the frontmatter from the content
@@ -80,7 +80,7 @@ Manage reusable rule files in `.claude/rules/` that can be sourced from built-in
    - Check for `source_url`, `source_path`, or `source_builtin`:
      - **If `source_url` exists**: Use WebFetch to download the latest content from the URL
      - **If `source_path` exists**: Use Read tool to read the latest content from the file path
-     - **If `source_builtin` exists**: Read from `../rules/{source_builtin}.md` (relative to command file)
+     - **If `source_builtin` exists**: Read from `${RULES_PATH}/{source_builtin}.md` (relative to command file)
      - **If none exist**: Report error that this rule cannot be updated (no source tracked)
    - **Validate the new content**:
      - Parse the frontmatter from the new content
@@ -99,7 +99,7 @@ Manage reusable rule files in `.claude/rules/` that can be sourced from built-in
    - List all files in `.claude/rules/` (use `ls .claude/rules/*.md`)
    - For each file, read it and check if it has `source_url`, `source_path`, or `source_builtin` in frontmatter
    - For files with a source:
-     - Download/read the new content (from URL, path, or ../rules/{builtin}.md)
+     - Download/read the new content (from URL, path, or ${RULES_PATH}/{builtin}.md)
      - Validate it has frontmatter with a `version` field (skip and report error if not)
      - Update the file with new content and merged frontmatter
    - Report which files were updated (with version changes) and which were skipped (with reasons)

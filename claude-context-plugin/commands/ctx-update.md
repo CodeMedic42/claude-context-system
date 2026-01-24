@@ -198,9 +198,9 @@ Then **EXIT IMMEDIATELY without modifying any files**.
 
 **If the template file IS found:**
 
-Read the current plugin version from `../.claude-plugin/plugin.json` (relative to this command file, the "version" field).
+Read the current template version from the template file you located in step 1. Extract the version from the "Agent File Metadata" section at the end - look for the line "- Template Version: X.Y.Z".
 
-Compare the existing file's template version with the current plugin version:
+Compare the existing file's template version with the current template version:
 
 - If versions differ, note that a template upgrade is needed
 - If versions match, template structure should be the same
@@ -680,7 +680,7 @@ After preserving user sections:
 3. **Update Metadata**:
    - Date Modified: ~:current timestamp:~
    - Last commit SHA built from: ~:current git HEAD commit SHA - use `git rev-parse HEAD` to get the FULL 40-character SHA, NOT the short 7-character version:~
-   - Template Version: ~:Read from ../.claude-plugin/plugin.json (relative to command file) - use the "version" field:~
+   - Template Version: ~:Extract from the template file you read in step 1 - look for "Template Version:" in the "Agent File Metadata" section at the end:~
 
 **VERIFICATION STEP:**
 
