@@ -1,0 +1,48 @@
+{
+  "toolId": "cli",
+  "planId": "fullstack-monorepo",
+  "steps": {
+    "fixture": {
+      "result": {
+        "status": "",
+        "log": "",
+        "error": ""
+      }
+    },
+    "preparation": {
+      "result": {
+        "status": "",
+        "log": "",
+        "error": ""
+      }
+    },
+    "testPlan": {
+      "result": {
+        "status": "",
+        "log": "",
+        "error": ""
+      }
+    },
+    "testProgress": {
+      "result": {
+        "status": "",
+        "log": "",
+        "error": ""
+      }
+    },
+    "execution": {
+      "result": {
+        "status": "",
+        "log": "",
+        "error": ""
+      }
+    },
+    "testContext": {
+      "result": {
+        "status": "",
+        "log": "",
+        "error": ""
+      }
+    }
+  }
+}

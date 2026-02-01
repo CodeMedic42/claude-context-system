@@ -1,6 +1,6 @@
 const { spawn } = require('child_process');
-const path = require('path');
-const fs = require('fs');
+// const path = require('path');
+// const fs = require('fs');
 const { execSync } = require('child_process');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const pc = require('picocolors');
@@ -27,15 +27,19 @@ class ClaudeTool extends Tool {
   /**
    * Execute the Claude Code plugin command
    * @param {string} repoPath - Path to the repository
-   * @param {string} command - Command to run (e.g., 'ctx-update')
+   * @param {string} command - Command to run (e.g., 'ctx-update', 'ctx-execute')
+   * @param {Array<string>} args - Additional command arguments
    * @returns {Promise<{success: boolean, output: string, error?: string}>}
    */
   // eslint-disable-next-line class-methods-use-this
-  async run({ batch, command }) {
+  async run({ batch, command, args = [] }) {
     // Map command names to plugin command format
     const commandMap = {
       update: '/claude-context-updater:ctx-update',
+      execute: '/claude-context-updater:ctx-execute',
       create: '/claude-context-updater:ctx-create',
+      prepare: '/claude-context-updater:ctx-prepare',
+      'ctx-execute': '/claude-context-updater:ctx-execute',
       rule: '/claude-context-updater:ctx-rule',
     };
 
@@ -48,18 +52,32 @@ class ClaudeTool extends Tool {
     delete env.NODE_OPTIONS;
 
     return new Promise((resolve, reject) => {
-      const outputFile = path.join(batch.batchDir, `tool.${this.id}.log`);
-      const outputStream = fs.createWriteStream(outputFile);
+      // const outputFile = path.join(batch.batchDir, `tool.${this.id}.log`);
+      // const outputStream = fs.createWriteStream(outputFile);
 
-      // Run Claude CLI with streaming JSON output
-      const claudeProcess = spawn('claude', [
+      // Build command-specific args
+      const commandArgs = [...args];
+      if (command === 'execute' && batch.plan.tokenLimit) {
+        commandArgs.push('--token-limit', batch.plan.tokenLimit.toString());
+      }
+
+      // Combine plugin command and its arguments into a single prompt
+      const prompt = commandArgs.length > 0
+        ? `${pluginCommand} ${commandArgs.join(' ')}`
+        : pluginCommand;
+
+      // Build command array
+      const claudeArgs = [
         '--print',
         '--verbose',
         '--output-format', 'stream-json',
         '--include-partial-messages',
         '--permission-mode', 'bypassPermissions',
-        pluginCommand,
-      ], {
+        prompt,
+      ];
+
+      // Run Claude CLI with streaming JSON output
+      const claudeProcess = spawn('claude', claudeArgs, {
         cwd: batch.fixtureDir,
         stdio: ['ignore', 'pipe', 'pipe'],
         env,
@@ -75,7 +93,7 @@ class ClaudeTool extends Tool {
       claudeProcess.stdout.on('data', (data) => {
         const chunk = data.toString();
         rawOutput += chunk;
-        outputStream.write(data);
+        // outputStream.write(data);
 
         stdoutBuffer += chunk;
         const lines = stdoutBuffer.split('\n');
@@ -134,12 +152,12 @@ class ClaudeTool extends Tool {
 
       claudeProcess.stderr.on('data', (data) => {
         rawOutput += data.toString();
-        outputStream.write(data);
+        // outputStream.write(data);
         process.stderr.write(data);
       });
 
       claudeProcess.on('close', (code) => {
-        outputStream.end();
+        // outputStream.end();
 
         if (code === 0) {
           resolve({
@@ -156,7 +174,7 @@ class ClaudeTool extends Tool {
       });
 
       claudeProcess.on('error', (error) => {
-        outputStream.end();
+        // outputStream.end();
         reject(new Error(`Failed to execute Claude CLI: ${error.message}`));
       });
     });

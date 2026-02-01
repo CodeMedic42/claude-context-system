@@ -31,12 +31,8 @@ function validateMetadata(contextData) {
   const errors = [];
   const metadata = contextData.getMetadata();
 
-  if (!metadata.dateCreated) {
-    errors.push('Missing Date Created in metadata');
-  }
-
-  if (!metadata.dateModified) {
-    errors.push('Missing Date Modified in metadata');
+  if (!metadata.revisionDate) {
+    errors.push('Missing Revision Date in metadata');
   }
 
   if (!metadata.commitSha) {

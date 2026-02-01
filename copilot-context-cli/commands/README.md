@@ -39,15 +39,15 @@ This ensures templates can be found regardless of:
 
 ```
 shared/commands/          ← EDIT HERE (source of truth)
-  ├── ctx-create.md       (has ${TEMPLATE_PATH} placeholders)
-  ├── ctx-update.md
+  ├── ctx-prepare.md      (has ${TEMPLATE_PATH} placeholders)
+  ├── ctx-execute.md
   └── ctx-rule.md
 
 ↓ sync via pnpm run sync ↓
 
 copilot-context-cli/commands/   ← AUTO-GENERATED (do not edit)
-  ├── ctx-create.md       (has ${TEMPLATE_PATH} placeholders)
-  ├── ctx-update.md
+  ├── ctx-prepare.md      (has ${TEMPLATE_PATH} placeholders)
+  ├── ctx-execute.md
   └── ctx-rule.md
 
 ↓ runtime replacement in bin/copilot-plugin.js ↓

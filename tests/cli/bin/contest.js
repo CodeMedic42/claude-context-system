@@ -26,7 +26,8 @@ program
 program
   .command('rerun')
   .description('Rerun tests from a previous run')
-  .requiredOption('-r, --run <number>', 'Run number to repeat')
+  .option('-r, --run <number>', 'Run number to repeat')
+  .option('-s, --step <step>', 'The step to start at')
   .action(rerunCommand);
 
 // Open command

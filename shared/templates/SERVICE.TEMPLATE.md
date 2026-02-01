@@ -158,12 +158,15 @@
 
 ~:Leave blank initially - user should review and populate:~
 
+# Agent File Maintenance
+~:Keep this section but do not modify the contents:~
+No LLM/AI/Agent may make changes to this file outside of the claude-context-system commands. This is a maintained file through automatic means.
+
 # Agent File Metadata
 {
 	This section contains the following information
 
-	- Date Created: timestamp
-	- Date Modified: timestamp
+	- Revision Date: timestamp
 	- Last commit SHA built from: GIT SHA
 	- Template Version: ~:version from plugin.json:~
 }

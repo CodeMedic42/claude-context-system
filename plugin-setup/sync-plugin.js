@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const fs = require('fs');
 const path = require('path');
 
@@ -16,16 +14,18 @@ const PLUGIN_DIR = path.join(__dirname, '..', 'claude-context-plugin');
 /**
  * Replace placeholders in file content
  */
-function replacePlaceholders(content) {
+function replacePlaceholders(content, {
+  templatePath,
+}) {
   return content
-    .replace(/\$\{TEMPLATE_PATH\}/g, '../templates')
+    .replace(/\$\{TEMPLATE_PATH\}/g, templatePath)
     .replace(/\$\{RULES_PATH\}/g, '../rules');
 }
 
 /**
  * Copy and process commands
  */
-function syncCommands() {
+function syncCommands(config) {
   const sharedCommandsDir = path.join(SHARED_DIR, 'commands');
   const pluginCommandsDir = path.join(PLUGIN_DIR, 'commands');
 
@@ -40,7 +40,7 @@ function syncCommands() {
     const destPath = path.join(pluginCommandsDir, file);
 
     let content = fs.readFileSync(sourcePath, 'utf8');
-    content = replacePlaceholders(content);
+    content = replacePlaceholders(content, config);
 
     fs.writeFileSync(destPath, content, 'utf8');
     console.log(`✓ Synced command: ${file}`);
@@ -69,11 +69,11 @@ function syncTemplates() {
   });
 }
 
-function main() {
+function main(config) {
   console.log('Syncing shared files to claude-context-plugin...\n');
 
   console.log('Commands:');
-  syncCommands();
+  syncCommands(config);
 
   console.log('\nTemplates:');
   syncTemplates();
@@ -86,4 +86,4 @@ function main() {
   console.log('  ${RULES_PATH} → ../rules');
 }
 
-main();
+module.exports = main;

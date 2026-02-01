@@ -1,7 +1,12 @@
 const path = require('path');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const fs = require('fs-extra');
-const { merge, noop, isEmpty } = require('lodash');
+const {
+  merge,
+  noop,
+  isEmpty,
+  isInteger,
+} = require('lodash');
 
 class Plan {
   constructor({ planDir, id }) {
@@ -19,7 +24,8 @@ class Plan {
     }
 
     // eslint-disable-next-line import/no-dynamic-require, global-require
-    const { testCommand, ...planHooks } = require(setupFile);
+    const setupModule = require(setupFile);
+    const { testCommand, tokenLimit, ...planHooks } = setupModule;
 
     if (isEmpty(testCommand)) {
       console.log('Each plan setup file must provide a testCommand field');
@@ -27,11 +33,20 @@ class Plan {
       process.exit(1);
     }
 
+    if (!isInteger(tokenLimit) || tokenLimit < 0) {
+      console.log('Each plan setup file must provide a valid tokenLimit field');
+
+      process.exit(1);
+    }
+
     this.testCommand = testCommand;
+    this.tokenLimit = tokenLimit;
 
     this.hooks = merge({
-      beforeGitSetup: noop,
-      afterGitSetup: noop,
+      beforeFixtureSetup: noop,
+      afterFixtureSetup: noop,
+      beforeToolPreparation: noop,
+      afterToolPreparation: noop,
       beforeToolExecution: noop,
       afterToolExecution: noop,
     }, planHooks);

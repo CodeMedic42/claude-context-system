@@ -2,7 +2,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const pc = require('picocolors');
+// const pc = require('picocolors');
 const Tool = require('./tool');
 
 class CopilotTool extends Tool {
@@ -29,14 +29,17 @@ class CopilotTool extends Tool {
    * Execute the Copilot CLI command
    * @param {Object} params - Parameters object
    * @param {Object} params.batch - Batch context with fixtureDir and batchDir
-   * @param {string} params.command - Command to run (e.g., 'update', 'create', 'rule')
+   * @param {string} params.command - Command to run (e.g., 'update', 'create', 'ctx-execute')
+   * @param {Array<string>} params.args - Additional command arguments
    * @returns {Promise<{success: boolean, output: string, error?: string}>}
    */
-  async run({ batch, command }) {
+  async run({ batch, command, args = [] }) {
     // Map command names to CLI command format
     const commandMap = {
       update: 'ctx-update',
       create: 'ctx-create',
+      execute: 'ctx-execute',
+      'ctx-execute': 'ctx-execute',
       rule: 'ctx-rule',
     };
 
@@ -49,17 +52,23 @@ class CopilotTool extends Tool {
     delete env.NODE_OPTIONS;
 
     return new Promise((resolve, reject) => {
-      const outputFile = path.join(batch.batchDir, `tool.${this.id}.log`);
-      const outputStream = fs.createWriteStream(outputFile);
+      // const outputFile = path.join(batch.batchDir, `tool.${this.id}.log`);
+      // const outputStream = fs.createWriteStream(outputFile);
 
       // GitHub Copilot blue using 256-color ANSI code
       const blue = (text) => `\x1b[38;5;33m${text}\x1b[0m`;
 
-      // Execute: node copilot-plugin.js <command>
-      const copilotProcess = spawn('node', [
-        this.cliPath,
-        cliCommand,
-      ], {
+      // Build command-specific args
+      const commandArgs = [...args];
+      if (command === 'execute' && batch.plan.tokenLimit) {
+        commandArgs.push('--token-limit', batch.plan.tokenLimit.toString());
+      }
+
+      // Build command array
+      const cliArgs = [this.cliPath, cliCommand, ...commandArgs];
+
+      // Execute: node copilot-plugin.js <command> [args...]
+      const copilotProcess = spawn('node', cliArgs, {
         cwd: batch.fixtureDir,
         stdio: ['ignore', 'pipe', 'pipe'],
         env: {
@@ -75,19 +84,19 @@ class CopilotTool extends Tool {
       copilotProcess.stdout.on('data', (data) => {
         const chunk = data.toString();
         stdout += chunk;
-        outputStream.write(data);
+        // outputStream.write(data);
         process.stdout.write(blue(chunk)); // Real-time blue output
       });
 
       copilotProcess.stderr.on('data', (data) => {
         const chunk = data.toString();
         stderr += chunk;
-        outputStream.write(data);
+        // outputStream.write(data);
         process.stderr.write(chunk);
       });
 
       copilotProcess.on('close', (code) => {
-        outputStream.end();
+        // outputStream.end();
 
         if (code === 0) {
           resolve({
@@ -104,7 +113,7 @@ class CopilotTool extends Tool {
       });
 
       copilotProcess.on('error', (error) => {
-        outputStream.end();
+        // outputStream.end();
         reject(new Error(`Failed to execute Copilot CLI: ${error.message}`));
       });
     });

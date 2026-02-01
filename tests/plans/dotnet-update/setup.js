@@ -199,13 +199,14 @@ function applyFixtureModifications(fixturePath) {
   execSync('git commit -m "feat: add CLI client for calculator service"', { cwd: fixturePath, stdio: 'ignore' });
 }
 
-function afterGitSetup(fixturePath) {
+function afterFixtureSetup(fixturePath) {
   // Apply modifications to test incremental updates
   // This simulates: library removal, code inlining, new API, new CLI project
   applyFixtureModifications(fixturePath);
 }
 
 module.exports = {
-  testCommand: 'update',
-  afterGitSetup,
+  testCommand: 'prepare',
+  afterFixtureSetup,
+  tokenLimit: 100000,
 };

@@ -30,14 +30,14 @@ This ensures template paths work correctly when the plugin is installed in Claud
 
 ```
 shared/commands/          ← EDIT HERE (source of truth)
-  ├── ctx-create.md
-  ├── ctx-update.md
+  ├── ctx-prepare.md
+  ├── ctx-execute.md
   └── ctx-rule.md
 
 ↓ sync via pnpm run sync ↓
 
 claude-context-plugin/commands/   ← AUTO-GENERATED (do not edit)
-  ├── ctx-create.md
-  ├── ctx-update.md
+  ├── ctx-prepare.md
+  ├── ctx-execute.md
   └── ctx-rule.md
 ```

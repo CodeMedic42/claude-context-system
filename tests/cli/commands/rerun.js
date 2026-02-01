@@ -1,3 +1,4 @@
+const { isNil, isNaN } = require('lodash');
 const ExecutionContext = require('../../lib/execution-context');
 const Run = require('../../lib/run');
 
@@ -6,9 +7,9 @@ const Run = require('../../lib/run');
  */
 async function rerunCommand(options) {
   try {
-    const runNumber = parseInt(options.run, 10);
+    const runNumber = !isNil(options.run) ? parseInt(options.run, 10) : -1;
 
-    if (isNaN(runNumber) || runNumber < 1) {
+    if (isNaN(runNumber)) {
       throw new Error('Run number must be a positive integer');
     }
 
@@ -18,11 +19,14 @@ async function rerunCommand(options) {
       process.argv[0], // node
       process.argv[1], // script
       `repeat-run=${runNumber}`,
+      `repeat-step=${options.step}`,
     ];
 
     // Create execution context with repeat-run
     const executionContext = new ExecutionContext();
+
     const run = new Run(executionContext);
+
     const success = await run.start();
 
     // Restore argv

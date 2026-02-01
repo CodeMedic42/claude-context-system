@@ -44,8 +44,9 @@
     "version:sync": "node plugin-setup/sync-version.js",
     "plugin:install": "node plugin-setup/plugin-install.js",
     "plugin:uninstall": "node plugin-setup/plugin-uninstall.js",
-    "plugin:sync": "node plugin-setup/sync-plugin.js",
-    "plugin:reinstall": "pnpm run plugin:uninstall && pnpm run plugin:sync && pnpm run plugin:install",
+    "plugin:sync": "node plugin-setup/sync-plugin-git.js",
+    "plugin:sync:local": "node plugin-setup/sync-plugin-local.js",
+    "plugin:reinstall": "pnpm run plugin:uninstall && pnpm run plugin:sync:local && pnpm run plugin:install",
     "copilot:sync": "node plugin-setup/sync-copilot.js"
   },
   "dependencies": {

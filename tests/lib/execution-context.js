@@ -45,6 +45,8 @@ function processParams(workingDir) {
       }
     } else if (arg.startsWith('repeat-run=')) {
       params.repeatRun = parseInt(arg.substring('repeat-run='.length), 10);
+    } else if (arg.startsWith('repeat-step=')) {
+      params.repeatStep = arg.substring('repeat-step='.length);
     }
   });
 

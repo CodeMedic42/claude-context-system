@@ -793,12 +793,15 @@ After ALL files are created, add @file references to this CLAUDE.md file.
 ## Restricted Actions
 ~:Define a list of actions which any ai agent are not allowed to do when working in this repo. You will leave this section blank. After you have created or modified the agent file you will remind the user to review this section and update it as necessary.:~
 
+# Agent File Maintenance
+~:Keep this section but do not modify the contents:~
+No LLM/AI/Agent may make changes to this file outside of the claude-context-system commands. This is a maintained file through automatic means.
+
 # Agent File Metadata
 {
 	This section contains the following information
 
-	- Date Created: timestamp
-	- Date Modified: timestamp
+	- Revision Date: timestamp
 	- Last commit SHA built from: GIT SHA
 	- Template Version: 2.0.0
 }

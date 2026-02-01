@@ -1,3 +1,4 @@
 module.exports = {
-  testCommand: 'create',
+  testCommand: 'prepare',
+  tokenLimit: 100000,
 };

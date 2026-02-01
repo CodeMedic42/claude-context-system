@@ -34,12 +34,8 @@ function testClaudeFile(claudeData, expectedConfiguration) {
     testMetadata(claudeData, 'CLAUDE.md');
 
     describe('Metadata', () => {
-      test('should have date created', () => {
-        expect(claudeData.getDateCreated()).toBeTruthy();
-      });
-
-      test('should have date modified', () => {
-        expect(claudeData.getDateModified()).toBeTruthy();
+      test('should have revision date', () => {
+        expect(claudeData.getRevisionDate()).toBeTruthy();
       });
     });
 

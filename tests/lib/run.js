@@ -8,26 +8,38 @@ const Plan = require('./plan');
 const { getToolById } = require('./tools');
 const Batch = require('./batch');
 
-function getNewRunNumber(executionContext) {
+function getTrackerFile(executionContext) {
   const { runRootDir } = executionContext;
 
-  const trackerFile = path.join(runRootDir, 'run-tracker.json');
+  return path.join(runRootDir, 'run-tracker.json');
+}
 
+function getLastRunNumber(trackerFile) {
   if (!fs.existsSync(trackerFile)) {
-    const tracker = { lastRunNumber: 1 };
-
-    fs.writeFileSync(trackerFile, JSON.stringify(tracker, null, 2));
-
-    return 1;
+    return null;
   }
 
-  const tracker = JSON.parse(fs.readFileSync(trackerFile, 'utf8'));
+  const { lastRunNumber } = JSON.parse(fs.readFileSync(trackerFile, 'utf8'));
 
-  tracker.lastRunNumber += 1;
+  return lastRunNumber;
+}
 
-  fs.writeFileSync(trackerFile, JSON.stringify(tracker, null, 2));
+function getNewRunNumber(executionContext) {
+  const trackerFile = getTrackerFile(executionContext);
 
-  return tracker.lastRunNumber;
+  let lastRunNumber = getLastRunNumber(trackerFile);
+
+  if (isNil(lastRunNumber)) {
+    lastRunNumber = 1;
+  }
+
+  const runNumber = !isNil(lastRunNumber) ? lastRunNumber + 1 : 1;
+
+  fs.writeFileSync(trackerFile, JSON.stringify({
+    lastRunNumber: runNumber,
+  }, null, 2));
+
+  return runNumber;
 }
 
 function LoadPlans(plansDir, planIds) {
@@ -45,12 +57,25 @@ function LoadPlans(plansDir, planIds) {
 
 function LoadTools(toolIds) {
   const tools = {};
+  let failed = false;
 
   forEach(toolIds, (toolId) => {
     const Tool = getToolById(toolId);
 
-    tools[toolId] = new Tool({});
+    const tool = new Tool({});
+
+    if (!tool.isAvailable()) {
+      console.log(`${tool.getName()} is not available. Please ensure the tool is properly installed.`);
+
+      failed = failed || true;
+    } else {
+      tools[toolId] = new Tool({});
+    }
   });
+
+  if (failed) {
+    throw new Error('Failed to load one or more tools');
+  }
 
   return tools;
 }
@@ -60,11 +85,23 @@ function getRunDir(runRootDir, runNumber) {
 }
 
 function loadRun(executionContext) {
-  const { runRootDir, repeatRun } = executionContext;
+  let { repeatRun } = executionContext;
+
+  if (repeatRun <= 0) {
+    const trackerFile = getTrackerFile(executionContext);
+
+    const lastRunNumber = getLastRunNumber(trackerFile);
+
+    if (isNil(lastRunNumber)) {
+      throw new Error('Invalid run number to re-run');
+    }
+
+    repeatRun = lastRunNumber;
+  }
 
   const runNumber = repeatRun;
 
-  const runDir = getRunDir(runRootDir, runNumber);
+  const runDir = getRunDir(executionContext.runRootDir, runNumber);
 
   const resultsFile = path.join(runDir, 'results.json');
 
@@ -179,23 +216,12 @@ class Run {
   }
 
   async start() {
-    let allSuccess = true;
-    let totalPassed = 0;
-    let totalFailed = 0;
+    let runSuccess = true;
 
     await forEachAsync(this.batches, async (batch) => {
-      const testResult = await batch.execute();
+      const success = await batch.execute();
 
-      // const generationResult = await batch.generate();
-      // allSuccess = allSuccess && generationResult.success;
-
-      // const testResult = await batch.test();
-
-      allSuccess = allSuccess && testResult.success;
-
-      // Accumulate totals
-      totalPassed += testResult.passed || 0;
-      totalFailed += testResult.failed || 0;
+      runSuccess = runSuccess && success;
     });
 
     // Write simplified results.json (batch-results.json has the detailed data)
@@ -212,12 +238,10 @@ class Run {
     console.log(`\n${'='.repeat(60)}`);
     console.log(`📊 Test Run ${this.runNumber} Complete`);
     console.log(`${'='.repeat(60)}`);
-    console.log(`Total Passed: ${totalPassed}`);
-    console.log(`Total Failed: ${totalFailed}`);
-    console.log(`Status: ${allSuccess ? '✅ PASSED' : '❌ FAILED'}`);
+    console.log(`Status: ${runSuccess ? '✅ PASSED' : '❌ FAILED'}`);
     console.log(`Results saved to: ${resultsFile}`);
 
-    return allSuccess;
+    return runSuccess;
   }
 }
 

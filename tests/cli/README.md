@@ -1,6 +1,6 @@
-# Contest CLI - Context System Test Runner
+# Contest CLI - Test Runner for tests
 
-**Contest** is a command-line interface for running and managing tests for the Claude Context System. It provides an intuitive way to test context generation tools (Claude Code Plugin and Copilot CLI) against various project fixtures.
+**Contest** is a command-line interface for running Jest-based tests for the new plan/execute workflow. This is the tests version which works with the refactored command structure.
 
 ## Installation
 
@@ -15,7 +15,7 @@ pnpm contest --help
 
 ### `contest test`
 
-Run tests against tools and plans with interactive confirmation.
+Run Jest tests against tools and plans with interactive confirmation.
 
 ```bash
 # Run all tests (all tools × all plans)
@@ -26,12 +26,12 @@ pnpm contest test --tools plugin
 pnpm contest test --tools cli
 
 # Run specific plans
-pnpm contest test --plans library-package
-pnpm contest test --plans simple-node-service,react-client-only
+pnpm contest test --plans small-monorepo
+pnpm contest test --plans small-monorepo,medium-monorepo
 
 # Combine options
-pnpm contest test --tools plugin --plans dotnet-update
-pnpm contest test -t cli -p library-package,react-client-only
+pnpm contest test --tools plugin --plans small-monorepo
+pnpm contest test -t cli -p medium-monorepo,large-monorepo
 ```
 
 **Options:**
@@ -41,306 +41,154 @@ pnpm contest test -t cli -p library-package,react-client-only
 **What it does:**
 1. Validates your tool and plan selections
 2. Shows configuration summary and asks for confirmation
-3. Sets up test fixtures with git repositories
-4. Executes the selected tool(s) to generate context files
-5. Runs Jest tests to validate the output
-6. Saves results to `~/claude-context-test-runs/{runNumber}/`
+3. Runs Jest with the specified test plans
+4. Sets TEST_TOOL environment variable if only one tool specified
+5. Displays full Jest output with test results
+
+**Available Plans:**
+- `small-monorepo` - 5 projects, basic workflow validation
+- `medium-monorepo` - 25 projects, multi-batch execution
+- `large-monorepo` - 100 projects, extreme scaling
 
 ---
 
-### `contest rerun`
+### Other Commands (Not Yet Implemented)
 
-Rerun tests from a previous test run using the same configuration.
+The following commands exist but are not yet adapted for Jest-based tests:
 
-```bash
-# Rerun test run #8
-pnpm contest rerun --run 8
-pnpm contest rerun -r 8
-```
+- `contest rerun` - Rerun previous test runs
+- `contest open` - Interactively explore test results
+- `contest list` - List all test runs
+- `contest clean` - Delete old test runs
 
-**Options:**
-- `-r, --run <number>` - Run number to repeat (required)
-
-**What it does:**
-- Loads the configuration from the specified run
-- Reruns tests on the existing fixtures (does not regenerate)
-- Appends new test results to the batch results
-
----
-
-### `contest open`
-
-Interactively explore results from a test run.
-
-```bash
-# Open test run #8
-pnpm contest open --run 8
-pnpm contest open -r 8
-```
-
-**Options:**
-- `-r, --run <number>` - Run number to open (required)
-
-**Interactive Menu:**
-1. **Select batch** - Choose a tool/plan combination to inspect
-2. **View batch details** - See generation and test results summary
-3. **Available actions:**
-   - 📂 **Open fixture in file explorer** - Opens the generated fixture directory
-   - 📄 **View tool generation log** - Shows formatted output from Claude/Copilot
-   - 🧪 **View test results** - Browse and display Jest test results
-4. **Navigate** - Return to batch list or exit
-
-**Log Formatting:**
-- Claude logs are parsed from streaming JSON and displayed naturally
-- Shows Claude's text responses and tool uses (Read, Write, Bash, etc.)
-- Jest output is colorized for easy reading
-
----
-
-### `contest list`
-
-List all test runs with details.
-
-```bash
-# List recent test runs
-pnpm contest list
-
-# Show more runs
-pnpm contest list --limit 20
-pnpm contest list -n 20
-```
-
-**Options:**
-- `-n, --limit <number>` - Number of recent runs to show (default: 10)
-
-**Output:**
-```
-📊 Test Runs (showing 10 of 15):
-
-Run 015:
-  Created: 1/21/2026, 10:30:45 AM
-  Tools: plugin, cli
-  Plans: library-package, simple-node-service
-
-Run 014:
-  Created: 1/21/2026, 9:15:22 AM
-  Tools: plugin
-  Plans: dotnet-update
-...
-```
-
----
-
-### `contest clean`
-
-Delete old test runs to free up disk space.
-
-```bash
-# Keep 5 most recent runs, delete the rest
-pnpm contest clean
-
-# Keep specific number of runs
-pnpm contest clean --keep 10
-pnpm contest clean -k 3
-
-# Skip confirmation prompt
-pnpm contest clean --force
-pnpm contest clean -k 5 --force
-```
-
-**Options:**
-- `-k, --keep <number>` - Number of recent runs to keep (default: 5)
-- `-f, --force` - Skip confirmation prompt
-
-**What it does:**
-1. Scans `~/claude-context-test-runs/` for test runs
-2. Sorts by run number (descending)
-3. Keeps the N most recent runs
-4. Asks for confirmation (unless `--force`)
-5. Deletes older runs permanently
-
----
-
-## Test Run Structure
-
-Test runs are saved to: `~/claude-context-test-runs/`
-
-```
-claude-context-test-runs/
-├── 001/                         # Run number (zero-padded)
-│   ├── results.json             # High-level run metadata
-│   ├── plugin/                  # Tool-specific results
-│   │   ├── library-package/     # Plan-specific results
-│   │   │   ├── batch-results.json   # Batch metadata + test results
-│   │   │   ├── tool.plugin.log      # Tool generation log
-│   │   │   └── fixture/             # Generated test fixture
-│   │   │       ├── CLAUDE.md
-│   │   │       └── ...
-│   │   └── simple-node-service/
-│   └── cli/
-│       └── library-package/
-└── 002/
-```
-
-### `results.json`
-```json
-{
-  "runNumber": 1,
-  "planIds": ["library-package", "simple-node-service"],
-  "toolIds": ["plugin", "cli"]
-}
-```
-
-### `batch-results.json`
-```json
-{
-  "toolId": "plugin",
-  "planId": "library-package",
-  "generationResults": {
-    "generatedOn": "2026-01-21T10:30:45.123Z",
-    "success": true,
-    "error": ""
-  },
-  "testResults": [
-    {
-      "ranOn": "2026-01-21T10:31:02.456Z",
-      "status": "success",
-      "passed": 15,
-      "failed": 0,
-      "log": "... full Jest output ..."
-    }
-  ]
-}
-```
+These will be implemented as needed to work with Jest's output structure.
 
 ---
 
 ## Examples
 
-### Run Tests for a New Feature
+### Run Tests for Small Monorepo
 
 ```bash
-# Test dotnet-update plan with both tools
-pnpm contest test --plans dotnet-update
+# Test small-monorepo plan with both tools
+pnpm contest test --plans small-monorepo
 
 # Review output
 ✓ Confirm configuration
 
-🚀 Starting test run 16
-   Plans: dotnet-update
-   Tools: plugin, cli
+Running tests for:
+  Plans: small-monorepo
+  Tools: plugin, cli
 
-  Generating context: dotnet-update (plugin)...
-  ✓ Generated successfully
-
-  Running tests: dotnet-update (plugin)...
-  ✓ Tests passed: 12 tests in 2.3s
-
-  Generating context: dotnet-update (cli)...
-  ✓ Generated successfully
-
-  Running tests: dotnet-update (cli)...
-  ✓ Tests passed: 12 tests in 1.8s
-
-📊 Test Run 16 Complete
-Total Passed: 24
-Total Failed: 0
-Status: ✅ PASSED
+# Jest output follows...
+PASS tests/plans/small-monorepo/small-monorepo.test.js
+  Small Monorepo - Plan/Execute Workflow
+    Planning Phase (/ctx-create)
+      ✓ should run ctx-create successfully (45023ms)
+      ✓ should create action plan file (2ms)
+      ...
 ```
 
-### Explore Failed Test Results
+### Test Specific Tool
 
 ```bash
-# Run returned errors, let's investigate
-pnpm contest open --run 16
+# Test only the Claude plugin
+pnpm contest test --tools plugin --plans small-monorepo
 
-# Interactive menu:
-# 1. Select batch: "plugin / dotnet-update"
-# 2. View test results
-# 3. See formatted Jest output with failures highlighted
-# 4. Open fixture to inspect generated files
+# This sets TEST_TOOL=plugin environment variable
+# Tests will only run against the plugin
 ```
 
-### Clean Up Old Runs
+### Run All Tests
 
 ```bash
-# Check what runs exist
-pnpm contest list
+# Run all test plans with all tools
+pnpm contest test
 
-# Keep only 3 most recent
-pnpm contest clean --keep 3
+# This will take a while:
+# - small-monorepo: ~5-10 minutes
+# - medium-monorepo: ~20-30 minutes
+# - large-monorepo: ~60 minutes
+```
 
-⚠️  Warning: This will delete test runs permanently!
-   Keeping: 3 most recent run(s)
-   Deleting: 12 run(s)
+---
 
-? Are you sure you want to delete these runs? (y/N)
+## Alternative: Direct Jest Commands
+
+You can also run Jest directly without the contest CLI:
+
+```bash
+# Run all tests tests
+pnpm test:v2
+
+# Run specific plan
+pnpm test:v2:small
+pnpm test:v2:medium
+pnpm test:v2:large
+
+# Or use Jest directly
+jest --config jest.config.tests.js tests/plans/small-monorepo
 ```
 
 ---
 
 ## Architecture
 
-The CLI is built on top of the core test infrastructure:
+The CLI wraps Jest and provides:
 
 - **Commander.js** - CLI framework and command parsing
-- **Inquirer.js** - Interactive prompts and menus
-- **ExecutionContext** - Parses test configuration
-- **Run** - Orchestrates test execution
-- **Batch** - Represents one tool × plan combination
-- **Plan** - Test plan with fixture and setup hooks
-- **Tool** - Abstract tool runner (ClaudeTool, CopilotTool)
+- **Inquirer.js** - Interactive confirmation
+- **Jest** - Test runner for .test.js files
+- **TEST_TOOL env var** - Optional tool filtering
+
+The test infrastructure uses:
+- **ActionPlan** - Parses CLAUDE_CONTEXT_ACTION_PLAN.json
+- **ProgressData** - Parses CLAUDE_CONTEXT_PROGRESS.json
+- **Common tests** - Reusable validation functions
+- **Tool runners** - ClaudeTool and CopilotTool
 
 ---
 
 ## Troubleshooting
-
-### "Tool is not available"
-
-**For Claude Plugin:**
-```bash
-# Check if claude CLI is installed
-which claude
-
-# Install plugin locally
-pnpm run plugin:install
-```
-
-**For Copilot CLI:**
-```bash
-# Install dependencies
-pnpm install
-
-# Check if copilot-plugin.js exists
-ls copilot-context-cli/bin/copilot-plugin.js
-```
 
 ### "Invalid plan(s)"
 
 Make sure the plan exists in `tests/plans/`:
 ```bash
 ls tests/plans/
-# dotnet-update  library-package  react-client-only  simple-node-service
+# large-monorepo  medium-monorepo  small-monorepo
 ```
 
-### "Run not found"
+### "Tool is not available"
 
-Check available runs:
+**For Claude Plugin:**
 ```bash
-pnpm contest list
+# Install plugin locally
+pnpm run plugin:install
+
+# Verify installation
+claude plugin list
+# Should show: claude-context-updater
+```
+
+**For Copilot CLI:**
+```bash
+# Check if copilot-plugin.js exists
+ls copilot-context-cli/bin/copilot-plugin.js
 ```
 
 ### Tests are failing
 
-1. Open the run interactively to see detailed logs
-2. Check the tool generation log for errors
-3. Review Jest output for specific test failures
-4. Inspect the generated fixture directory
+1. Check Jest output for specific test failures
+2. Tests create temporary directories that are cleaned up automatically
+3. Check if /tmp has space (tests create temporary repos)
+4. Verify plugin is installed for Claude tests
+5. Verify copilot CLI exists for CLI tests
 
 ---
 
 ## See Also
 
-- [Main Testing Documentation](../README.md)
-- [Test Plans Documentation](../plans/)
-- [Core Infrastructure](../lib/)
+- [tests Documentation](../README.md) - Test infrastructure overview
+- [Test Plans](../plans/) - Individual test plan details
+- [Core Classes](../lib/) - ActionPlan, ProgressData, etc.

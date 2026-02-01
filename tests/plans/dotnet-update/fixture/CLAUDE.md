@@ -1,6 +1,6 @@
 # Repository Agent Context
 
-## Repository Summary
+## Repository Overview
 
 DotnetCalculator is a demonstration .NET solution showcasing a simple REST API architecture with a shared library. The solution consists of a calculator service that exposes HTTP endpoints for mathematical operations, leveraging a shared mathematical operations library. This serves as an example of clean separation between API controllers and reusable business logic in a .NET environment.
 
@@ -199,7 +199,6 @@ dotnet format
 
 # Agent File Metadata
 
-- Date Created: 2026-01-09T22:05:00Z
-- Date Modified: 2026-01-09T22:05:00Z
+- Revision Date: 2026-01-09T22:05:00Z
 - Last commit SHA built from: c643e25aed1a0e80acf49197d3072448b6e101f5
 - Template Version: 2.1.0

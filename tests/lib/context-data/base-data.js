@@ -80,11 +80,8 @@ class BaseData {
     }
 
     // Extract metadata fields (handle both plain and bold markdown formatting)
-    const dateCreatedMatch = metadataSection.match(
-      /\*\*Date Created\*\*:\s*(.+)|Date Created:\s*(.+)/,
-    );
-    const dateModifiedMatch = metadataSection.match(
-      /\*\*Date Modified\*\*:\s*(.+)|Date Modified:\s*(.+)/,
+    const revisionDateMatch = metadataSection.match(
+      /\*\*Revision Date\*\*:\s*(.+)|Revision Date:\s*(.+)/,
     );
     const commitShaMatch = metadataSection.match(
       /\*\*Last commit SHA built from\*\*:\s*([a-f0-9]+)|Last commit SHA built from:\s*([a-f0-9]+)/,
@@ -94,9 +91,8 @@ class BaseData {
     );
 
     this.metadata = {
-      dateCreated: dateCreatedMatch ? (dateCreatedMatch[1] || dateCreatedMatch[2]).trim() : null,
-      dateModified: dateModifiedMatch
-        ? (dateModifiedMatch[1] || dateModifiedMatch[2]).trim()
+      revisionDate: revisionDateMatch
+        ? (revisionDateMatch[1] || revisionDateMatch[2]).trim()
         : null,
       commitSha: commitShaMatch ? (commitShaMatch[1] || commitShaMatch[2]).trim() : null,
       templateVersion: templateVersionMatch
@@ -148,19 +144,11 @@ class BaseData {
   }
 
   /**
-   * Get date created
+   * Get revision date
    * @returns {string|null}
    */
-  getDateCreated() {
-    return this.metadata.dateCreated;
-  }
-
-  /**
-   * Get date modified
-   * @returns {string|null}
-   */
-  getDateModified() {
-    return this.metadata.dateModified;
+  getRevisionDate() {
+    return this.metadata.revisionDate;
   }
 
   /**
