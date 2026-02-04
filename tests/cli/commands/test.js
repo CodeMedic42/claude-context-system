@@ -74,12 +74,18 @@ async function testCommand(options) {
     // Override process.argv to match ExecutionContext expectations
     // ExecutionContext reads from process.argv
     const originalArgv = process.argv;
-    process.argv = [
+    const argv = [
       process.argv[0], // node
       process.argv[1], // script
       `tool=${tools.join(',')}`,
       `plan=${plans.join(',')}`,
     ];
+
+    if (options.prepareOnly) {
+      argv.push('prepare-only=true');
+    }
+
+    process.argv = argv;
 
     // Create execution context and run
     const executionContext = new ExecutionContext();

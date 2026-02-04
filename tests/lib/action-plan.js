@@ -5,17 +5,7 @@ const path = require('path');
  * Parses and validates CLAUDE_CONTEXT_ACTION_PLAN.json
  */
 class ActionPlan {
-  constructor(repoPath) {
-    this.repoPath = repoPath;
-    this.planPath = path.join(repoPath, 'CLAUDE_CONTEXT_ACTION_PLAN.json');
-
-    if (!fs.existsSync(this.planPath)) {
-      throw new Error(`Action plan not found at: ${this.planPath}`);
-    }
-
-    const content = fs.readFileSync(this.planPath, 'utf8');
-    const data = JSON.parse(content);
-
+  constructor(data) {
     // Store all plan data
     this.version = data.version;
     this.type = data.type;
@@ -33,25 +23,17 @@ class ActionPlan {
     this.currentCommit = data.currentCommit;
   }
 
-  /**
-   * Reload the plan from disk
-   */
-  reload() {
-    const content = fs.readFileSync(this.planPath, 'utf8');
+  static load(repoPath) {
+    const planPath = path.join(repoPath, 'CLAUDE_CONTEXT_ACTION_PLAN.json');
+
+    if (!fs.existsSync(planPath)) {
+      throw new Error('Action Plan does not exist');
+    }
+
+    const content = fs.readFileSync(planPath, 'utf8');
     const data = JSON.parse(content);
 
-    this.version = data.version;
-    this.type = data.type;
-    this.created = data.created;
-    this.repository = data.repository;
-    this.estimatedTokensPerFile = data.estimatedTokensPerFile;
-    this.actualTokensPerFile = data.actualTokensPerFile;
-    this.projects = data.projects || [];
-    this.estimatedTotalTokens = data.estimatedTotalTokens;
-    this.estimatedExecutions = data.estimatedExecutions;
-    this.contextFiles = data.contextFiles || [];
-    this.basedOnCommit = data.basedOnCommit;
-    this.currentCommit = data.currentCommit;
+    return new ActionPlan(data);
   }
 
   /**

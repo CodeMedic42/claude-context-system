@@ -1,4 +1,4 @@
 module.exports = {
   testCommand: 'prepare',
-  tokenLimit: 100000,
+  maxProjects: 5, // React client-only - should complete in one execution
 };

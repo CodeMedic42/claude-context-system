@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs-extra');
+
 class BatchStep {
   constructor({
     batch,
@@ -11,6 +14,7 @@ class BatchStep {
     this.status = status ?? 'pending';
     this.log = log ?? '';
     this.error = error ?? null;
+    this.logFilePath = path.join(this.batch.batchDir, `${this.id}.log`);
   }
 
   async execute(rerun) {
@@ -25,10 +29,16 @@ class BatchStep {
     return false;
   }
 
+  writeLog() {
+    fs.writeFileSync(this.logFilePath, this.log || '');
+
+    return this;
+  }
+
   getData() {
     return {
       status: this.status,
-      log: this.log,
+      logFilePath: this.logFilePath,
       error: this.error,
     };
   }

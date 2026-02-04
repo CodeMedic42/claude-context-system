@@ -1,3 +1,4 @@
+const { isNil } = require('lodash');
 const ProgressData = require('../../lib/progress-data');
 
 describe('library-package:progress', () => {
@@ -5,7 +6,11 @@ describe('library-package:progress', () => {
   let progress;
 
   beforeAll(() => {
-    progress = new ProgressData(fixtureDir);
+    progress = ProgressData.load(fixtureDir);
+
+    if (isNil(progress)) {
+      throw new Error('Progress file does not exist');
+    }
   });
 
   describe('Progress', () => {

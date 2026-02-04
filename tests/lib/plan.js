@@ -25,7 +25,7 @@ class Plan {
 
     // eslint-disable-next-line import/no-dynamic-require, global-require
     const setupModule = require(setupFile);
-    const { testCommand, tokenLimit, ...planHooks } = setupModule;
+    const { testCommand, maxProjects, ...planHooks } = setupModule;
 
     if (isEmpty(testCommand)) {
       console.log('Each plan setup file must provide a testCommand field');
@@ -33,22 +33,22 @@ class Plan {
       process.exit(1);
     }
 
-    if (!isInteger(tokenLimit) || tokenLimit < 0) {
-      console.log('Each plan setup file must provide a valid tokenLimit field');
+    if (!isInteger(maxProjects) || maxProjects < 1) {
+      console.log('Each plan setup file must provide a valid maxProjects field (integer >= 1)');
 
       process.exit(1);
     }
 
     this.testCommand = testCommand;
-    this.tokenLimit = tokenLimit;
+    this.maxProjects = maxProjects;
 
     this.hooks = merge({
       beforeFixtureSetup: noop,
       afterFixtureSetup: noop,
       beforeToolPreparation: noop,
       afterToolPreparation: noop,
-      beforeToolExecution: noop,
-      afterToolExecution: noop,
+      beforeToolExecutionCycle: noop,
+      afterToolExecutionCycle: noop,
     }, planHooks);
   }
 }

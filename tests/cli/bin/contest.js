@@ -20,6 +20,7 @@ program
   .description('Run tests against tools and plans')
   .option('-t, --tools <tools>', 'Comma-separated list of tools (plugin,cli). Default: all tools')
   .option('-p, --plans <plans>', 'Comma-separated list of plans. Default: all plans')
+  .option('--prepare-only', 'Stop after testPreparation step (fixture, preparation, testPreparation)')
   .action(testCommand);
 
 // Rerun command

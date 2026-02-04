@@ -4,10 +4,9 @@ const fs = require('fs-extra');
 const {
   FixtureStep,
   PreparationStep,
-  TestContextPlanStep,
-  TestContextProgressStep,
+  TestPreparationStep,
   ExecutionStep,
-  TestContextStep,
+  TestExecutionStep,
 } = require('./batch-steps');
 
 function loadBatchSteps(batch) {
@@ -28,21 +27,17 @@ function loadBatchSteps(batch) {
       batch,
       ...(batchResults?.steps?.preparation ?? {}),
     }),
-    testContextPlan: new TestContextPlanStep({
+    testPreparation: new TestPreparationStep({
       batch,
-      ...(batchResults?.steps?.testContextPlan ?? {}),
-    }),
-    testContextProgress: new TestContextProgressStep({
-      batch,
-      ...(batchResults?.steps?.testContextProgress ?? {}),
+      ...(batchResults?.steps?.testPreparation ?? {}),
     }),
     execution: new ExecutionStep({
       batch,
       ...(batchResults?.steps?.execution ?? {}),
     }),
-    testContext: new TestContextStep({
+    testExecution: new TestExecutionStep({
       batch,
-      ...(batchResults?.steps?.testContext ?? {}),
+      ...(batchResults?.steps?.testExecution ?? {}),
     }),
   };
 }
@@ -52,10 +47,12 @@ class Batch {
     run,
     plan,
     tool,
+    prepareOnly = false,
   }) {
     this.run = run;
     this.plan = plan;
     this.tool = tool;
+    this.prepareOnly = prepareOnly;
 
     this.batchDir = path.join(this.run.runDir, tool.id, plan.id);
     this.fixtureDir = path.join(this.batchDir, 'fixture');
@@ -64,23 +61,25 @@ class Batch {
   }
 
   async execute() {
-    const result = await this.steps.fixture.execute()
-      && await this.steps.preparation.execute()
-      && await this.steps.testContextPlan.execute()
-      && await this.steps.testContextProgress.execute()
-      && await this.steps.execution.execute()
-      && await this.steps.testContext.execute();
+    let result = await this.steps.fixture.execute()
+        && await this.steps.preparation.execute()
+        && await this.steps.testPreparation.execute();
+
+    if (!this.prepareOnly) {
+      result = result
+        && await this.steps.execution.execute()
+        && await this.steps.testExecution.execute();
+    }
 
     const batchResults = {
       toolId: this.tool.id,
       planId: this.plan.id,
       steps: {
-        fixture: this.steps.fixture.getData(),
-        preparation: this.steps.preparation.getData(),
-        testContextPlan: this.steps.testContextPlan.getData(),
-        testContextProgress: this.steps.testContextProgress.getData(),
-        execution: this.steps.execution.getData(),
-        testContext: this.steps.testContext.getData(),
+        fixture: this.steps.fixture.writeLog().getData(),
+        preparation: this.steps.preparation.writeLog().getData(),
+        testPreparation: this.steps.testPreparation.writeLog().getData(),
+        execution: this.steps.execution.writeLog().getData(),
+        testExecution: this.steps.testExecution.writeLog().getData(),
       },
     };
 

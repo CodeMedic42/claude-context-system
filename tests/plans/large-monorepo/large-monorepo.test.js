@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const { isNil } = require('lodash');
 const ActionPlan = require('../../lib/action-plan');
 const ProgressData = require('../../lib/progress-data');
 
@@ -9,8 +10,12 @@ describe('large-monorepo', () => {
   let progress;
 
   beforeAll(() => {
-    actionPlan = new ActionPlan(fixtureDir);
-    progress = new ProgressData(fixtureDir);
+    actionPlan = ActionPlan.load(fixtureDir);
+    progress = ProgressData.load(fixtureDir);
+
+    if (isNil(progress)) {
+      throw new Error('Progress file does not exist');
+    }
   });
 
   describe('Action Plan', () => {

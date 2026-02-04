@@ -1,10 +1,10 @@
 const BatchStep = require('./batch-step');
 const runJest = require('../run-jest');
 
-class TestContextProgressStep extends BatchStep {
+class TestPreparationStep extends BatchStep {
   constructor(config) {
     super({
-      id: 'testContextProgress',
+      id: 'testPreparation',
       ...config,
     });
   }
@@ -20,8 +20,8 @@ class TestContextProgressStep extends BatchStep {
       error,
     } = await runJest({
       batch: this.batch,
-      testName: 'Context Progress',
-      testFileName: 'context-progress-0.test.js',
+      testName: 'Preparation',
+      testFileName: 'preparation.test.js',
     });
 
     this.status = success ? 'success' : 'failed';
@@ -32,4 +32,4 @@ class TestContextProgressStep extends BatchStep {
   }
 }
 
-module.exports = TestContextProgressStep;
+module.exports = TestPreparationStep;

@@ -103,7 +103,7 @@
       "outputCapture": "std"
     },
     {
-      "name": "Debug claude:small-monorepo Test",
+      "name": "Debug plugin:angular-components Test",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
@@ -113,7 +113,8 @@
         "--tools",
         "plugin",
         "--plans",
-        "small-monorepo"
+        "angular-components",
+        "--prepare-only"
       ],
       "console": "integratedTerminal",
       "skipFiles": [

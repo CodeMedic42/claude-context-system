@@ -20,7 +20,7 @@ function beforeFixtureSetup(fixturePath) {
 }
 
 module.exports = {
-  testCommand: 'create',
-  tokenLimit: 100000, // Will require multiple executions
+  testCommand: 'prepare',
+  maxProjects: 10, // Large repo - will require multiple executions
   beforeFixtureSetup,
 };

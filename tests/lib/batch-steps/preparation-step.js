@@ -17,7 +17,7 @@ class PreparationStep extends BatchStep {
       console.log(`  Running planning phase: ${this.batch.plan.id} - ${this.batch.tool.id}...`);
 
       console.log('  Running beforeToolPreparation hook...');
-      this.batch.plan.hooks.beforeToolPreparation(this.batch.batchDir);
+      await this.batch.plan.hooks.beforeToolPreparation(this.batch.fixtureDir);
 
       // Execute the tool
       const {
@@ -42,7 +42,7 @@ class PreparationStep extends BatchStep {
       this.status = 'success';
 
       console.log('  Running afterToolPreparation hook...');
-      this.batch.plan.hooks.afterToolPreparation(this.batch.batchDir);
+      await this.batch.plan.hooks.afterToolPreparation(this.batch.fixtureDir);
 
       console.log('  ✓ Tool Preparation complete');
 

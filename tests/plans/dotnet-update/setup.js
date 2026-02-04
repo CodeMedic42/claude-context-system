@@ -208,5 +208,5 @@ function afterFixtureSetup(fixturePath) {
 module.exports = {
   testCommand: 'prepare',
   afterFixtureSetup,
-  tokenLimit: 100000,
+  maxProjects: 10, // .NET solution - should complete in one execution
 };

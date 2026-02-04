@@ -60,8 +60,8 @@ class CopilotTool extends Tool {
 
       // Build command-specific args
       const commandArgs = [...args];
-      if (command === 'execute' && batch.plan.tokenLimit) {
-        commandArgs.push('--token-limit', batch.plan.tokenLimit.toString());
+      if (command === 'execute' && batch.plan.maxProjects) {
+        commandArgs.push('--max-projects', batch.plan.maxProjects.toString());
       }
 
       // Build command array

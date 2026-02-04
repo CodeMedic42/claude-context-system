@@ -90,7 +90,9 @@ class FixtureStep extends BatchStep {
       // Make sure the fixture directory exists and create it if it does not.
       await fs.ensureDir(this.batch.fixtureDir);
 
-      await fs.copy(this.batch.plan.fixtureDir, this.batch.fixtureDir);
+      if (fs.existsSync(this.batch.plan.fixtureDir)) {
+        await fs.copy(this.batch.plan.fixtureDir, this.batch.fixtureDir);
+      }
 
       const gitDir = path.join(this.batch.fixtureDir, '.git');
 
@@ -99,7 +101,7 @@ class FixtureStep extends BatchStep {
       }
 
       console.log('  Running beforeFixtureSetup hook...');
-      this.batch.plan.hooks.beforeFixtureSetup(this.batch.fixtureDir);
+      await this.batch.plan.hooks.beforeFixtureSetup(this.batch.fixtureDir);
 
       // Initialize git repo
       console.log('    Initializing git repository...');
@@ -121,7 +123,7 @@ class FixtureStep extends BatchStep {
       }
 
       console.log('  Running afterFixtureSetup hook...');
-      this.batch.plan.hooks.afterFixtureSetup(this.batch.fixtureDir);
+      await this.batch.plan.hooks.afterFixtureSetup(this.batch.fixtureDir);
 
       console.log('  Fixture Setup Complete');
 

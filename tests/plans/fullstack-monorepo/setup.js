@@ -1,4 +1,4 @@
 module.exports = {
   testCommand: 'prepare',
-  tokenLimit: 100000,
+  maxProjects: 10, // Fullstack monorepo - should complete in one execution
 };

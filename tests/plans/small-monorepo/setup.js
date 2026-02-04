@@ -21,6 +21,6 @@ function beforeFixtureSetup(fixturePath) {
 
 module.exports = {
   testCommand: 'prepare',
-  tokenLimit: 100000, // High token limit - should complete in one execution
+  maxProjects: 10, // Small repo - should complete in one execution
   beforeFixtureSetup,
 };

@@ -30,7 +30,7 @@ function getNewRunNumber(executionContext) {
   let lastRunNumber = getLastRunNumber(trackerFile);
 
   if (isNil(lastRunNumber)) {
-    lastRunNumber = 1;
+    lastRunNumber = 0;
   }
 
   const runNumber = !isNil(lastRunNumber) ? lastRunNumber + 1 : 1;
@@ -210,6 +210,7 @@ class Run {
           run: this,
           plan,
           tool,
+          prepareOnly: executionContext.prepareOnly,
         }));
       });
     });
@@ -218,28 +219,32 @@ class Run {
   async start() {
     let runSuccess = true;
 
-    await forEachAsync(this.batches, async (batch) => {
-      const success = await batch.execute();
+    try {
+      await forEachAsync(this.batches, async (batch) => {
+        const success = await batch.execute();
 
-      runSuccess = runSuccess && success;
-    });
+        runSuccess = runSuccess && success;
+      });
 
-    // Write simplified results.json (batch-results.json has the detailed data)
-    const resultsFile = path.join(this.runDir, 'results.json');
-    const resultsData = {
-      runNumber: this.runNumber,
-      planIds: this.planIds,
-      toolIds: this.toolIds,
-    };
+      // Write simplified results.json (batch-results.json has the detailed data)
+      const resultsFile = path.join(this.runDir, 'results.json');
+      const resultsData = {
+        runNumber: this.runNumber,
+        planIds: this.planIds,
+        toolIds: this.toolIds,
+      };
 
-    fs.writeFileSync(resultsFile, JSON.stringify(resultsData, null, 2));
+      fs.writeFileSync(resultsFile, JSON.stringify(resultsData, null, 2));
 
-    // Print summary
-    console.log(`\n${'='.repeat(60)}`);
-    console.log(`📊 Test Run ${this.runNumber} Complete`);
-    console.log(`${'='.repeat(60)}`);
-    console.log(`Status: ${runSuccess ? '✅ PASSED' : '❌ FAILED'}`);
-    console.log(`Results saved to: ${resultsFile}`);
+      // Print summary
+      console.log(`\n${'='.repeat(60)}`);
+      console.log(`📊 Test Run ${this.runNumber} Complete`);
+      console.log(`${'='.repeat(60)}`);
+      console.log(`Status: ${runSuccess ? '✅ PASSED' : '❌ FAILED'}`);
+      console.log(`Results saved to: ${resultsFile}`);
+    } catch (error) {
+      console.error(`Catastrophic Error: ${error}\n${error.stack}`);
+    }
 
     return runSuccess;
   }

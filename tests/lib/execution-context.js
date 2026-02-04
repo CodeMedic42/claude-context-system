@@ -23,6 +23,7 @@ function processParams(workingDir) {
     planIds: null, // null = all test plans
     toolIds: null, // null = both tools
     repeatRun: null, // null = new run
+    prepareOnly: false, // false = run all steps
     plansDir: path.join(workingDir, 'tests', 'plans'),
   };
 
@@ -47,6 +48,8 @@ function processParams(workingDir) {
       params.repeatRun = parseInt(arg.substring('repeat-run='.length), 10);
     } else if (arg.startsWith('repeat-step=')) {
       params.repeatStep = arg.substring('repeat-step='.length);
+    } else if (arg.startsWith('prepare-only=')) {
+      params.prepareOnly = arg.substring('prepare-only='.length) === 'true';
     }
   });
 
@@ -72,12 +75,13 @@ function processParams(workingDir) {
 class ExecutionContext {
   constructor() {
     const {
-      planIds, toolIds, repeatRun, plansDir,
+      planIds, toolIds, repeatRun, prepareOnly, plansDir,
     } = processParams(process.cwd());
 
     this.planIds = planIds;
     this.toolIds = toolIds;
     this.repeatRun = repeatRun;
+    this.prepareOnly = prepareOnly;
     this.plansDir = plansDir;
     this.rootDir = __dirname;
     this.runRootDir = path.join(os.homedir(), 'claude-context-test-runs');

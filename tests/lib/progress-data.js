@@ -5,30 +5,36 @@ const path = require('path');
  * Parses and validates CLAUDE_CONTEXT_PROGRESS.json
  */
 class ProgressData {
-  constructor(repoPath) {
-    this.repoPath = repoPath;
-    this.progressPath = path.join(repoPath, 'CLAUDE_CONTEXT_PROGRESS.json');
-
-    if (!fs.existsSync(this.progressPath)) {
-      throw new Error(`Progress file not found at: ${this.progressPath}`);
-    }
-
-    this.reload();
-  }
-
-  /**
-   * Reload the progress from disk
-   */
-  reload() {
-    const content = fs.readFileSync(this.progressPath, 'utf8');
-    const data = JSON.parse(content);
-
+  constructor(data) {
     this.planFile = data.planFile;
     this.lastUpdated = data.lastUpdated;
     this.completedProjects = data.completedProjects || [];
     this.nextProject = data.nextProject;
     this.discoveries = data.discoveries || [];
     this.claudeMdData = data.claudeMdData || [];
+  }
+
+  /**
+   * Reload the progress from disk
+   */
+  static load(repoPath) {
+    const progressPath = path.join(repoPath, 'CLAUDE_CONTEXT_PROGRESS.json');
+
+    if (!fs.existsSync(progressPath)) {
+      return null;
+    }
+
+    const content = fs.readFileSync(progressPath, 'utf8');
+    const data = JSON.parse(content);
+
+    return new ProgressData(data);
+  }
+
+  /**
+   * Get a completed projects
+   */
+  getCompletedProjects() {
+    return this.completedProjects;
   }
 
   /**
@@ -212,7 +218,10 @@ class ProgressData {
    * Get total count of notes
    */
   getTotalNotesCount() {
-    return this.claudeMdData.reduce((sum, projectData) => sum + (projectData.notes ? projectData.notes.length : 0), 0);
+    return this.claudeMdData.reduce(
+      (sum, projectData) => sum + (projectData.notes ? projectData.notes.length : 0),
+      0,
+    );
   }
 
   /**
