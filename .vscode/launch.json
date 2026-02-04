@@ -2,127 +2,42 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug claude:dotnet-update Test",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
-      "program": "${workspaceFolder}/tests/run-tests.js",
-      "args": [
-        "plan=dotnet-update",
-        "tool=plugin"
-      ],
-      "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "cwd": "${workspaceFolder}",
-      "outputCapture": "std"
-    },
-    {
-      "name": "Debug copilot:library-package Test",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
-      "program": "${workspaceFolder}/tests/run-tests.js",
-      "args": [
-        "plan=library-package",
-        "tool=cli"
-      ],
-      "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "cwd": "${workspaceFolder}",
-      "outputCapture": "std"
-    },
-    {
-      "name": "Debug Any Test Plan",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
-      "program": "${workspaceFolder}/tests/run-tests.js",
-      "args": [],
-      "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "cwd": "${workspaceFolder}",
-      "outputCapture": "std"
-    },
-    {
-      "name": "Debug Contest Rerun 12",
+      "name": "Debug plugin:library-package",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
       "program": "${workspaceFolder}/tests/cli/bin/contest.js",
-      "args": [
-        "rerun",
-        "--run",
-        "13"
-      ],
+      "args": [ "test", "--tools", "plugin", "--plans", "library-package", "--prepare-only" ],
       "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_ENV": "development"
-      },
+      "skipFiles": [ "<node_internals>/**" ],
+      "env": { "NODE_ENV": "development" },
       "cwd": "${workspaceFolder}",
       "outputCapture": "std"
     },
     {
-      "name": "Debug claude:library-package Test",
+      "name": "Debug plugin:angular-components",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
       "program": "${workspaceFolder}/tests/cli/bin/contest.js",
-      "args": [
-        "test",
-        "--tools",
-        "plugin",
-        "--plans",
-        "library-package"
-      ],
+      "args": [ "test", "--tools", "plugin", "--plans", "angular-components", "--prepare-only" ],
       "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_ENV": "development"
-      },
+      "skipFiles": [ "<node_internals>/**" ],
+      "env": { "NODE_ENV": "development" },
       "cwd": "${workspaceFolder}",
       "outputCapture": "std"
     },
+
     {
-      "name": "Debug plugin:angular-components Test",
+      "name": "Debug plugin:facebook-react",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
       "program": "${workspaceFolder}/tests/cli/bin/contest.js",
-      "args": [
-        "test",
-        "--tools",
-        "plugin",
-        "--plans",
-        "angular-components",
-        "--prepare-only"
-      ],
+      "args": [ "test", "--tools", "plugin", "--plans", "facebook-react", "--prepare-only" ],
       "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_ENV": "development"
-      },
+      "skipFiles": [ "<node_internals>/**" ],
+      "env": { "NODE_ENV": "development" },
       "cwd": "${workspaceFolder}",
       "outputCapture": "std"
     },

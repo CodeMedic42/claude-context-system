@@ -17,8 +17,8 @@ describe('small-monorepo:preparation', () => {
     });
 
     describe('Action Plan', () => {
-      test('should have 57 projects', () => {
-        expect(actionPlan.projects.length).toBe(57);
+      test('should have 86 projects', () => {
+        expect(actionPlan.projects.length).toBe(86);
       });
 
       test('should be valid', () => {
