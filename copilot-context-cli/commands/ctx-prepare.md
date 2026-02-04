@@ -72,54 +72,234 @@ A **project** is a grouping of common tools or business functionality together w
 
 **Key principle: When in doubt, if it has an identifying file, it's a project.**
 
-### How to Identify Projects
+### Language Registry
 
-**1. Look for identifying files (project manifest files):**
+This section defines all supported languages, their file extensions, manifest files, and exclusion patterns. Use this as the authoritative source for language detection and project discovery.
 
-These files indicate a project exists at that location. Examples include (but are not exhaustive):
-- **JavaScript/Node**: `package.json`
-- **Rust**: `Cargo.toml`
-- **Java**: `pom.xml`, `build.gradle`, `build.gradle.kts`
-- **C#/.NET**: `*.csproj`, `*.sln`, `*.fsproj`, `*.vbproj`
-- **Go**: `go.mod`
-- **Python**: `pyproject.toml`, `setup.py`, `requirements.txt`
-- **Ruby**: `Gemfile`
-- **PHP**: `composer.json`
-- **Other**: `Makefile`, `CMakeLists.txt`, `Package.swift`, `mix.exs`, `build.sbt`
+**JavaScript/TypeScript:**
+- Extensions: `js`, `jsx`, `mjs`, `cjs`, `ts`, `tsx`, `mts`, `cts`
+- Manifest files: `package.json`
+- Workspace files: `lerna.json`, `pnpm-workspace.yaml`, `nx.json`, `rush.json`
+- Exclusions: `node_modules/`, `dist/`, `build/`, `out/`, `.next/`, `.nuxt/`
 
-**Note:** This list helps you understand what we mean by "identifying files" but is not exhaustive. Use your judgment for other languages and ecosystems.
+**Rust:**
+- Extensions: `rs`
+- Manifest files: `Cargo.toml`
+- Workspace files: `Cargo.toml` (with `[workspace]` section)
+- Exclusions: `target/`
 
-**2. Don't rely solely on workspace/solution configurations:**
+**Go:**
+- Extensions: `go`
+- Manifest files: `go.mod`
+- Workspace files: `go.work`
+- Exclusions: `vendor/`
 
-If you find workspace or solution files (e.g., `package.json` with `workspaces`, `*.sln`, `lerna.json`, `nx.json`, `pnpm-workspace.yaml`):
-- Use them as a starting point to discover projects
-- **BUT** continue searching the repository - don't assume that's the only workspace/solution
-- Don't assume because you found a workspace/solution that there are no more workspaces/solutions, keep looking around
-- Don't assume because you found a workspace/solution that there are not satellite projects defined outside them, keep looking around
-- Search outside the declared workspace paths
+**Python:**
+- Extensions: `py`, `pyw`
+- Manifest files: `pyproject.toml`, `setup.py`, `setup.cfg`, `requirements.txt`, `Pipfile`
+- Workspace files: `pyproject.toml` (with `[tool.poetry]` or workspace config)
+- Exclusions: `__pycache__/`, `.venv/`, `venv/`, `.eggs/`, `*.egg-info/`, `dist/`, `build/`
 
-**3. Handle nested workspaces:**
+**Java:**
+- Extensions: `java`
+- Manifest files: `pom.xml`, `build.gradle`, `build.gradle.kts`
+- Workspace files: `settings.gradle`, `settings.gradle.kts`, `pom.xml` (with `<modules>`)
+- Exclusions: `target/`, `build/`, `.gradle/`
 
-After finding projects via a workspace configuration, recursively check subdirectories for their own workspace configurations. Repositories can have nested monorepos.
+**C# / .NET:**
+- Extensions: `cs`, `csproj`, `fsproj`, `vbproj`, `sln`
+- Manifest files: `*.csproj`, `*.fsproj`, `*.vbproj`
+- Workspace files: `*.sln`
+- Exclusions: `bin/`, `obj/`, `packages/`
 
-**4. Search constraints:**
+**C / C++:**
+- Extensions: `c`, `cc`, `cpp`, `cxx`, `h`, `hpp`, `hxx`
+- Manifest files: `CMakeLists.txt`, `Makefile`, `meson.build`
+- Workspace files: `CMakeLists.txt` (root level)
+- Exclusions: `build/`, `cmake-build-*/`, `.build/`
 
-- **Depth limit**: Search up to 3-4 directory levels deep from the repository root
-- **Skip dependency/build folders**: Ignore folders that typically contain dependencies or build outputs
+**Ruby:**
+- Extensions: `rb`, `rake`
+- Manifest files: `Gemfile`, `*.gemspec`
+- Workspace files: `Gemfile` (root level)
+- Exclusions: `vendor/bundle/`, `.bundle/`
 
-Examples of folders to skip (use judgment for others):
-- `node_modules/` (Node.js)
-- `vendor/` (PHP, Go)
-- `target/` (Rust, Java)
-- `build/`, `dist/`, `out/` (build outputs)
-- `.git/`, `.github/` (version control)
-- `__pycache__/`, `.venv/`, `venv/` (Python)
-- `bin/`, `obj/` (.NET)
+**PHP:**
+- Extensions: `php`
+- Manifest files: `composer.json`
+- Workspace files: `composer.json` (root level)
+- Exclusions: `vendor/`
 
-**5. Special cases:**
+**Swift:**
+- Extensions: `swift`
+- Manifest files: `Package.swift`
+- Workspace files: `Package.swift` (root level)
+- Exclusions: `.build/`, `.swiftpm/`
 
-- **Single-project repository**: If you only find identifying files at the repository root and no subdirectory projects, the entire repository is a single project
-- **Private packages**: Include packages marked with `"private": true` - they are still projects
+**Kotlin:**
+- Extensions: `kt`, `kts`
+- Manifest files: `build.gradle.kts`, `pom.xml`
+- Workspace files: `settings.gradle.kts`
+- Exclusions: `build/`, `.gradle/`
+
+**Scala:**
+- Extensions: `scala`, `sc`
+- Manifest files: `build.sbt`
+- Workspace files: `build.sbt` (root level)
+- Exclusions: `target/`, `project/target/`
+
+**Elixir:**
+- Extensions: `ex`, `exs`
+- Manifest files: `mix.exs`
+- Workspace files: `mix.exs` (with umbrella app)
+- Exclusions: `_build/`, `deps/`
+
+### Step 3.1: Detect Repository Languages
+
+**First, get all unique file extensions in the repository:**
+
+```bash
+git ls-files | sed -n 's/.*\.//p' | sort -u
+```
+
+**Match the extensions against the Language Registry above to determine which languages are present.**
+
+Create a list of detected languages. For example:
+- If you see extensions: `js`, `jsx`, `ts`, `tsx` → JavaScript/TypeScript is present
+- If you see extensions: `rs` → Rust is present
+- If you see extensions: `go` → Go is present
+- If you see extensions: `py` → Python is present
+- And so on...
+
+**Important:** Only search for manifest files for languages that are actually detected in the repository.
+
+### Step 3.2: Search for Manifest Files
+
+**Based on the detected languages, search for their manifest files using the correct command for your platform.**
+
+**CRITICAL: Find Command Syntax**
+
+When searching for multiple file types with `-o` (OR), you MUST use parentheses `\( ... \)` to group patterns correctly:
+
+**Build the search command based on detected languages:**
+
+For each detected language, include its manifest file patterns in the search. Example:
+
+```bash
+find . -maxdepth 4 -type f \( \
+  -name "package.json" \           # JavaScript/TypeScript
+  -o -name "Cargo.toml" \          # Rust
+  -o -name "go.mod" \              # Go
+  -o -name "pom.xml" \             # Java
+  -o -name "build.gradle" \        # Java/Kotlin
+  -o -name "build.gradle.kts" \   # Java/Kotlin
+  -o -name "*.csproj" \            # .NET
+  -o -name "*.sln" \               # .NET
+  -o -name "pyproject.toml" \     # Python
+  -o -name "setup.py" \            # Python
+  -o -name "Gemfile" \             # Ruby
+  -o -name "composer.json" \       # PHP
+  -o -name "Package.swift" \       # Swift
+  -o -name "CMakeLists.txt" \     # C/C++
+  -o -name "mix.exs" \             # Elixir
+  -o -name "build.sbt" \           # Scala
+\) \
+  -not -path "*/.git/*" \
+  -not -path "*/node_modules/*" \
+  -not -path "*/target/*" \
+  -not -path "*/vendor/*" \
+  -not -path "*/dist/*" \
+  -not -path "*/build/*" \
+  -not -path "*/out/*" \
+  -not -path "*/__pycache__/*" \
+  -not -path "*/.venv/*" \
+  -not -path "*/venv/*" \
+  -not -path "*/bin/*" \
+  -not -path "*/obj/*" \
+  -not -path "*/.gradle/*" \
+  -not -path "*/_build/*" \
+  -not -path "*/deps/*" \
+| sort
+```
+
+**Only include the `-name` patterns for languages you detected in Step 3.1.** Don't search for manifest files for languages that aren't present.
+
+**Example:** If you only detected JavaScript/TypeScript and Rust, your command should be:
+
+```bash
+find . -maxdepth 4 -type f \( \
+  -name "package.json" \
+  -o -name "Cargo.toml" \
+\) \
+  -not -path "*/.git/*" \
+  -not -path "*/node_modules/*" \
+  -not -path "*/target/*" \
+| sort
+```
+
+### Step 3.3: Check Workspace Configurations
+
+For detected languages, check if workspace/monorepo configurations exist:
+
+**JavaScript/TypeScript:**
+- Check root `package.json` for `"workspaces"` field
+- Check for `lerna.json`, `pnpm-workspace.yaml`, `nx.json`, `rush.json`
+
+**Rust:**
+- Check if root `Cargo.toml` has a `[workspace]` section
+
+**Go:**
+- Check for `go.work` file
+
+**Java:**
+- Check for `settings.gradle` or `settings.gradle.kts`
+- Check if `pom.xml` has `<modules>` section
+
+**.NET:**
+- Check for `*.sln` files
+
+**Python:**
+- Check if `pyproject.toml` has workspace configuration
+
+**Important guidelines:**
+- Use workspace configs as a starting point but DON'T rely solely on them
+- Continue searching the entire repository - there may be additional workspaces or satellite projects
+- Don't assume one workspace means there aren't others
+- Search outside declared workspace paths
+
+### Step 3.4: Handle Nested Workspaces
+
+After finding projects via workspace configurations, recursively check subdirectories for their own workspace configurations. Repositories can have nested monorepos.
+
+### Step 3.5: Look for Project-Like Directory Structures
+
+After searching for manifest files, also look for directories with project-like structures that may not have traditional manifest files.
+
+**IMPORTANT**: You must find at least **2-3 indicators** from the list below to consider it a project. A single indicator (e.g., just a `src/` directory) is NOT sufficient.
+
+Project structure indicators:
+- **Organized code directories**: `src/`, `lib/`, `app/`, `pkg/` directories with source files
+- **Entry points**: `bin/`, `main.js`, `index.js`, `__main__.py`, executable scripts
+- **Command structure**: `commands/`, `cli/`, `scripts/` directories suggesting a CLI or tool
+- **Documentation**: README.md or similar that describes the directory as a project/tool/library
+- **Test infrastructure**: Presence of `tests/` or `__tests__/` with its own test runner/framework
+- **Multiple organized source files**: Not just config files, but actual implementation code
+- **Build/config files**: Makefile, Dockerfile, or similar suggesting independent build process
+
+Examples:
+- `tests/cli/` with bin/, lib/, commands/, and README describing it as a CLI → Project (4 indicators)
+- `src/` directory alone with a few JS files → NOT a project (1 indicator)
+- `tools/` with src/, tests/, and Makefile → Project (3 indicators)
+
+### Step 3.6: Special Cases
+
+**Private packages:** Include packages marked with `"private": true` - they are still projects.
+
+**Cross-platform considerations:** The commands above work on macOS and Linux. If you encounter issues, use `git ls-files` as a fallback:
+
+```bash
+git ls-files | grep -E '(package\.json|Cargo\.toml|go\.mod|pom\.xml)$' | sort
+```
 
 ### Build Review List
 
@@ -128,7 +308,17 @@ Examples of folders to skip (use judgment for others):
 For each project, record:
 - Project ID (directory name or package name from manifest)
 - Path (use absolute path)
-- File count (for token estimation - count files in project directory, excluding dependency folders)
+- Language(s) (from Step 3.1)
+- File count (for token estimation - count files in project directory, excluding dependency folders based on language exclusions from Language Registry)
+
+### Exclude Repository Root Unless It's the Only Project
+
+**IMPORTANT**: After discovering all projects in subdirectories:
+
+- If you found ANY projects in subdirectories → DO NOT include the repository root as a project (even if it has a manifest file like package.json)
+- If you found NO projects anywhere in subdirectories → THEN include the repository root as the single project
+
+This rule applies regardless of workspace/monorepo configuration. The root manifest file in a multi-project repository is typically just for orchestration, not a project itself.
 
 ## Step 4: Analyze Dependencies
 
