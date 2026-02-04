@@ -1,6 +1,6 @@
 ---
-description: Execute context file generation from action plan with token-bounded batching
-argument-hint: --token-limit <number>
+description: Execute context file generation from action plan with project count limit
+argument-hint: --max-projects <number>
 allowed-tools: Bash(git*), Bash(find*), Bash(mkdir*), Read, Write, Edit, Glob, Grep
 ---
 
@@ -8,10 +8,10 @@ allowed-tools: Bash(git*), Bash(find*), Bash(mkdir*), Read, Write, Edit, Glob, G
 
 Execute context file generation based on an action plan created by `/ctx-prepare`, `/ctx-create`, or `/ctx-update`.
 
-**Required Parameter:** `--token-limit <number>` - Maximum tokens to consume per execution
+**Required Parameter:** `--max-projects <number>` - Maximum number of projects to process per execution
 
-**Operation:** $1 (should be "--token-limit")
-**Token Limit:** $2 (number of tokens)
+**Operation:** $1 (should be "--max-projects")
+**Max Projects:** $2 (number of projects to process)
 
 ## Prerequisites
 
@@ -25,81 +25,153 @@ Before proceeding, verify:
    - Check for `CLAUDE_CONTEXT_PROGRESS.json` in repository root
    - If not found: ERROR - "No progress file found. Run /ctx-create first."
 
-3. **Token limit provided:**
-   - If $1 is not "--token-limit": ERROR - "Missing required parameter. Usage: /ctx-execute --token-limit <number>"
-   - If $2 is not a number: ERROR - "Token limit must be a number"
-   - If $2 is less than 10000: ERROR - "Token limit too low. Minimum: 10000 tokens"
+3. **Max projects provided:**
+   - If $1 is not "--max-projects": ERROR - "Missing required parameter. Usage: /ctx-execute --max-projects <number>"
+   - If $2 is not a number: ERROR - "Max projects must be a number"
+   - If $2 is less than 1: ERROR - "Max projects must be at least 1"
 
-## Phase 1: Load Template Context
+## Important: File Path Requirements
 
-**CRITICAL TEMPLATE VERIFICATION:**
+**CRITICAL: All file paths stored in JSON files must be FULL paths, not relative paths.**
 
-This tool uses specialized template files which define the structure of context files which will be created.
+When writing to `CLAUDE_CONTEXT_ACTION_PLAN.json` or `CLAUDE_CONTEXT_PROGRESS.json`:
+- File paths in `changedFiles` arrays must be full paths (e.g., `"/path/to/repo/src/file.js"`)
+- File paths in `files` arrays within notes must be full paths
+- File paths in `contextFiles` arrays must be full paths
+- Project `path` fields should remain relative to repo root (e.g., `"./packages/project"`)
 
-There 5 template files you should be able to find. You will fetch and load these files. If the path to these files requires you to load them from the web then you will do this.
-
-- ${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md
-- ${TEMPLATE_PATH}/SERVICE.TEMPLATE.md
-- ${TEMPLATE_PATH}/CLIENT.TEMPLATE.md
-- ${TEMPLATE_PATH}/DATABASE.TEMPLATE.md
-- ${TEMPLATE_PATH}/LIBRARY.TEMPLATE.md
-
-**If the template file cannot be fetched:**
-
-STOP IMMEDIATELY. This indicates an installation, network, or repository problem. Inform the user:
-
-```
-❌ ERROR: Template files not accessible.
-
-The context file templates could not be loaded from ${TEMPLATE_PATH}.
+Example:
+```json
+{
+  "files": [
+    {"filePath": "/Users/username/repo/packages/api/src/index.js", "lines": "10-20"}
+  ],
+  "changedFiles": [
+    "/Users/username/repo/packages/api/src/handler.js"
+  ]
+}
 ```
 
-**DO NOT PROCEED:**
-- You will NOT guess what the template should contain
-- You will NOT create any context files
-- You will NOT attempt to generate content without the template
-
-Then **EXIT IMMEDIATELY without creating any files**.
+## Phase 1: Load Initial Context
 
 **Load required files:**
 
-1. Template files:
-   - These template files define what information to track
+1. **Load CLAUDE.TEMPLATE.md:**
+   - Path: `${TEMPLATE_PATH}/CLAUDE.TEMPLATE.md`
+   - This is the main template for the repository-level context file
+   - Load this upfront as it's always needed
    - Parse instruction placeholders (~:...:~) to understand topics
 
-2. Load `CLAUDE_CONTEXT_ACTION_PLAN.json`
+   **If this template cannot be fetched:**
+   - STOP IMMEDIATELY - indicates an installation or network problem
+   - Inform the user:
+     ```
+     ❌ ERROR: Template file not accessible.
+     The CLAUDE.TEMPLATE.md file could not be loaded from ${TEMPLATE_PATH}.
+     ```
+   - DO NOT PROCEED without the template
+   - EXIT IMMEDIATELY without creating any files
+
+2. **Load action plan:**
+   - Load `CLAUDE_CONTEXT_ACTION_PLAN.json`
    - Contains project list, dependencies, estimates
    - Note the project `status` field ("new", "updated", or "stable")
    - Note removedProjects array
 
-3. Load `CLAUDE_CONTEXT_PROGRESS.json`
+3. **Load progress file:**
+   - Load `CLAUDE_CONTEXT_PROGRESS.json`
    - Contains completed projects, next project, discoveries, claudeMdData
 
+**CRITICAL: Do NOT load project-specific templates yet**
+
+**DO NOT load these files in Phase 1:**
+- ❌ DO NOT load `${TEMPLATE_PATH}/SERVICE.TEMPLATE.md`
+- ❌ DO NOT load `${TEMPLATE_PATH}/CLIENT.TEMPLATE.md`
+- ❌ DO NOT load `${TEMPLATE_PATH}/DATABASE.TEMPLATE.md`
+- ❌ DO NOT load `${TEMPLATE_PATH}/LIBRARY.TEMPLATE.md`
+
+**Why:** Loading all templates upfront wastes ~40,000-50,000 tokens. These templates will be loaded on-demand in Step 2.4 when processing projects of each specific type.
+
+**Only load them when needed:** When you encounter a project that needs SERVICE.TEMPLATE.md in Step 2.4, load it then. Not before.
+
 **Calculate execution parameters:**
-- Safety threshold: `$2 * 0.9` (stop at 90% of token limit)
-- Initialize token counter: `currentTokens = 0`
+- Max projects: `$2` (from command argument)
 - Identify next project from progress file
+
+**Project counting approach:**
+- Count how many projects have been completed in this execution
+- Stop when you've processed `maxProjects` number of projects
+- Simple: if `projectsProcessedThisExecution >= maxProjects`, stop before the next project
+
+**Example:**
+- Max projects: 10
+- Completed this execution: 0 projects
+- Process projects 1-10 sequentially
+- After processing project #10, check: 10 >= 10 ✓ STOP
+
+**IMPORTANT: Just start processing**
+- Do NOT inform the user about repository size or how many executions it will take
+- Do NOT ask the user for confirmation to proceed
+- Do NOT wait for user input
+- The user already knows the scope and has executed the command - just begin processing projects immediately
 
 ## Phase 2: Process Projects
 
+**CRITICAL: Process projects ONE AT A TIME, sequentially:**
+- DO NOT process multiple projects in parallel
+- DO NOT use Task agents to process projects concurrently
+- DO NOT batch projects together
+- Process the next project from the action plan, complete it fully, update the progress file (Step 2.7), then loop back to Step 2.1 for the next project
+- The term "batch" in this command refers to "this execution of /ctx-execute", not to processing multiple projects at once
+
+**Why sequential processing is required:**
+- Step 2.7 must update the progress file after EACH project
+- The progress file tracks completed projects, which is needed for:
+  - Token budget calculations (Step 2.1)
+  - Resuming from interruptions
+  - Phase 3 refinement (needs completedProjects array)
+  - Creating main CLAUDE.md (needs full list of context files)
+- Using Task agents bypasses Step 2.7, creating files that are never tracked in the progress file
+- This breaks the entire workflow - files exist but the system doesn't know about them
+
 FOR EACH project starting from `nextProject` in progress file:
 
-### Step 2.1: Pre-Check Token Budget
+### Step 2.1: Pre-Check Project Count
 
-BEFORE starting this project:
-- Check: `currentTokens + project.estimatedTokens > safetyThreshold`
-- IF TRUE:
-  - STOP execution (don't start this project)
-  - OUTPUT summary:
-    ```
-    Token limit approaching. Stopping before next project.
+**Count projects processed in this execution:**
+- Track how many projects you've completed since this `/ctx-execute` command started
+- Initialize counter: `projectsProcessedThisExecution = 0`
+- Check: `projectsProcessedThisExecution >= maxProjects`
 
-    Completed this batch: X projects
-    Remaining: Y projects
-    Progress: Z% complete
+**Decision:**
+- IF `projectsProcessedThisExecution >= maxProjects`: STOP execution, skip to Phase 4
+- IF `projectsProcessedThisExecution < maxProjects`: **PROCEED with this project**, continue to Step 2.2
 
-    Run /ctx-execute --token-limit <number> to continue
-    ```
+**Example with max-projects 10:**
+```
+Max projects: 10
+Projects processed this execution: 8
+Check: 8 < 10 ✓ PROCEED
+→ Continue to Step 2.2 and process this project
+→ After completing, increment counter: projectsProcessedThisExecution = 9
+```
+
+**After processing max projects:**
+```
+Projects processed: 10
+Check: 10 >= 10 ✓ STOP
+
+Completed in this execution: 10 projects
+Remaining: Y projects
+Progress: Z% complete
+
+Run /ctx-execute --max-projects 10 to continue
+```
+
+**Important:**
+- Once you START a project, COMPLETE it even if it would exceed max projects
+- Only stop BEFORE starting a new project, never abandon mid-processing
+- The counter tracks projects completed **in this execution only**, not total completed projects
   - EXIT (skip to Phase 4: Final Steps)
 
 ### Step 2.2: Load Dependency Context
@@ -186,8 +258,18 @@ IF project.status is "stable":
 
 IF project.status is "new":
   - FOR EACH type determined in Step 2.3:
-    - Create new context file: `{project.path}/{TYPE}.CLAUDE.md`
-    - Use template loaded in Phase 1 for this TYPE
+    - **Load template for this TYPE if not already loaded:**
+      - SERVICE → load `${TEMPLATE_PATH}/SERVICE.TEMPLATE.md`
+      - CLIENT → load `${TEMPLATE_PATH}/CLIENT.TEMPLATE.md`
+      - DATABASE → load `${TEMPLATE_PATH}/DATABASE.TEMPLATE.md`
+      - LIBRARY → load `${TEMPLATE_PATH}/LIBRARY.TEMPLATE.md`
+      - If already loaded in memory, reuse it
+    - **Create new context file: `{project.path}/{TYPE}.CLAUDE.md`**
+      - **CRITICAL**: The filename MUST be `{TYPE}.CLAUDE.md` where TYPE is SERVICE, CLIENT, DATABASE, or LIBRARY
+      - **Examples**: `SERVICE.CLAUDE.md`, `CLIENT.CLAUDE.md`, `DATABASE.CLAUDE.md`, `LIBRARY.CLAUDE.md`
+      - **WRONG**: Do NOT name it `CLAUDE_CONTEXT.md` or `CONTEXT.md` or `{projectName}.md`
+      - **RIGHT**: If type is LIBRARY, filename is `LIBRARY.CLAUDE.md`
+    - Use the template for this TYPE
     - Populate all sections based on template instructions
     - Include metadata:
       - Revision Date: current timestamp
@@ -197,9 +279,11 @@ IF project.status is "new":
 IF project.status is "updated":
   - FOR EACH type determined in Step 2.3:
     - Read existing context file: `{project.path}/{TYPE}.CLAUDE.md`
+      - **Remember**: filename is `{TYPE}.CLAUDE.md` (e.g., `SERVICE.CLAUDE.md`)
     - If type changed (new types added or removed):
       - Delete context files for removed types
-      - Create context files for newly added types
+      - For newly added types: **Load template if not already loaded** (same as "new" status above)
+      - Create context files for newly added types (filename: `{TYPE}.CLAUDE.md`)
     - For existing types:
       - Update sections affected by changes in changedFiles
       - Keep sections that weren't affected by changes
@@ -235,6 +319,7 @@ WHILE analyzing project, look for information matching CLAUDE.TEMPLATE.md sectio
 
 WHEN you find relevant information:
 - Add note to claudeMdData in progress file
+- **IMPORTANT: Use FULL file paths in the files array**
 - Structure:
   ```json
   {
@@ -243,7 +328,7 @@ WHEN you find relevant information:
       {
         "topic": "Environment Setup - Prerequisites",
         "files": [
-          {"filePath": "./packages/project/package.json", "lines": "3-5"}
+          {"filePath": "/full/path/to/repo/packages/project/package.json", "lines": "3-5"}
         ],
         "note": "Requires Node.js v16.0.0 or higher"
       }
@@ -314,14 +399,14 @@ IF you discover something unexpected:
 
 After completing project:
 
-1. Add to completedProjects:
+1. Add to completedProjects (use FULL paths for contextFiles):
    ```json
    {
      "id": "project-id",
      "status": "new|updated|stable",
      "types": ["SERVICE"],
      "contextFiles": [
-       {"type": "SERVICE", "path": "./packages/project/SERVICE.CLAUDE.md"}
+       {"type": "SERVICE", "path": "/full/path/to/repo/packages/project/SERVICE.CLAUDE.md"}
      ]
    }
    ```
@@ -335,20 +420,13 @@ After completing project:
 
 5. Update action plan (if missed projects added)
 
-6. Update actualTokens field for this project
+6. Record estimated tokens for this project (from action plan)
 
 7. Update lastUpdated timestamp
 
 8. Save both progress file and action plan
 
-### Step 2.8: Update Token Counter
-
-- Calculate actual tokens consumed for this project
-- Update: `currentTokens += actualTokens`
-- Calculate refined estimate: `actualTokensPerFile = totalActual / totalFiles`
-- Use for remaining projects
-
-### Step 2.9: Continue or Stop
+### Step 2.8: Continue or Stop
 
 - Check if more projects remain
 - If yes: Loop to Step 2.1 for next project
@@ -429,20 +507,19 @@ IF all projects complete (Phase 3 executed):
 
 Total projects: X
 Context files created: Y
-Tokens consumed: ~Z
 
 CLAUDE.md created at repository root.
 ```
 
-ELSE (stopped due to token limit):
+ELSE (stopped due to max projects):
 ```
-Batch complete. Stopped at token threshold.
+Execution complete. Processed maximum projects.
 
-Completed this batch: X projects (A tokens)
-Remaining: Y projects (~B tokens estimated)
+Completed in this execution: X projects
+Remaining: Y projects
 Progress: Z% complete
 
-Run /ctx-execute --token-limit <number> to continue
+Run /ctx-execute --max-projects <number> to continue
 ```
 
 **Exit successfully.**
