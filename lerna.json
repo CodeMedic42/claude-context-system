@@ -4,8 +4,7 @@
   "npmClient": "pnpm",
   "packages": [
     "claude-context-plugin",
-    "copilot-context-cli",
-    "test-runner"
+    "copilot-context-cli"
   ],
   "command": {
     "version": {
