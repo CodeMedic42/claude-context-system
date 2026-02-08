@@ -8,14 +8,14 @@ const { testMetadata, testContentQuality, hasSectionMatching } = require('./base
  * Test library.claude.md file
  * @param {LibraryClaudeData} libraryData - LibraryClaudeData instance
  */
-function testLibraryFile(libraryData) {
+function testLibraryFile(libraryData, title) {
   if (!libraryData) {
     throw new Error('libraryData is required - file may not exist');
   }
 
   describe(`Library File: ${libraryData.getProjectName()}`, () => {
     describe('Required Sections', () => {
-      const requiredSections = libraryData.getRequiredSections();
+      const requiredSections = libraryData.getRequiredSections(title);
 
       requiredSections.forEach((sectionName) => {
         test(`should have "${sectionName}" section`, () => {

@@ -14,7 +14,7 @@ describe('library-package:context', () => {
 
   // Test library.claude.md
   const libraryData = contextData.getProjectContextData('./LIBRARY.CLAUDE.md');
-  testLibraryFile(libraryData);
+  testLibraryFile(libraryData, '@test/utility-library');
 
   // Custom tests specific to this test plan
   describe('Custom Validation', () => {
@@ -37,7 +37,7 @@ describe('library-package:context', () => {
     });
 
     test('should have Libraries and Plugins section in CLAUDE.md', () => {
-      expect(contextData.hasSection('Libraries and Plugins')).toBe(true);
+      expect(contextData.hasSection('Libraries and Plugins [libraries] [packages] [reusable]')).toBe(true);
     });
 
     test('should NOT have Services and APIs section in CLAUDE.md', () => {

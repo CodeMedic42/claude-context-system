@@ -12,6 +12,16 @@ const path = require('path');
 
 const SHARED_DIR = path.join(__dirname, '..', 'shared');
 const CLI_DIR = path.join(__dirname, '..', 'copilot-context-cli');
+const ROOT_DIR = path.join(__dirname, '..');
+
+/**
+ * Get version from package.json
+ */
+function getVersion() {
+  const packageJsonPath = path.join(ROOT_DIR, 'package.json');
+  const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+  return pkg.version;
+}
 
 /**
  * Copy commands (with placeholders intact)
@@ -36,7 +46,7 @@ function syncCommands() {
 }
 
 /**
- * Copy templates
+ * Copy templates with version replacement
  */
 function syncTemplates() {
   const sharedTemplatesDir = path.join(SHARED_DIR, 'templates');
@@ -46,19 +56,25 @@ function syncTemplates() {
     fs.mkdirSync(cliTemplatesDir, { recursive: true });
   }
 
+  const version = getVersion();
   const files = fs.readdirSync(sharedTemplatesDir).filter((f) => f.endsWith('.md') && f !== 'README.md');
 
   files.forEach((file) => {
     const sourcePath = path.join(sharedTemplatesDir, file);
     const destPath = path.join(cliTemplatesDir, file);
 
-    fs.copyFileSync(sourcePath, destPath);
+    let content = fs.readFileSync(sourcePath, 'utf8');
+    content = content.replace(/\$\{templateVersion\}/g, version);
+
+    fs.writeFileSync(destPath, content, 'utf8');
     console.log(`✓ Synced template: ${file}`);
   });
 }
 
 function main() {
   console.log('Syncing shared files to copilot-context-cli...\n');
+
+  const version = getVersion();
 
   console.log('Commands:');
   syncCommands();
@@ -67,7 +83,10 @@ function main() {
   syncTemplates();
 
   console.log('\n✓ CLI sync complete!');
-  console.log('\nNote: Placeholders will be replaced at runtime by the CLI wrapper:');
+  console.log('\nTemplate placeholders replaced at sync time:');
+  // eslint-disable-next-line no-template-curly-in-string
+  console.log(`  \${templateVersion} → ${version}`);
+  console.log('\nCommand placeholders will be replaced at runtime by the CLI wrapper:');
   // eslint-disable-next-line no-template-curly-in-string
   console.log('  ${TEMPLATE_PATH} → <install-dir>/templates');
   // eslint-disable-next-line no-template-curly-in-string

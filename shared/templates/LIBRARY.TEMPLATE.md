@@ -1,47 +1,47 @@
 # Library Context: ~:Library Name:~
 
-## Template Usage Guidelines
+## Template Usage Guidelines [guidelines] [instructions]
 
 **IMPORTANT: Exclude sections that contain no meaningful information.**
 
-### When to EXCLUDE a section:
+### When to EXCLUDE a section: [guidelines] [exclusion]
 - The section would only contain placeholder text, "N/A", "None", or "Not applicable"
 - The library doesn't have that feature (e.g., no HTTP endpoints, no configuration options)
 - The information is obvious or adds no value (e.g., "this is written in JavaScript" for a JS-only repo)
 - The section would duplicate information already stated elsewhere
 
-### When to INCLUDE a section:
+### When to INCLUDE a section: [guidelines] [inclusion]
 - It contains specific, actionable information
 - It documents behavior that isn't immediately obvious from the code
 - It would help an AI agent or developer understand how to use or extend the library
 - It describes important constraints, patterns, or conventions
 
-### How to use this template:
+### How to use this template: [guidelines] [instructions]
 1. Fill in sections that have meaningful content for your library
 2. DELETE entire sections (including headers) that don't apply or have no material information
 3. Keep the document focused and concise - quality over completeness
 
 ---
 
-## Library Overview
+## Library Overview [overview] [summary]
 ~:Provide a clear description of what this library does, its primary purpose, and what problems it solves:~
 
-## Library Type
+## Library Type [metadata] [classification]
 ~:Specify the type of library - EXCLUDE this section if type is obvious from context:~
 - **Type**: ~:e.g., "Shared utility library", "UI component library", "Plugin", "SDK", "CLI tool", "Middleware", "Express/Gateway Plugin":~
 - **Scope**: ~:e.g., "Internal use only", "Public package", "Organization-wide":~
 - **Language**: ~:Primary programming language:~
 
-## Package Information
+## Package Information [package] [distribution] [installation]
 
-### Package Details
+### Package Details [package] [metadata]
 ~:Information about the package distribution:~
 - **Package name**: ~:e.g., "@company/utils", "my-library":~
 - **Current version**: ~:Current version number:~
 - **Package manager**: ~:e.g., "npm", "yarn", "pip", "Maven", "NuGet":~
 - **Registry**: ~:Where the package is published - npm, private registry, etc.:~
 
-### Installation
+### Installation [installation] [setup]
 ~:How consumers install this library:~
 ```
 {Installation command, e.g.:
@@ -51,7 +51,7 @@ dotnet add package MyLibrary
 }
 ```
 
-## Core Functionality
+## Core Functionality [features] [api] [functionality]
 
 ~:DISCOVERY PROMPTS for automated generation:
 - Search for route/endpoint definitions (files like *-api.js, *-routes.js, *router*, */routes/*)
@@ -62,13 +62,13 @@ dotnet add package MyLibrary
 - Find configuration schemas or option objects
 :~
 
-### Main Features
+### Main Features [features] [capabilities]
 ~:List the main features/capabilities this library provides - EXCLUDE if fewer than 2 features:~
 1. ~:Feature 1:~: ~:Brief description:~
 2. ~:Feature 2:~: ~:Brief description:~
 3. ~:Feature 3:~: ~:Brief description:~
 
-### Public API
+### Public API [api] [exports] [interface]
 ~:Describe the public API surface - EXCLUDE subsections with no exports:~
 - **Exported plugins**: ~:List plugins/middleware and their purposes - DELETE this line if none:~
   - `~:PluginName:~`: ~:Brief purpose:~
@@ -83,12 +83,12 @@ dotnet add package MyLibrary
 - **Exported utilities**: ~:List utility objects or helper collections - DELETE this line if none:~
   - `~:UtilObject:~`: ~:Brief purpose:~
 
-## Generated/Registered APIs
+## Generated/Registered APIs [api] [generated] [routes]
 ~:EXCLUDE THIS ENTIRE SECTION if the library doesn't automatically create routes, services, or APIs when initialized:~
 
 ~:If this library automatically creates routes, services, or APIs when initialized, document them here:~
 
-### HTTP Routes
+### HTTP Routes [api] [routes] [endpoints]
 ~:EXCLUDE this subsection if no HTTP routes are created:~
 
 ~:List all HTTP routes this library creates - include ALL endpoints with full details:~
@@ -107,31 +107,31 @@ dotnet add package MyLibrary
 - **Authentication**: ~:Required level or not required:~
 - **Special Configuration**: ~:Any settings that affect this endpoint:~
 
-### Service Actions
+### Service Actions [services] [actions]
 ~:EXCLUDE this subsection if not using a service broker pattern:~
 
 ~:If using a service broker pattern (like @pcc-prompt/services), list actions registered:~
 - `~:action.name:~`: ~:Description and purpose:~
 - `~:action.name:~`: ~:Description and purpose:~
 
-### Event Listeners
+### Event Listeners [events] [listeners]
 ~:EXCLUDE this subsection if no event listeners are registered:~
 
 ~:If this registers event listeners or subscribers:~
 - **~:Event name:~**: ~:What it does when triggered:~
 
-### Context Additions
+### Context Additions [context] [extensions]
 ~:EXCLUDE this subsection if nothing is added to context/request:~
 
 ~:What this plugin/library adds to the application context or request object:~
 - `~:context.key:~` (~:type:~): ~:Description and when it's available:~
 
-## API Reference
+## API Reference [api-reference] [documentation] [reference]
 ~:EXCLUDE THIS ENTIRE SECTION if the library has simple/self-explanatory exports covered in Public API section:~
 
 ~:For libraries with complex APIs, document key functions/methods/classes in detail:~
 
-### Functions
+### Functions [functions] [api]
 ~:EXCLUDE this subsection if no functions need detailed documentation:~
 
 #### `~:functionName(param1, param2):~`
@@ -146,7 +146,7 @@ dotnet add package MyLibrary
 ~:Usage example:~
 ```
 
-### Classes
+### Classes [classes] [api]
 ~:EXCLUDE this subsection if no classes need detailed documentation:~
 
 #### `~:ClassName:~`
@@ -159,15 +159,15 @@ dotnet add package MyLibrary
 ~:Usage example:~
 ```
 
-## Usage Examples
+## Usage Examples [examples] [usage] [how-to]
 
-### Basic Usage
+### Basic Usage [examples] [basic] [getting-started]
 ~:Provide a simple usage example showing the most common use case:~
 ```~:language:~
 ~:Basic usage example showing how to import and use the library:~
 ```
 
-### Plugin/Middleware Usage
+### Plugin/Middleware Usage [plugin] [middleware] [integration]
 ~:EXCLUDE this subsection if not a plugin/middleware library:~
 
 ~:Show how to register and use this plugin/middleware:~
@@ -185,7 +185,7 @@ app.use(PluginName);
 // - Endpoints created: List them
 ```
 
-### Advanced Usage
+### Advanced Usage [examples] [advanced]
 ~:EXCLUDE this subsection if basic usage covers all common scenarios:~
 
 ~:Provide more complex usage examples:~
@@ -193,16 +193,16 @@ app.use(PluginName);
 ~:Advanced usage example showing more sophisticated features:~
 ```
 
-### Common Patterns
+### Common Patterns [patterns] [best-practices]
 ~:EXCLUDE this subsection if there are no notable patterns:~
 
 ~:Describe common patterns for using this library:~
 - **Pattern 1**: ~:Description and when to use it:~
 - **Pattern 2**: ~:Description and when to use it:~
 
-## Architecture and Design
+## Architecture and Design [architecture] [design] [patterns]
 
-### Design Principles
+### Design Principles [design] [principles]
 ~:EXCLUDE this subsection if principles are standard/unremarkable:~
 
 ~:Describe the design principles guiding this library:~
@@ -210,13 +210,13 @@ app.use(PluginName);
 - **Principle 2**: ~:e.g., "Type-safe", "Backward compatible", "Framework agnostic":~
 - **Principle 3**: ~:e.g., "Performance-focused", "Memory-efficient":~
 
-### Code Organization
+### Code Organization [organization] [structure]
 ~:Describe how the library code is organized:~
 - **Directory structure**: ~:Brief overview of folder organization:~
 - **Module organization**: ~:How modules/files are structured:~
 - **Entry points**: ~:Main entry points for the library:~
 
-### Dependencies
+### Dependencies [dependencies] [packages]
 ~:List and describe key dependencies - EXCLUDE subsections with no dependencies:~
 - **Runtime dependencies**: ~:Dependencies required at runtime - DELETE this line if none:~
 - **Peer dependencies**: ~:Dependencies consumers must provide - DELETE this line if none:~
@@ -224,10 +224,10 @@ app.use(PluginName);
 - **Dev dependencies**: ~:Key development dependencies - DELETE this line if not material:~
 - **Dependency philosophy**: ~:Approach to managing dependencies:~
 
-## Internal Code Patterns
+## Internal Code Patterns [code-patterns] [conventions] [implementation]
 ~:EXCLUDE THIS ENTIRE SECTION if library is small/simple with obvious patterns:~
 
-### File Structure Conventions
+### File Structure Conventions [structure] [organization]
 ~:Describe how files are typically organized within the library:~
 ```
 {Provide a concrete example of a typical module/component file structure, e.g.:
@@ -243,7 +243,7 @@ src/
 }
 ```
 
-### Code Style Patterns
+### Code Style Patterns [style] [conventions]
 ~:EXCLUDE this subsection if using standard conventions:~
 
 ~:Describe common coding patterns used within the library:~
@@ -252,7 +252,7 @@ src/
 - **File naming**: ~:e.g., "kebab-case.ts", "PascalCase.tsx for components":~
 - **Export patterns**: ~:e.g., "Export from index.ts barrel files", "Direct named exports":~
 
-### Implementation Examples
+### Implementation Examples [examples] [implementation]
 ~:EXCLUDE this subsection if patterns are standard or obvious:~
 
 ~:Provide 1-2 representative code snippets showing typical internal patterns:~
@@ -280,7 +280,7 @@ Another example showing:
 }
 ```
 
-### Adding New Code
+### Adding New Code [development] [contribution] [adding-features]
 ~:EXCLUDE this subsection if process is standard or obvious:~
 
 ~:Step-by-step guidance for adding new modules/components/features:~
@@ -294,7 +294,7 @@ Another example showing:
 6. ~:Step 6 - e.g., "Update the main library index to include the new export":~
 7. ~:Step 7 - e.g., "Add documentation/examples as needed":~
 
-### Testing Patterns
+### Testing [testing] [quality] [test-automation] Patterns [testing] [patterns]
 ~:EXCLUDE this subsection if test patterns are standard:~
 
 ~:Describe how tests are typically structured within the library:~
@@ -303,7 +303,7 @@ Another example showing:
 - **Common test utilities**: ~:e.g., "Custom test helpers in src/test-utils/", "Mock factories":~
 - **Assertion style**: ~:e.g., "Jest expect assertions", "Chai should/expect":~
 
-### Documentation Requirements
+### Documentation [documentation] [reference] Requirements [documentation] [requirements]
 ~:EXCLUDE this subsection if documentation requirements are standard:~
 
 ~:What documentation should accompany new code:~
@@ -312,10 +312,10 @@ Another example showing:
 - **Example code**: ~:When examples are required:~
 - **Type documentation**: ~:How to document complex types:~
 
-## Configuration
+## Configuration [configuration] [settings] [options]
 ~:EXCLUDE THIS ENTIRE SECTION if the library has no configuration options:~
 
-### Configuration Options
+### Configuration Options [configuration] [options]
 ~:If the library accepts configuration, describe options:~
 - **Configuration method**: ~:How configuration is provided - constructor args, config file, env vars:~
 - **Configuration schema**: ~:If available, link to JSON schema or type definition - DELETE this line if none:~
@@ -330,16 +330,16 @@ Another example showing:
 
 ~:Repeat for each major configuration option:~
 
-### Environment Variables
+### Environment Variables [configuration] [environment]
 ~:EXCLUDE this subsection if no environment variables are used:~
 
 ~:If applicable, list environment variables:~
 - `~:VAR_NAME:~`: ~:Description, default value, and when it's required:~
 
-## Integration Points
+## Integration Points [integration] [hooks] [lifecycle]
 ~:EXCLUDE THIS ENTIRE SECTION if library is standalone with no integrations:~
 
-### What This Library Modifies/Extends
+### What This Library Modifies/Extends [integration] [modifications]
 ~:Describe what the library hooks into or modifies:~
 - **Application startup**: ~:What happens during initialization - DELETE this line if nothing:~
 - **Request lifecycle**: ~:If it intercepts requests, where in the lifecycle - DELETE this line if not applicable:~
@@ -347,7 +347,7 @@ Another example showing:
 - **Application context**: ~:What it adds to shared context - DELETE this line if nothing:~
 - **Database/External services**: ~:What external connections it creates - DELETE this line if none:~
 
-### Dependencies on Other Libraries
+### Dependencies on Other Libraries [dependencies] [integrations]
 ~:EXCLUDE this subsection if library is standalone:~
 
 ~:If this library requires or works with specific other libraries:~
@@ -355,17 +355,17 @@ Another example showing:
 - **Optional integrations**: ~:Can enhance these libraries - DELETE this line if none:~
 - **Conflicts**: ~:Known conflicts or incompatibilities - DELETE this line if none:~
 
-## Type Safety
+## Type Safety [types] [typescript] [type-safety]
 ~:EXCLUDE THIS ENTIRE SECTION if not using TypeScript or not providing type definitions:~
 
-### TypeScript Support
+### TypeScript Support [typescript] [types]
 ~:If applicable, describe TypeScript support:~
 - **Type definitions**: ~:Where type definitions are located:~
 - **Type coverage**: ~:Level of type coverage:~
 - **Generic types**: ~:Key generic types provided - DELETE this line if none:~
 - **Type utilities**: ~:Helper types or type utilities included - DELETE this line if none:~
 
-### Type Exports
+### Type Exports [types] [exports]
 ~:EXCLUDE this subsection if no notable types are exported:~
 
 ~:List important exported types:~
@@ -375,35 +375,35 @@ Another example showing:
 
 ## Testing
 
-### Testing Approach
+### Testing Approach [testing] [strategy]
 ~:Describe how the library is tested:~
 - **Testing framework**: ~:e.g., "Jest", "Vitest", "Mocha", "pytest", "xUnit":~
 - **Test coverage**: ~:Target or current coverage percentage - DELETE this line if unknown/not tracked:~
 - **Test types**: ~:Unit, integration, E2E, etc.:~
 
-### Running Tests
+### Running Tests [testing] [commands]
 ~:Commands to run tests:~
 - **Run all tests**: `~:Command:~`
 - **Run specific tests**: `~:Command:~` ~:DELETE this line if not applicable:~
 - **Coverage report**: `~:Command:~` ~:DELETE this line if not configured:~
 - **Watch mode**: `~:Command:~` ~:DELETE this line if not available:~
 
-### Testing for Consumers
+### Testing for Consumers [testing] [mocking]
 ~:EXCLUDE this subsection if library doesn't need special mocking/test utilities:~
 
 ~:Guidance for consumers who want to test code using this library:~
 - **Mocking**: ~:How to mock this library in tests:~
 - **Test utilities**: ~:Any test utilities or helpers provided - DELETE this line if none:~
 
-## Building and Development
+## Building and Development [build] [development] [setup]
 
-### Development Setup
+### Development Setup [development] [setup]
 ~:Steps to set up the library for development:~
 ```bash
 ~:Commands to install dependencies and set up dev environment:~
 ```
 
-### Build Process
+### Build Process [build] [compilation]
 ~:EXCLUDE this subsection if no build step required:~
 
 ~:How to build the library:~
@@ -411,12 +411,12 @@ Another example showing:
 - **Build output**: ~:Where build artifacts are created:~
 - **Build targets**: ~:Different build formats - ESM, CJS, UMD, etc.:~
 
-### Development Scripts
+### Development Scripts [development] [scripts]
 ~:Key npm/package scripts for development:~
 - `~:script-name:~`: ~:What it does:~
 - `~:script-name:~`: ~:What it does:~
 
-### Changelog
+### Changelog [changelog] [versioning]
 ~:EXCLUDE this subsection if no changelog is maintained:~
 
 ~:Where changelog is maintained:~
@@ -425,28 +425,28 @@ Another example showing:
 
 ## Documentation
 
-### API Documentation
+### API Documentation [documentation] [api-reference]
 ~:Where API documentation lives:~
 - **Documentation location**: ~:e.g., "Generated docs at /docs", "README.md", "External doc site":~
 - **Documentation format**: ~:e.g., "JSDoc", "TSDoc", "Sphinx", "Docusaurus":~
 - **Documentation generation**: ~:Command to generate docs if applicable - DELETE this line if not applicable:~
 
-### Examples and Guides
+### Examples and Guides [documentation] [examples] [guides]
 ~:EXCLUDE this subsection if no separate examples/guides exist:~
 
 ~:Location of examples and guides:~
 - **Examples directory**: ~:Path to examples:~
 - **Guide topics**: ~:List of key guides or tutorials:~
 
-## Compatibility
+## Compatibility [compatibility] [platform-support] [requirements]
 
-### Platform Support
+### Platform Support [compatibility] [platforms]
 ~:Describe platform compatibility:~
 - **Node.js versions**: ~:Supported Node versions:~
 - **Browser support**: ~:If applicable, supported browsers - DELETE this line if not applicable:~
 - **Platform compatibility**: ~:Other platform requirements - DELETE this line if none:~
 
-### Framework Integration
+### Framework Integration [integration] [frameworks]
 ~:EXCLUDE this subsection if library is framework-agnostic or only works with one framework:~
 
 ~:If applicable, describe framework integrations:~
@@ -456,46 +456,46 @@ Another example showing:
 - **Express**: ~:Express-specific usage - DELETE this line if not applicable:~
 - **Other frameworks**: ~:Other framework integrations - DELETE this line if not applicable:~
 
-## Performance Considerations
+## Performance Considerations [performance] [optimization] [efficiency]
 ~:EXCLUDE THIS ENTIRE SECTION if performance is not a significant concern or is standard:~
 
-### Performance Characteristics
+### Performance Characteristics [performance] [metrics]
 ~:Describe performance aspects:~
 - **Performance goals**: ~:e.g., "Sub-millisecond operations", "Zero-copy where possible":~
 - **Bundle size**: ~:Approximate bundle size impact - DELETE this line if not applicable (backend libraries):~
 - **Tree-shaking**: ~:Whether library is tree-shakeable - DELETE this line if not applicable:~
 - **Performance benchmarks**: ~:Where benchmarks can be found - DELETE this line if none exist:~
 
-### Optimization Tips
+### Optimization Tips [performance] [optimization] [tips]
 ~:EXCLUDE this subsection if no specific optimizations are needed:~
 
 ~:Tips for optimal usage:~
 - ~:Tip 1:~
 - ~:Tip 2:~
 
-## Security
+## Security [security] [safety] [vulnerabilities]
 ~:EXCLUDE THIS ENTIRE SECTION if library has no special security considerations:~
 
-### Security Considerations
+### Security Considerations [security] [considerations]
 ~:Security aspects consumers should know:~
 - **Input validation**: ~:How inputs are validated - DELETE this line if not applicable:~
 - **Security audits**: ~:Whether/how library is audited - DELETE this line if not audited:~
 - **Vulnerability reporting**: ~:How to report security issues:~
 - **Known limitations**: ~:Security limitations users should be aware of - DELETE this line if none:~
 
-### Safe Usage Patterns
+### Safe Usage Patterns [security] [patterns] [best-practices]
 ~:EXCLUDE this subsection if no special security patterns are needed:~
 
 ~:Patterns to ensure safe usage:~
 - ~:Pattern 1:~
 - ~:Pattern 2:~
 
-## Maintenance Status
+## Maintenance Status [maintenance] [status] [support]
 ~:Current maintenance status:~
 - **Status**: ~:e.g., "Actively maintained", "Maintenance mode", "Stable", "Deprecated":~
 - **Maintainers**: ~:Who maintains this library - DELETE this line if not public information:~
 
-## Restricted Actions
+## Restricted Actions [security] [restrictions] [policies]
 ~:Define actions that AI agents should NOT perform when working with this library:~
 
 ~:This section should be reviewed and populated by repository maintainers. Examples:~
@@ -507,15 +507,15 @@ Another example showing:
 
 ~:Leave blank initially - user should review and populate based on their specific requirements:~
 
-# Agent File Maintenance
+# Agent File Maintenance [metadata] [maintenance]
 ~:Keep this section but do not modify the contents:~
 No LLM/AI/Agent may make changes to this file outside of the claude-context-system commands. This is a maintained file through automatic means.
 
-# Agent File Metadata
+# Agent File Metadata [metadata] [tracking]
 {
 	This section contains the following information
 
 	- Revision Date: timestamp
 	- Last commit SHA built from: GIT SHA
-	- Template Version: ~:version from plugin.json:~
+	- Template Version: ${templateVersion}
 }

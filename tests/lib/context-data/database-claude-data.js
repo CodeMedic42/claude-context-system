@@ -22,13 +22,13 @@ class DatabaseClaudeData extends BaseData {
    * Sections with '*' wildcard match any text after the prefix
    * @returns {string[]}
    */
-  getRequiredSections() {
+  getRequiredSections(title) {
     // Method accesses instance for potential future customization per project
     return this.projectName ? [
-      'Database Context: *',
+      `Database Context: ${title}`,
       'Database Overview',
       'Schema Design',
-      'Agent File Metadata',
+      'Agent File Metadata [metadata] [tracking]',
     ] : [];
   }
 }

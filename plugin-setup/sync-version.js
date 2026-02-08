@@ -32,12 +32,12 @@ function main() {
   const templateContent = fs.readFileSync(TEMPLATE_FILE, 'utf8');
 
   // Replace the Template Version line in the Agent File Metadata section
-  // Match pattern: "\t- Template Version: X.Y.Z" (with tab prefix)
-  const versionLineRegex = /^(\t- Template Version: )[\d.]+$/m;
+  // Match pattern: "\t- Template Version: ${templateVersion}" (with tab prefix)
+  const versionLineRegex = /^(\t- Template Version: )\$\{templateVersion\}$/m;
 
   if (!versionLineRegex.test(templateContent)) {
     console.error('Error: Could not find "Template Version:" line in CLAUDE.TEMPLATE.md');
-    console.error('Expected format: "\\t- Template Version: X.Y.Z"');
+    console.error('Expected format: "\\t- Template Version: ${templateVersion}"');
     process.exit(1);
   }
 

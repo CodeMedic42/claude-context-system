@@ -114,12 +114,12 @@ class ClaudeData extends BaseData {
     // Method accesses instance for potential future customization per fixture
     return this.fixturePath ? [
       'Repository Agent Context',
-      'Repository Overview',
-      'High-Level Repository Information',
-      'Repository Structure',
-      'Code Organization Patterns',
-      'Environment Setup',
-      'Agent File Metadata',
+      'Repository Overview [overview] [summary]',
+      'High-Level Repository Information [metadata] [technologies]',
+      'Repository Structure [structure] [organization]',
+      'Code Organization Patterns [architecture] [patterns]',
+      'Environment Setup [setup] [environment] [prerequisites]',
+      'Agent File Metadata [metadata] [tracking]',
     ] : [];
   }
 }

@@ -10,4 +10,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   verbose: true,
   testTimeout: 30000, // 30 seconds for plugin execution
+  setupFilesAfterEnv: [
+    '<rootDir>/tests/jest-common/index.js',
+  ],
 };

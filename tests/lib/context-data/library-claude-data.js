@@ -22,13 +22,13 @@ class LibraryClaudeData extends BaseData {
    * Sections with '*' wildcard match any text after the prefix
    * @returns {string[]}
    */
-  getRequiredSections() {
+  getRequiredSections(title) {
     // Method accesses instance for potential future customization per project
     return this.projectName ? [
-      'Library Context: *',
-      'Library Overview',
-      'Public API',
-      'Agent File Metadata',
+      `Library Context: ${title}`,
+      'Library Overview [overview] [summary]',
+      'Public API [api] [exports] [interface]',
+      'Agent File Metadata [metadata] [tracking]',
     ] : [];
   }
 }

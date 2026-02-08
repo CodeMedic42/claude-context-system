@@ -73,7 +73,7 @@ class BaseData {
    * @private
    */
   parseMetadata() {
-    const metadataSection = this.getSection('Agent File Metadata');
+    const metadataSection = this.getSection('Agent File Metadata [metadata] [tracking]');
     if (!metadataSection) {
       this.errors.push('Missing Agent File Metadata section');
       return;

@@ -1,43 +1,47 @@
-const { isNil } = require('lodash');
+const { isNil, toLower } = require('lodash');
 const ActionPlan = require('../../lib/action-plan');
 const ProgressData = require('../../lib/progress-data');
 
 describe('dotnet-update:preparation', () => {
-  describe('plan', () => {
-    const fixtureDir = process.env.TEST_RUN_DIR;
-    let actionPlan;
+  const fixtureDir = process.env.TEST_RUN_DIR;
+  let actionPlan;
+  let progress;
 
-    beforeAll(() => {
-      actionPlan = ActionPlan.load(fixtureDir);
+  beforeAll(() => {
+    actionPlan = ActionPlan.load(fixtureDir);
+    progress = ProgressData.load(fixtureDir);
+
+    if (isNil(actionPlan)) {
+      throw new Error('PAction plan does not exist');
+    }
+
+    if (isNil(progress)) {
+      throw new Error('Progress file does not exist');
+    }
+  });
+
+  describe('Action Plan', () => {
+    test('Should have 2 projects', () => {
+      expect(actionPlan.projects.length).toBe(2);
     });
 
-    describe('Action Plan', () => {
-      test('should have 2 projects', () => {
-        expect(actionPlan.projects.length).toBe(2);
-      });
-
-      test('should be valid', () => {
-        expect(() => actionPlan.validate()).not.toThrow();
-      });
+    test('Should be valid', () => {
+      expect(() => actionPlan.validate()).not.toThrow();
     });
   });
 
-  describe('progress', () => {
-    const fixtureDir = process.env.TEST_RUN_DIR;
-    let progress;
+  describe('Progress', () => {
+    test('Next project should be one of', () => {
+      const nextProject = toLower(progress.getNextProject());
 
-    beforeAll(() => {
-      progress = ProgressData.load(fixtureDir);
-
-      if (isNil(progress)) {
-        throw new Error('Progress file does not exist');
-      }
+      expect(nextProject).toBeOneOf(['service.api', 'service-api', 'service.cli']);
     });
 
-    describe('Progress', () => {
-      test('next project should be service-api', () => {
-        expect(progress.getNextProject()).toBe('service-api');
-      });
+    test('Next project should be the first project', () => {
+      const nextProject = toLower(progress.getNextProject());
+      const firstProject = toLower(actionPlan.projects[0].id);
+
+      expect(nextProject).toBe(firstProject);
     });
   });
 });

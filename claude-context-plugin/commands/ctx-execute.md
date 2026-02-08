@@ -13,6 +13,32 @@ Execute context file generation based on an action plan created by `/ctx-prepare
 **Operation:** $1 (should be "--max-projects")
 **Max Projects:** $2 (number of projects to process)
 
+## ⚠️ CRITICAL REQUIREMENT: Preserve User-Added Content
+
+**When updating existing context files (CLAUDE.md, SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md), you MUST preserve ALL user-added sections.**
+
+**What are user-added sections?**
+- Any `##` level heading that does NOT exist in the template
+- Examples: "## Architecture Decisions", "## Compliance Requirements", "## Custom Workflows", etc.
+- Users add these sections to customize their documentation
+
+**How to preserve:**
+1. Load the template file to know which sections are standard
+2. Parse existing context file for all `##` headings
+3. Compare headings to template - identify which are NOT in template
+4. Extract full content of each user-added section (heading + all content until next `##` or `#`)
+5. When generating updated file, insert ALL user-added sections:
+   - After "## Restricted Actions" section
+   - Before "# Agent File Maintenance" section
+   - Preserve exact heading text and content
+   - Maintain original order
+
+**This applies to:**
+- CLAUDE.md (Step 3.2)
+- All project context files: SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md (Step 2.4)
+
+**Failure to preserve user content will break the system and require manual fixes.**
+
 ## Prerequisites
 
 Before proceeding, verify:
@@ -280,6 +306,12 @@ IF project.status is "updated":
   - FOR EACH type determined in Step 2.3:
     - Read existing context file: `{project.path}/{TYPE}.CLAUDE.md`
       - **Remember**: filename is `{TYPE}.CLAUDE.md` (e.g., `SERVICE.CLAUDE.md`)
+    - **CRITICAL: Identify and preserve user-added sections:**
+      1. **Load template for this TYPE** (to know which sections are standard)
+      2. **Parse existing file** - extract all `##` level headings
+      3. **Identify user-added sections** - any `##` heading NOT in the template
+      4. **Extract user-added content** - full section including heading + content until next `##` or `#`
+      5. **Store user-added sections** for preservation (see step below)
     - If type changed (new types added or removed):
       - Delete context files for removed types
       - For newly added types: **Load template if not already loaded** (same as "new" status above)
@@ -287,6 +319,12 @@ IF project.status is "updated":
     - For existing types:
       - Update sections affected by changes in changedFiles
       - Keep sections that weren't affected by changes
+      - **CRITICAL: Preserve user-added sections:**
+        - Insert ALL user-added sections after "## Restricted Actions"
+        - Before "# Agent File Maintenance"
+        - Maintain exact heading text and content
+        - Preserve original order
+        - Add blank line between sections
       - Update metadata:
         - Revision Date: current timestamp
         - Last commit SHA built from: current HEAD commit (40-character full SHA)
@@ -295,7 +333,13 @@ IF project.status is "updated":
 IF project.status is "stable":
   - IF dependencies changed in a way that affects this project (determined in Step 2.3):
     - Read existing context file(s)
+    - **CRITICAL: Preserve user-added sections** (same process as "updated" status):
+      1. Load template to identify standard sections
+      2. Parse existing file for all `##` headings
+      3. Identify user-added sections (not in template)
+      4. Extract and store user-added content
     - Update only the affected sections (usually Dependencies section)
+    - **Preserve user-added sections** - insert after "## Restricted Actions", before "# Agent File Maintenance"
     - Update metadata:
       - Revision Date: current timestamp
       - Last commit SHA built from: current HEAD commit (40-character full SHA)
@@ -467,6 +511,17 @@ FOR EACH discovery in discoveries array:
 
 ### Step 3.2: Create/Update Main CLAUDE.md
 
+**CRITICAL: Preserve User-Added Content**
+
+IF CLAUDE.md already exists (updating, not creating new):
+1. **Read existing CLAUDE.md file**
+2. **Identify user-added sections:**
+   - Parse all `##` level headings in existing file
+   - Compare against template headings
+   - Any `##` heading NOT in template = user-added section
+   - Extract full content of each user-added section (heading + all content until next `##` or `#`)
+3. **Store user-added sections** for insertion in step 7 below
+
 **Use CLAUDE.TEMPLATE.md structure:**
 
 1. Use template loaded in Phase 1:
@@ -495,7 +550,33 @@ FOR EACH discovery in discoveries array:
    - Last commit SHA built from: current HEAD commit (40-character full SHA)
    - Template Version: (extract from template file)
 
-6. Write CLAUDE.md to repository root
+6. **CRITICAL: Preserve user-added sections (if updating existing file):**
+   - After "## Restricted Actions" section
+   - Before "# Agent File Maintenance" section
+   - Insert ALL user-added sections that were identified above
+   - Preserve exact heading text and content
+   - Maintain original order of user-added sections
+   - Add blank line between each section
+
+7. Write CLAUDE.md to repository root
+
+**Example of preserved user section:**
+```markdown
+## Restricted Actions
+
+*(template content here)*
+
+## Architecture Decisions
+
+This section documents key architectural decisions made during development.
+Decision records are maintained in the /docs/adr/ directory.
+
+## Project History
+
+(user's custom content preserved exactly as-is)
+
+# Agent File Maintenance
+```
 
 ## Phase 4: Final Steps
 

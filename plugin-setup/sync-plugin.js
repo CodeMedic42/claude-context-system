@@ -10,16 +10,28 @@ const path = require('path');
 
 const SHARED_DIR = path.join(__dirname, '..', 'shared');
 const PLUGIN_DIR = path.join(__dirname, '..', 'claude-context-plugin');
+const ROOT_DIR = path.join(__dirname, '..');
+
+/**
+ * Get version from package.json
+ */
+function getVersion() {
+  const packageJsonPath = path.join(ROOT_DIR, 'package.json');
+  const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+  return pkg.version;
+}
 
 /**
  * Replace placeholders in file content
  */
 function replacePlaceholders(content, {
   templatePath,
+  version,
 }) {
   return content
     .replace(/\$\{TEMPLATE_PATH\}/g, templatePath)
-    .replace(/\$\{RULES_PATH\}/g, '../rules');
+    .replace(/\$\{RULES_PATH\}/g, '../rules')
+    .replace(/\$\{templateVersion\}/g, version);
 }
 
 /**
@@ -48,9 +60,9 @@ function syncCommands(config) {
 }
 
 /**
- * Copy templates (no replacement needed)
+ * Copy templates with placeholder replacement
  */
-function syncTemplates() {
+function syncTemplates(config) {
   const sharedTemplatesDir = path.join(SHARED_DIR, 'templates');
   const pluginTemplatesDir = path.join(PLUGIN_DIR, 'templates');
 
@@ -64,7 +76,10 @@ function syncTemplates() {
     const sourcePath = path.join(sharedTemplatesDir, file);
     const destPath = path.join(pluginTemplatesDir, file);
 
-    fs.copyFileSync(sourcePath, destPath);
+    let content = fs.readFileSync(sourcePath, 'utf8');
+    content = replacePlaceholders(content, config);
+
+    fs.writeFileSync(destPath, content, 'utf8');
     console.log(`✓ Synced template: ${file}`);
   });
 }
@@ -72,11 +87,14 @@ function syncTemplates() {
 function main(config) {
   console.log('Syncing shared files to claude-context-plugin...\n');
 
+  const version = getVersion();
+  const configWithVersion = { ...config, version };
+
   console.log('Commands:');
-  syncCommands(config);
+  syncCommands(configWithVersion);
 
   console.log('\nTemplates:');
-  syncTemplates();
+  syncTemplates(configWithVersion);
 
   console.log('\n✓ Plugin sync complete!');
   console.log('\nPlaceholder replacements:');
@@ -84,6 +102,8 @@ function main(config) {
   console.log('  ${TEMPLATE_PATH} → ../templates');
   // eslint-disable-next-line no-template-curly-in-string
   console.log('  ${RULES_PATH} → ../rules');
+  // eslint-disable-next-line no-template-curly-in-string
+  console.log(`  \${templateVersion} → ${version}`);
 }
 
 module.exports = main;

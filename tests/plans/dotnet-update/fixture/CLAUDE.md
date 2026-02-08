@@ -1,6 +1,6 @@
 # Repository Agent Context
 
-## Repository Overview
+## Repository Overview [overview] [summary]
 
 DotnetCalculator is a demonstration .NET solution showcasing a simple REST API architecture with a shared library. The solution consists of a calculator service that exposes HTTP endpoints for mathematical operations, leveraging a shared mathematical operations library. This serves as an example of clean separation between API controllers and reusable business logic in a .NET environment.
 
@@ -10,7 +10,7 @@ DotnetCalculator is a demonstration .NET solution showcasing a simple REST API a
 - Bob Smith (Backend Engineer)
 - Carol Davis (DevOps Engineer)
 
-## High-Level Repository Information
+## High-Level Repository Information [metadata] [technologies]
 
 - **Project Types**: ASP.NET Core Web API service, .NET Class Library
 - **Languages**: C# (.NET 8.0)
@@ -19,7 +19,7 @@ DotnetCalculator is a demonstration .NET solution showcasing a simple REST API a
   - Swashbuckle.AspNetCore - Swagger/OpenAPI documentation
   - Microsoft.Extensions.Logging - Structured logging
 
-## Repository Structure
+## Repository Structure [structure] [organization]
 
 ```
 dotnet-update/
@@ -38,7 +38,7 @@ dotnet-update/
     └── library.claude.md      # Library-specific context documentation
 ```
 
-## Code Organization Patterns
+## Code Organization Patterns [architecture] [patterns]
 
 - **Architecture**: Simple solution with service and shared library pattern
 - **Project organization**:
@@ -57,25 +57,17 @@ dotnet-update/
   - Project folders match project names (PascalCase with dots)
   - Controller files end with "Controller" suffix
 
-═══════════════════════════════════════════════════════════
-## Services and APIs
-═══════════════════════════════════════════════════════════
+## Services and APIs [services] [apis] [backend]
 
 - **Calculator API Service**: @file ./Service.Api/service.claude.md
 
-═══════════════════════════════════════════════════════════
-
-═══════════════════════════════════════════════════════════
-## Libraries and Plugins
-═══════════════════════════════════════════════════════════
+## Libraries and Plugins [libraries] [packages] [reusable]
 
 - **Shared.Library (Mathematical Operations)**: @file ./Shared.Library/library.claude.md
 
-═══════════════════════════════════════════════════════════
+## Environment Setup [setup] [environment] [prerequisites]
 
-## Environment Setup
-
-### Prerequisites
+### Prerequisites [prerequisites] [requirements]
 
 **Required:**
 - .NET 8.0 SDK or later
@@ -85,17 +77,17 @@ dotnet-update/
 - Git for version control
 - Postman, curl, or similar tool for API testing (alternatively use Swagger UI)
 
-### System Configuration
+### System Configuration [configuration] [environment] [setup]
 
 No special environment variables or system paths required beyond having the .NET 8.0 SDK in your PATH.
 
-### External Dependencies
+### External Dependencies [dependencies] [external] [services]
 
 No external services, databases, or programs need to be running. This is a self-contained stateless service.
 
-## Running the Application Locally
+## Running the Application Locally [development] [local] [setup]
 
-### 1. Environment Setup
+### 1. Environment Setup [setup] [installation]
 
 ```bash
 # Navigate to the repository root
@@ -142,9 +134,9 @@ curl -X POST https://localhost:5001/calculate/add \
 }
 ```
 
-## Repository Verification
+## Repository Verification [testing] [verification] [quality]
 
-### Unit Tests
+### Unit Tests [testing] [unit-tests]
 
 Currently, no test projects are configured in the solution. To add tests:
 
@@ -163,7 +155,7 @@ Recommended test structure:
 - `Service.Api.Tests/` - Unit tests for the API controllers
 - `Shared.Library.Tests/` - Unit tests for mathematical operations
 
-### Linting and Code Style
+### Linting and Code Style [linting] [code-quality] [style]
 
 Standard .NET analyzers are enabled by default in .NET 8.0 projects.
 
@@ -180,7 +172,7 @@ To format code automatically:
 dotnet format
 ```
 
-## Documentation
+## Documentation [documentation] [reference]
 
 **Key documentation files:**
 - `README.md` - Main repository documentation with API endpoint examples
@@ -193,11 +185,15 @@ dotnet format
 - When changing the solution structure, update this `claude.md` file
 - When modifying build or deployment processes, update relevant context files
 
-## Restricted Actions
+## Restricted Actions [security] [restrictions] [policies]
 
 *(This section is intentionally left blank for the user to fill in with project-specific restrictions)*
 
-# Agent File Metadata
+# Agent File Maintenance [metadata] [maintenance]
+
+No LLM/AI/Agent may make changes to this file outside of the claude-context-system commands. This is a maintained file through automatic means.
+
+# Agent File Metadata [metadata] [tracking]
 
 - Revision Date: 2026-01-09T22:05:00Z
 - Last commit SHA built from: c643e25aed1a0e80acf49197d3072448b6e101f5

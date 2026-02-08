@@ -1,23 +1,23 @@
 # Database Context: ~:Database Name:~
 
-## Database Overview
+## Database Overview [overview] [summary]
 ~:Provide a clear description of what this database stores, its primary purpose, and its role in the system:~
 
-## Database Type and Technology
+## Database Type and Technology [metadata] [technology]
 - **Database Type**: ~:e.g., "Relational (SQL)", "Document", "Key-Value", "Graph", "Time-series":~
 - **Database System**: ~:e.g., "PostgreSQL", "MongoDB", "Redis", "Cassandra", "Neo4j":~
 - **Version**: ~:Version number:~
 - **Hosting**: ~:e.g., "Self-hosted", "AWS RDS", "MongoDB Atlas", "Azure SQL":~
 
-## Connection Information
+## Connection Information [connection] [access] [configuration]
 
-### Connection Details
+### Connection Details [connection] [configuration]
 ~:How to connect to this database:~
 - **Connection string format**: ~:Format of connection string:~
 - **Default port**: ~:Default port number:~
 - **Authentication method**: ~:e.g., "Username/password", "IAM", "Certificate-based":~
 
-### Environment Variables
+### Environment Variables [configuration] [environment]
 ~:Environment variables used for connection:~
 - `~:DB_HOST:~`: ~:Database host:~
 - `~:DB_PORT:~`: ~:Database port:~
@@ -25,20 +25,20 @@
 - `~:DB_USER:~`: ~:Database user:~
 - `~:DB_PASSWORD:~`: ~:Database password (reference, not actual value):~
 
-### Connection Pooling
+### Connection Pooling [connection] [pooling] [performance]
 ~:If applicable, describe connection pooling:~
 - **Pool configuration**: ~:Pool size, timeout settings:~
 - **Pool implementation**: ~:Library or mechanism used:~
 
-## Schema Design
+## Schema Design [schema] [design] [architecture]
 
-### Schema Overview
+### Schema Overview [schema] [overview]
 ~:High-level overview of the database schema design:~
 - **Schema organization**: ~:How schema is organized - schemas, namespaces, collections:~
 - **Design patterns**: ~:e.g., "Normalized", "Denormalized", "Star schema":~
 - **Key design decisions**: ~:Important architectural decisions:~
 
-## Tables/Collections
+## Tables/Collections [tables] [collections] [entities]
 
 ~:For each major table or collection, document its structure:~
 
@@ -77,37 +77,37 @@
 
 ~:Repeat for each major table/collection:~
 
-## Relationships and Constraints
+## Relationships and Constraints [relationships] [constraints] [integrity]
 
-### Entity Relationships
+### Entity Relationships [relationships] [entities]
 ~:Describe key relationships between tables/collections:~
 - **~:Entity 1:~ → ~:Entity 2:~**: ~:Relationship type and description:~
 - **~:Entity 2:~ → ~:Entity 3:~**: ~:Relationship type and description:~
 
-### Referential Integrity
+### Referential Integrity [integrity] [constraints]
 ~:Describe how referential integrity is maintained:~
 - **Foreign keys**: ~:How foreign keys are used:~
 - **Cascade rules**: ~:ON DELETE, ON UPDATE behavior:~
 - **Constraint enforcement**: ~:How constraints are enforced:~
 
-## Indexes and Performance
+## Indexes and Performance [indexes] [performance] [optimization]
 
-### Indexing Strategy
+### Indexing Strategy [indexes] [strategy]
 ~:Describe the indexing approach:~
 - **Primary indexes**: ~:List primary indexes:~
 - **Secondary indexes**: ~:List secondary indexes and their purposes:~
 - **Composite indexes**: ~:List composite indexes:~
 - **Full-text indexes**: ~:If applicable:~
 
-### Query Performance
+### Query Performance [performance] [queries] [optimization]
 ~:Describe performance considerations:~
 - **Optimization patterns**: ~:Common optimization techniques used:~
 - **Slow query monitoring**: ~:How slow queries are identified:~
 - **Query patterns to avoid**: ~:Known problematic query patterns:~
 
-## Data Access Patterns
+## Data Access Patterns [data-access] [queries] [patterns]
 
-### Common Queries
+### Common Queries [queries] [patterns]
 ~:Document common query patterns:~
 
 **Query Pattern 1: ~:Name:~**
@@ -125,202 +125,202 @@
 - **Purpose**: ~:What this query does:~
 - **Performance**: ~:Expected performance characteristics:~
 
-### ORM/Query Builder
+### ORM/Query Builder [orm] [data-access]
 ~:If applicable, describe ORM or query builder usage:~
 - **ORM/Tool**: ~:e.g., "Sequelize", "TypeORM", "Mongoose", "Dapper":~
 - **Entity models**: ~:Where entity models are defined:~
 - **Query conventions**: ~:Conventions for writing queries:~
 
-## Data Migrations
+## Data Migrations [migrations] [schema-changes] [versioning]
 
-### Migration Strategy
+### Migration Strategy [migrations] [strategy]
 ~:Describe how database migrations are managed:~
 - **Migration tool**: ~:e.g., "Flyway", "Liquibase", "Alembic", "Sequelize migrations":~
 - **Migration location**: ~:Where migration files are stored:~
 - **Migration naming**: ~:Naming convention for migrations:~
 
-### Running Migrations
+### Running Migrations [migrations] [execution]
 ~:How to run migrations:~
 - **Apply migrations**: ~:Command to apply migrations:~
 - **Rollback migrations**: ~:Command to rollback if needed:~
 - **Migration status**: ~:Command to check migration status:~
 
-### Migration Guidelines
+### Migration Guidelines [migrations] [guidelines]
 ~:Guidelines for creating migrations:~
 - ~:Guideline 1:~
 - ~:Guideline 2:~
 
-## Seeding and Test Data
+## Seeding and Test Data [seeding] [test-data] [fixtures]
 
-### Data Seeding
+### Data Seeding [seeding] [initialization]
 ~:How to seed initial data:~
 - **Seed scripts**: ~:Where seed scripts are located:~
 - **Seed command**: ~:Command to run seeds:~
 - **Seed data**: ~:What data is seeded:~
 
-### Test Data
+### Test Data [testing] [fixtures] [test-data]
 ~:How test data is managed:~
 - **Test fixtures**: ~:Where test fixtures are located:~
 - **Test data generation**: ~:How test data is generated:~
 - **Test database**: ~:Separate test database strategy:~
 
-## Backup and Recovery
+## Backup and Recovery [backup] [recovery] [disaster-recovery]
 
-### Backup Strategy
+### Backup Strategy [backup] [strategy]
 ~:Describe backup approach:~
 - **Backup frequency**: ~:How often backups occur:~
 - **Backup method**: ~:e.g., "Automated snapshots", "pg_dump", "mongodump":~
 - **Backup location**: ~:Where backups are stored:~
 - **Retention policy**: ~:How long backups are kept:~
 
-### Recovery Process
+### Recovery Process [recovery] [restore]
 ~:Steps to recover from backup:~
 1. ~:Step 1:~
 2. ~:Step 2:~
 3. ~:Step 3:~
 
-### Point-in-Time Recovery
+### Point-in-Time Recovery [recovery] [pitr]
 ~:If applicable, describe PITR capabilities:~
 - **PITR availability**: ~:Whether PITR is available:~
 - **Recovery granularity**: ~:How precise recovery can be:~
 
-## Security and Access Control
+## Security and Access Control [security] [access-control] [encryption]
 
-### Authentication
+### Authentication [security] [authentication]
 ~:How users authenticate to the database:~
 - **Authentication method**: ~:e.g., "Password", "Certificate", "IAM":~
 - **User management**: ~:How database users are managed:~
 
-### Authorization
+### Authorization [security] [authorization] [permissions]
 ~:How permissions are managed:~
 - **Role-based access**: ~:If roles are used:~
 - **Permissions model**: ~:How permissions are structured:~
 - **Least privilege**: ~:How least privilege is enforced:~
 
-### Data Encryption
+### Data Encryption [security] [encryption]
 ~:Describe encryption approach:~
 - **Encryption at rest**: ~:Whether/how data is encrypted at rest:~
 - **Encryption in transit**: ~:SSL/TLS configuration:~
 - **Encrypted columns**: ~:If specific columns are encrypted:~
 
-### Sensitive Data
+### Sensitive Data [security] [data-privacy] [pii]
 ~:Define sensitive data in this database:~
 - **PII fields**: ~:List fields containing personal information:~
 - **Protected data**: ~:Other sensitive data types:~
 - **Data masking**: ~:Whether/how sensitive data is masked:~
 
-## Data Integrity and Validation
+## Data Integrity and Validation [data-integrity] [validation] [constraints]
 
-### Data Validation
+### Data Validation [validation] [integrity]
 ~:How data integrity is ensured:~
 - **Check constraints**: ~:List important check constraints:~
 - **Data types**: ~:Important data type choices and why:~
 - **NOT NULL constraints**: ~:Strategy for nullable vs non-nullable:~
 
-### Data Integrity Rules
+### Data Integrity Rules [integrity] [constraints] [rules]
 ~:Business rules enforced at database level:~
 - ~:Rule 1:~
 - ~:Rule 2:~
 
-## Stored Procedures and Functions
+## Stored Procedures and Functions [stored-procedures] [functions] [triggers]
 
-### Stored Procedures
+### Stored Procedures [stored-procedures] [procedures]
 ~:If applicable, list important stored procedures:~
 - **~:Procedure Name:~**: ~:Purpose and parameters:~
 
-### Database Functions
+### Database Functions [functions] [udf]
 ~:If applicable, list important functions:~
 - **~:Function Name:~**: ~:Purpose and usage:~
 
-### Triggers
+### Triggers [triggers] [automation]
 ~:If applicable, list important triggers:~
 - **~:Trigger Name:~**: ~:What event triggers it and what it does:~
 
-## Monitoring and Maintenance
+## Monitoring and Maintenance [monitoring] [maintenance] [operations]
 
-### Monitoring
+### Monitoring [monitoring] [observability]
 ~:How database health is monitored:~
 - **Monitoring tools**: ~:e.g., "CloudWatch", "Datadog", "pgAdmin":~
 - **Key metrics**: ~:Important metrics to watch:~
 - **Alerting**: ~:What alerts are configured:~
 
-### Regular Maintenance
+### Regular Maintenance [maintenance] [operations]
 ~:Routine maintenance tasks:~
 - **Vacuum/Optimize**: ~:If applicable, optimization schedule:~
 - **Index maintenance**: ~:Index rebuilding or optimization:~
 - **Statistics updates**: ~:Keeping query planner statistics current:~
 
-## Scaling and Performance
+## Scaling and Performance [scaling] [performance] [capacity]
 
-### Scaling Strategy
+### Scaling Strategy [scaling] [strategy]
 ~:Describe scaling approach:~
 - **Vertical scaling**: ~:Instance size considerations:~
 - **Horizontal scaling**: ~:Read replicas, sharding, etc.:~
 - **Caching**: ~:Database-level caching strategies:~
 
-### Performance Tuning
+### Performance Tuning [performance] [tuning] [optimization]
 ~:Performance tuning considerations:~
 - **Configuration**: ~:Important configuration parameters:~
 - **Query optimization**: ~:Ongoing optimization approach:~
 - **Resource limits**: ~:Connection limits, memory limits, etc.:~
 
-## Data Lifecycle
+## Data Lifecycle [data-lifecycle] [retention] [archival]
 
-### Data Retention
+### Data Retention [retention] [policy]
 ~:Describe data retention policies:~
 - **Retention periods**: ~:How long different data types are kept:~
 - **Archival strategy**: ~:How old data is archived:~
 - **Data deletion**: ~:How data is permanently deleted when required:~
 
-### Data Purging
+### Data Purging [purging] [cleanup]
 ~:If applicable, describe data purging:~
 - **Purge strategy**: ~:How old data is purged:~
 - **Purge schedule**: ~:When purging occurs:~
 - **Purge scripts**: ~:Where purge scripts are located:~
 
-## Environment-Specific Configuration
+## Environment-Specific Configuration [environment] [configuration] [deployment]
 
-### Development Environment
+### Development Environment [environment] [development]
 ~:Development database configuration:~
 - **Database location**: ~:Where dev database runs:~
 - **Seed data**: ~:What seed data is available:~
 - **Access**: ~:How developers access dev database:~
 
-### Staging Environment
+### Staging Environment [environment] [staging]
 ~:Staging database configuration:~
 - **Database location**: ~:Where staging database runs:~
 - **Data sync**: ~:How staging data is kept current:~
 
-### Production Environment
+### Production Environment [environment] [production]
 ~:Production database configuration:~
 - **Database location**: ~:Where production database runs:~
 - **High availability**: ~:HA configuration:~
 - **Disaster recovery**: ~:DR setup:~
 
-## Troubleshooting
+## Troubleshooting [troubleshooting] [debugging] [issues]
 
-### Common Issues
+### Common Issues [troubleshooting] [issues]
 ~:Document common issues and solutions:~
 - **Issue 1**: ~:Description and solution:~
 - **Issue 2**: ~:Description and solution:~
 
-### Debugging Queries
+### Debugging Queries [debugging] [queries] [performance]
 ~:How to debug problematic queries:~
 - **Query logging**: ~:How to enable query logging:~
 - **Explain plans**: ~:How to analyze query plans:~
 - **Performance profiling**: ~:Tools for profiling queries:~
 
-## Documentation and Resources
+## Documentation and Resources [documentation] [reference] [diagrams]
 
-### Schema Documentation
+### Schema Documentation [documentation] [schema]
 ~:Links to additional schema documentation:~
 - ~:Doc name:~: ~:Link or path:~
 
-### ER Diagrams
+### ER Diagrams [diagrams] [schema] [visualization]
 ~:Where entity-relationship diagrams can be found:~
 - ~:Diagram location:~
 
-## Restricted Actions
+## Restricted Actions [security] [restrictions] [policies]
 ~:Define actions that AI agents should NOT perform on this database:~
 
 ~:Critical: Define operations that should never be automated:~
@@ -331,15 +331,15 @@
 
 ~:User should review and customize this section for their specific requirements:~
 
-# Agent File Maintenance
+# Agent File Maintenance [metadata] [maintenance]
 ~:Keep this section but do not modify the contents:~
 No LLM/AI/Agent may make changes to this file outside of the claude-context-system commands. This is a maintained file through automatic means.
 
-# Agent File Metadata
+# Agent File Metadata [metadata] [tracking]
 {
 	This section contains the following information
 
 	- Revision Date: timestamp
 	- Last commit SHA built from: GIT SHA
-	- Template Version: ~:version from plugin.json:~
+	- Template Version: ${templateVersion}
 }

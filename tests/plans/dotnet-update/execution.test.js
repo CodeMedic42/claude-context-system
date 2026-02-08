@@ -17,11 +17,11 @@ describe('dotnet-update:context', () => {
 
   // Test service.claude.md
   const serviceData = contextData.getProjectContextData('./Service.Api/SERVICE.CLAUDE.md');
-  testServiceFile(serviceData);
+  testServiceFile(serviceData, 'Calculator API Service');
 
   // Test client.claude.md
   const clientData = contextData.getProjectContextData('./Service.Cli/CLIENT.CLAUDE.md');
-  testClientFile(clientData);
+  testClientFile(clientData, 'Calculator CLI Client');
 
   // Custom tests for manual content preservation
   describe('Manual Content Preservation', () => {

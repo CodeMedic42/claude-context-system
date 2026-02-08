@@ -8,14 +8,14 @@ const { testMetadata, testContentQuality, hasSectionMatching } = require('./base
  * Test database.claude.md file
  * @param {DatabaseClaudeData} databaseData - DatabaseClaudeData instance
  */
-function testDatabaseFile(databaseData) {
+function testDatabaseFile(databaseData, title) {
   if (!databaseData) {
     throw new Error('databaseData is required - file may not exist');
   }
 
   describe(`Database File: ${databaseData.getProjectName()}`, () => {
     describe('Required Sections', () => {
-      const requiredSections = databaseData.getRequiredSections();
+      const requiredSections = databaseData.getRequiredSections(title);
 
       requiredSections.forEach((sectionName) => {
         test(`should have "${sectionName}" section`, () => {

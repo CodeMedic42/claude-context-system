@@ -1,6 +1,6 @@
 {
   "name": "claude-context-system",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Automated claude.md context file manager for AI assistants - supports Claude Code and GitHub Copilot",
   "private": true,
   "keywords": [
@@ -41,8 +41,7 @@
     "changed": "lerna changed",
     "diff": "lerna diff",
     "exec": "lerna exec",
-    "sync": "pnpm run version:sync && pnpm run plugin:sync && pnpm run copilot:sync",
-    "version:sync": "node plugin-setup/sync-version.js",
+    "sync": "pnpm run plugin:sync && pnpm run copilot:sync",
     "plugin:install": "node plugin-setup/plugin-install.js",
     "plugin:uninstall": "node plugin-setup/plugin-uninstall.js",
     "plugin:sync": "node plugin-setup/sync-plugin-git.js",

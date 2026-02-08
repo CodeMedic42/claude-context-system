@@ -58,7 +58,7 @@ describe('fullstack-monorepo:context', () => {
     });
 
     test('should have Libraries and Plugins section in CLAUDE.md', () => {
-      expect(contextData.hasSection('Libraries and Plugins')).toBe(true);
+      expect(contextData.hasSection('Libraries and Plugins [libraries] [packages] [reusable]')).toBe(true);
     });
 
     test('should have Databases section in CLAUDE.md', () => {

@@ -2,20 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug plugin:library-package",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
-      "program": "${workspaceFolder}/tests/cli/bin/contest.js",
-      "args": [ "test", "--tools", "plugin", "--plans", "library-package", "--prepare-only" ],
-      "console": "integratedTerminal",
-      "skipFiles": [ "<node_internals>/**" ],
-      "env": { "NODE_ENV": "development" },
-      "cwd": "${workspaceFolder}",
-      "outputCapture": "std"
-    },
-    {
-      "name": "Debug plugin:angular-components",
+      "name": "Prepare plugin:angular-components",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
@@ -27,9 +14,21 @@
       "cwd": "${workspaceFolder}",
       "outputCapture": "std"
     },
-
     {
-      "name": "Debug plugin:facebook-react",
+      "name": "Prepare plugin:dotnet-update",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
+      "program": "${workspaceFolder}/tests/cli/bin/contest.js",
+      "args": [ "test", "--tools", "plugin", "--plans", "dotnet-update", "--prepare-only" ],
+      "console": "integratedTerminal",
+      "skipFiles": [ "<node_internals>/**" ],
+      "env": { "NODE_ENV": "development" },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Prepare plugin:facebook-react",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
@@ -42,7 +41,46 @@
       "outputCapture": "std"
     },
     {
-      "name": "Debug Re-run Last Test",
+      "name": "Prepare plugin:fullstack-monorepo",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
+      "program": "${workspaceFolder}/tests/cli/bin/contest.js",
+      "args": [ "test", "--tools", "plugin", "--plans", "fullstack-monorepo", "--prepare-only" ],
+      "console": "integratedTerminal",
+      "skipFiles": [ "<node_internals>/**" ],
+      "env": { "NODE_ENV": "development" },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Prepare plugin:library-package",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
+      "program": "${workspaceFolder}/tests/cli/bin/contest.js",
+      "args": [ "test", "--tools", "plugin", "--plans", "library-package", "--prepare-only" ],
+      "console": "integratedTerminal",
+      "skipFiles": [ "<node_internals>/**" ],
+      "env": { "NODE_ENV": "development" },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Prepare plugin:react-client-only",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",
+      "program": "${workspaceFolder}/tests/cli/bin/contest.js",
+      "args": [ "test", "--tools", "plugin", "--plans", "react-client-only", "--prepare-only" ],
+      "console": "integratedTerminal",
+      "skipFiles": [ "<node_internals>/**" ],
+      "env": { "NODE_ENV": "development" },
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Continue Last Test",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${env:HOME}/.local/share/fnm/aliases/default/bin/node",

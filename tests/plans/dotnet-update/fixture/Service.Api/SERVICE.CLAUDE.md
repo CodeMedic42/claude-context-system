@@ -1,10 +1,10 @@
 # Service Context: Calculator API Service
 
-## Service Overview
+## Service Overview [overview] [summary]
 
 This is a REST API service that provides mathematical calculation endpoints. Built with ASP.NET Core 8.0, the service exposes HTTP endpoints for performing calculations by leveraging the Shared.Library for core mathematical operations. It serves as a demonstration of a simple microservice architecture with clean separation between API controllers and business logic.
 
-## Technologies
+## Technologies [technologies] [stack]
 
 - **Language**: C# with .NET 8.0
 - **Framework**: ASP.NET Core 8.0 Web API
@@ -13,9 +13,9 @@ This is a REST API service that provides mathematical calculation endpoints. Bui
   - Swashbuckle.AspNetCore - Swagger UI generation
   - Shared.Library - Internal library providing mathematical operations
 
-## API Endpoints
+## API Endpoints [api] [endpoints] [routes]
 
-### Endpoint Patterns
+### Endpoint Patterns [api] [routing] [patterns]
 
 - **Routing pattern**: Controller-based routing with [Route] and [HttpPost] attributes on controller actions
 - **Endpoint structure**: `/calculate/{operation}` where operation is the mathematical function (e.g., add, subtract)
@@ -47,13 +47,13 @@ Adds two integers together.
 
 **Implementation:** Uses the `Calculator.Add` method from Shared.Library to perform the calculation. Logs the operation with structured logging including both input values.
 
-## Authentication/Authorization
+## Authentication/Authorization [security] [auth] [access-control]
 
 - **Authentication method**: None (this is a demonstration service)
 - **Authorization approach**: None currently implemented
 - **Implementation details**: No authentication or authorization middleware is configured. Service is open to all requests. For production use, consider adding JWT bearer authentication or API key validation.
 
-## Error Handling Patterns
+## Error Handling Patterns [errors] [exceptions] [error-handling]
 
 - **Error handling approach**: Default ASP.NET Core error handling pipeline
 - **Error response format**: Standard ASP.NET Core problem details format (RFC 7807)
@@ -62,7 +62,7 @@ Adds two integers together.
   - 500 Internal Server Error - Unhandled exceptions
 - **Where errors are caught**: ASP.NET Core middleware handles exceptions globally. No custom error handling middleware is currently configured.
 
-## Data Validation
+## Data Validation [validation] [input] [data-integrity]
 
 - **Validation library/approach**: Built-in ASP.NET Core model validation using C# types
 - **Where validation happens**:
@@ -73,7 +73,7 @@ Adds two integers together.
   - [FromBody] attribute ensures request body is properly deserialized
   - Invalid JSON or type mismatches automatically return 400 Bad Request
 
-## Middleware/Request Pipeline
+## Middleware/Request Pipeline [middleware] [pipeline] [request-lifecycle]
 
 The middleware pipeline is configured in Program.cs and executes in the following order:
 
@@ -88,7 +88,7 @@ The middleware pipeline is configured in Program.cs and executes in the followin
 - Controllers are registered with `AddControllers()`
 - OpenAPI/Swagger generation configured with `AddEndpointsApiExplorer()` and `AddSwaggerGen()`
 
-## Request/Response Conventions
+## Request/Response Conventions [conventions] [patterns] [api]
 
 - **Request conventions**:
   - POST methods for all calculation operations
@@ -100,7 +100,7 @@ The middleware pipeline is configured in Program.cs and executes in the followin
 - **Pagination**: Not applicable (no collection endpoints)
 - **Content types**: `application/json` for both requests and responses
 
-## Code Organization Patterns
+## Code Organization Patterns [architecture] [code-structure] [organization]
 
 - **Architecture**: Simple MVC pattern with Controllers and Services separation
   - Controllers: Handle HTTP concerns (request/response)
@@ -119,7 +119,7 @@ The middleware pipeline is configured in Program.cs and executes in the followin
   - Use appropriate HTTP verbs and route patterns
   - Add XML documentation comments for Swagger
 
-## Database/Data Access Patterns
+## Database/Data Access Patterns [data-access] [database] [persistence]
 
 - **Database(s)**: None - this is a stateless calculation service
 - **ORM/Data access**: Not applicable
@@ -127,32 +127,32 @@ The middleware pipeline is configured in Program.cs and executes in the followin
 - **Transaction handling**: Not applicable
 - **Migration approach**: Not applicable
 
-## Service Dependencies
+## Service Dependencies [dependencies] [integrations] [external-services]
 
-### Internal Services
+### Internal Services [dependencies] [internal] [services]
 
 None - this service does not call other services.
 
-### External APIs
+### External APIs [dependencies] [external] [apis]
 
 None - this service does not integrate with external APIs.
 
-### Databases
+### Databases [dependencies] [databases] [data]
 
 None - this is a stateless service.
 
-### Message Queues/Event Systems
+### Message Queues/Event Systems [dependencies] [messaging] [events]
 
 None - this service does not use message queues or event systems.
 
-## Service Communication
+## Service Communication [communication] [inter-service] [integration]
 
 - **Communication protocol**: REST over HTTPS
 - **Client libraries**: Not applicable (this service is the provider, not a consumer)
 - **Retry/Circuit breaker**: Not implemented (no outbound calls)
 - **Service discovery**: Not applicable (single service, no service mesh)
 
-## Logging Conventions
+## Logging Conventions [logging] [observability] [debugging]
 
 - **Logging framework**: Built-in ASP.NET Core logging (Microsoft.Extensions.Logging)
 - **Log levels used**:
@@ -167,7 +167,7 @@ None - this service does not use message queues or event systems.
   - **Request information**: ASP.NET Core automatically logs HTTP request details
   - **Errors**: Unhandled exceptions are automatically logged by the framework
 
-### What Should NOT Be Logged
+### What Should NOT Be Logged [security] [logging] [sensitive-data]
 
 - **Passwords and credentials**: Never log passwords, API keys, tokens, or authentication credentials
 - **Personal data**: In a real application, be cautious about logging user IDs, email addresses, or other PII
@@ -176,7 +176,7 @@ None - this service does not use message queues or event systems.
 
 **Note:** This is a demonstration service with simple integer calculations. For production services handling sensitive data, review and customize logging to comply with security and privacy requirements.
 
-## Testing Patterns
+## Testing Patterns [testing] [quality] [test-automation]
 
 - **Testing frameworks**: Not currently configured (typical would be xUnit, NUnit, or MSTest)
 - **Test organization**: Would typically follow the pattern:
@@ -192,26 +192,26 @@ None - this service does not use message queues or event systems.
 - **Mocking approach**: Would use Moq, NSubstitute, or FakeItEasy for mocking dependencies
 - **Test data**: Create test request DTOs with known inputs and expected outputs
 
-## Configuration/Environment Variables
+## Configuration/Environment Variables [configuration] [environment] [settings]
 
-### Required Environment Variables
+### Required Environment Variables [configuration] [environment] [required]
 
 None - service uses default configuration.
 
-### Optional Environment Variables
+### Optional Environment Variables [configuration] [environment] [optional]
 
 - `ASPNETCORE_ENVIRONMENT`: Determines environment (Development, Staging, Production). Affects Swagger availability and logging levels. Default: Production
 - `ASPNETCORE_URLS`: Configures the URLs the service listens on. Default: `https://localhost:5001;http://localhost:5000`
 
-### Configuration Files
+### Configuration Files [configuration] [files]
 
 - **appsettings.json**: Default configuration file (not present in this minimal example, but would contain default settings)
 - **appsettings.Development.json**: Development-specific overrides (not present in this minimal example)
 - **appsettings.Production.json**: Production-specific overrides (not present in this minimal example)
 
-## Build and Deployment
+## Build and Deployment [build] [deployment] [ci-cd]
 
-### Build Process
+### Build Process [build] [compilation]
 
 ```bash
 # Restore dependencies
@@ -224,7 +224,7 @@ dotnet build
 dotnet build -c Release
 ```
 
-### Run Locally
+### Run Locally [development] [local] [setup]
 
 ```bash
 # Navigate to the service directory
@@ -240,7 +240,7 @@ The service will start and listen on:
 
 Access Swagger UI at: https://localhost:5001/swagger (Development environment only)
 
-### Deployment
+### Deployment [deployment] [release] [ci-cd]
 
 - **Build output**: Compiled assemblies in `bin/Release/net8.0/`
 - **Publish**: Use `dotnet publish -c Release -o ./publish` to create deployment package
@@ -251,18 +251,22 @@ Access Swagger UI at: https://localhost:5001/swagger (Development environment on
   - Linux with Kestrel
 - **CI/CD**: Would typically use Azure DevOps, GitHub Actions, or similar for automated builds and deployments
 
-## Documentation
+## Documentation [documentation] [reference]
 
 - **README.md**: Project root contains basic API documentation with endpoint examples
 - **Swagger UI**: Available at `/swagger` when running in Development mode
 - **OpenAPI Specification**: Available at `/swagger/v1/swagger.json` in Development mode
 - **XML Documentation**: Add XML documentation comments to controllers/actions for enhanced Swagger documentation
 
-## Restricted Actions
+## Restricted Actions [security] [restrictions] [policies]
 
 *(Leave blank initially - user should review and populate with project-specific restrictions)*
 
-# Agent File Metadata
+# Agent File Maintenance [metadata] [maintenance]
+
+No LLM/AI/Agent may make changes to this file outside of the claude-context-system commands. This is a maintained file through automatic means.
+
+# Agent File Metadata [metadata] [tracking]
 
 - Revision Date: 2026-01-09T22:05:00Z
 - Last commit SHA built from: c643e25aed1a0e80acf49197d3072448b6e101f5

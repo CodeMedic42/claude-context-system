@@ -4,6 +4,11 @@
 echo "🔄 Auto-syncing shared files to plugin and CLI..."
 pnpm run sync
 
+# Stage the synced files so they're included in this commit
+echo "📦 Staging synced files..."
+git add claude-context-plugin/commands/ claude-context-plugin/templates/
+git add copilot-context-cli/commands/ copilot-context-cli/templates/
+
 # Simple pre-commit check: Ensure plugin directories match shared directory
 
 check_directory_sync() {

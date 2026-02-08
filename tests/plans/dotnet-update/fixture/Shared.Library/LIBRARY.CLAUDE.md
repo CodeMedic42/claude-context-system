@@ -1,25 +1,25 @@
 # Library Context: Shared.Library
 
-## Library Overview
+## Library Overview [overview] [summary]
 
 Shared.Library is a .NET class library that provides basic mathematical operations. It serves as a shared computational layer that can be consumed by multiple services or applications within the solution. The library follows a simple, static API design pattern for stateless mathematical functions, making it easy to use without instantiation overhead.
 
-## Library Type
+## Library Type [metadata] [classification]
 
 - **Type**: Shared utility library
 - **Scope**: Internal use within the DotnetCalculator solution
 - **Language**: C# (.NET 8.0)
 
-## Package Information
+## Package Information [package] [distribution] [installation]
 
-### Package Details
+### Package Details [package] [metadata]
 
 - **Package name**: Shared.Library
 - **Current version**: Not versioned (internal project reference)
 - **Package manager**: NuGet (via project reference)
 - **Registry**: Not published - consumed as internal project reference within the solution
 
-### Installation
+### Installation [installation] [setup]
 
 This library is consumed via project reference within the solution:
 
@@ -31,15 +31,15 @@ This library is consumed via project reference within the solution:
 
 For consumers within the solution, the library is automatically built and referenced through the .NET build system.
 
-## Core Functionality
+## Core Functionality [features] [api] [functionality]
 
-### Main Features
+### Main Features [features] [capabilities]
 
 1. **Addition Operations**: Provides integer addition functionality through a static API
 2. **Extensible Design**: Structured to easily add more mathematical operations following the same pattern
 3. **Zero-Dependency**: Pure .NET library with no external dependencies
 
-### Public API
+### Public API [api] [exports] [interface]
 
 - **Exported functions**:
   - `Calculator.Add(int a, int b)` - Adds two integers and returns the sum
@@ -48,9 +48,9 @@ For consumers within the solution, the library is automatically built and refere
 - **Exported constants**: None
 - **Exported types**: None (uses primitive types)
 
-## Usage Examples
+## Usage Examples [examples] [usage] [how-to]
 
-### Basic Usage
+### Basic Usage [examples] [basic] [getting-started]
 
 ```csharp
 using Shared.Library;
@@ -66,7 +66,7 @@ int sum = Calculator.Add(x, y);
 Console.WriteLine(sum); // Output: 30
 ```
 
-### Advanced Usage
+### Advanced Usage [examples] [advanced]
 
 ```csharp
 using Shared.Library;
@@ -90,15 +90,15 @@ if (sum > 25)
 }
 ```
 
-### Common Patterns
+### Common Patterns [patterns] [best-practices]
 
 - **Direct static calls**: Call methods directly without instantiation (`Calculator.Add(...)`)
 - **Dependency injection**: While the current implementation uses static methods, this library could be refactored to use interfaces for testability in larger applications
 - **Pure functions**: All methods are pure functions with no side effects, making them safe for concurrent use
 
-## Architecture and Design
+## Architecture and Design [architecture] [design] [patterns]
 
-### Design Principles
+### Design Principles [design] [principles]
 
 - **Simplicity**: Static methods for stateless operations, no unnecessary abstraction
 - **Zero dependencies**: No external package dependencies, only .NET 8.0 runtime
@@ -106,22 +106,22 @@ if (sum > 25)
 - **Pure functions**: Methods have no side effects and return deterministic results
 - **XML documentation**: All public methods include XML documentation for IntelliSense support
 
-### Code Organization
+### Code Organization [organization] [structure]
 
 - **Directory structure**: Flat structure with classes at the root level
 - **Module organization**: One class per mathematical domain (currently only `Calculator.cs`)
 - **Entry points**: The `Calculator` class serves as the main entry point
 
-### Dependencies
+### Dependencies [dependencies] [packages]
 
 - **Runtime dependencies**: None (only .NET 8.0 runtime)
 - **Peer dependencies**: None
 - **Optional dependencies**: None
 - **Dependency philosophy**: Keep the library dependency-free to maximize portability and minimize version conflicts
 
-## Internal Code Patterns
+## Internal Code Patterns [code-patterns] [conventions] [implementation]
 
-### File Structure Conventions
+### File Structure Conventions [structure] [organization]
 
 ```
 Shared.Library/
@@ -139,7 +139,7 @@ Shared.Library/
 └── StatisticsHelper.cs      # Statistical operations (future)
 ```
 
-### Code Style Patterns
+### Code Style Patterns [style] [conventions]
 
 - **Import conventions**: Namespace matches assembly name (`namespace Shared.Library`)
 - **Naming conventions**:
@@ -149,7 +149,7 @@ Shared.Library/
 - **File naming**: PascalCase matching the primary class name (e.g., `Calculator.cs`)
 - **Export patterns**: All public members are automatically available when namespace is imported
 
-### Implementation Examples
+### Implementation Examples [examples] [implementation]
 
 **Example 1: Static Method Pattern**
 
@@ -214,7 +214,7 @@ This demonstrates:
 - Pure function implementations
 - Type-safe integer operations
 
-### Adding New Code
+### Adding New Code [development] [contribution] [adding-features]
 
 **To add a new mathematical operation:**
 
@@ -235,7 +235,7 @@ This demonstrates:
 5. Implement methods following the same pattern as Calculator
 6. Add a project reference in any consuming project if needed
 
-### Testing Patterns
+### Testing Patterns [testing] [patterns]
 
 - **Test file location**: Would typically be in a separate `Shared.Library.Tests` project
 - **Test structure**: xUnit with fact/theory patterns, or NUnit with Test attributes
@@ -277,30 +277,30 @@ public class CalculatorTests
 }
 ```
 
-### Documentation Requirements
+### Documentation Requirements [documentation] [requirements]
 
 - **Code comments**: XML documentation required for all public types and members
 - **README updates**: Not required for internal project reference
 - **Example code**: Add usage examples to service/application that consumes the library
 - **Type documentation**: XML docs with `<summary>`, `<param>`, `<returns>`, and `<exception>` tags as appropriate
 
-## Configuration
+## Configuration [configuration] [settings] [options]
 
-### Configuration Options
+### Configuration Options [configuration] [options]
 
 Not applicable - this library contains pure functions with no configuration.
 
-### Environment Variables
+### Environment Variables [configuration] [environment]
 
 Not applicable - no environment-specific behavior.
 
-## Type Safety
+## Type Safety [types] [typescript] [type-safety]
 
-### TypeScript Support
+### TypeScript Support [typescript] [types]
 
 Not applicable - this is a C# library.
 
-### Type Exports
+### Type Exports [types] [exports]
 
 All methods use built-in .NET types:
 - Parameters: `int` (System.Int32)
@@ -315,15 +315,15 @@ public static T Add<T>(T a, T b) where T : INumber<T>
 }
 ```
 
-## Testing
+## Testing [testing] [quality] [test-automation]
 
-### Testing Approach
+### Testing Approach [testing] [strategy]
 
 - **Testing framework**: Recommended xUnit, NUnit, or MSTest for .NET unit testing
 - **Test coverage**: Should target 100% coverage for pure mathematical functions
 - **Test types**: Unit tests (no integration or E2E tests needed for pure functions)
 
-### Running Tests
+### Running Tests [testing] [commands]
 
 Once tests are added:
 
@@ -338,14 +338,14 @@ dotnet test --verbosity normal
 dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 ```
 
-### Testing for Consumers
+### Testing for Consumers [testing] [mocking]
 
 - **Mocking**: Not needed - methods are pure functions that can be called directly in tests
 - **Test utilities**: No special test utilities provided or needed
 
-## Building and Development
+## Building and Development [build] [development] [setup]
 
-### Development Setup
+### Development Setup [development] [setup]
 
 ```bash
 # Navigate to the library directory
@@ -358,13 +358,13 @@ dotnet restore
 dotnet build
 ```
 
-### Build Process
+### Build Process [build] [compilation]
 
 - **Build command**: `dotnet build`
 - **Build output**: `bin/Debug/net8.0/Shared.Library.dll` (or Release)
 - **Build targets**: Single target framework: net8.0
 
-### Development Scripts
+### Development Scripts [development] [scripts]
 
 This library uses standard .NET CLI commands:
 
@@ -372,15 +372,15 @@ This library uses standard .NET CLI commands:
 - `dotnet clean` - Cleans build artifacts
 - `dotnet restore` - Restores dependencies (none currently)
 
-## Versioning and Releases
+## Versioning and Releases [versioning] [releases] [changelog]
 
-### Versioning Strategy
+### Versioning Strategy [versioning] [strategy]
 
 - **Versioning scheme**: Not currently versioned (internal library)
 - **Breaking changes**: If this becomes a published package, follow Semantic Versioning
 - **Deprecation policy**: Mark methods as `[Obsolete]` for at least one major version before removal
 
-### Release Process
+### Release Process [release] [deployment]
 
 Not applicable - consumed as internal project reference.
 
@@ -391,20 +391,20 @@ If published as a NuGet package:
 4. Publish to internal or public NuGet feed
 5. Update CHANGELOG.md with changes
 
-### Changelog
+### Changelog [changelog] [versioning]
 
 - **Changelog location**: Would be maintained in `CHANGELOG.md` if published
 - **Changelog format**: Keep a Changelog format recommended
 
-## Documentation
+## Documentation [documentation] [reference]
 
-### API Documentation
+### API Documentation [documentation] [api-reference]
 
 - **Documentation location**: XML documentation comments in source code
 - **Documentation format**: Standard C# XML documentation
 - **Documentation generation**: Can generate API docs using DocFX or similar tools
 
-### Examples and Guides
+### Examples and Guides [documentation] [examples] [guides]
 
 - **Examples directory**: Usage examples provided in this file and in consuming services (Service.Api)
 - **Guide topics**:
@@ -412,9 +412,9 @@ If published as a NuGet package:
   - Adding new operations
   - Extension patterns for new mathematical domains
 
-## Compatibility
+## Compatibility [compatibility] [platform-support] [requirements]
 
-### Platform Support
+### Platform Support [compatibility] [platforms]
 
 - **Node.js versions**: Not applicable (.NET library)
 - **.NET versions**: Requires .NET 8.0 or later
@@ -423,38 +423,38 @@ If published as a NuGet package:
   - Linux (x64, ARM64)
   - macOS (x64, ARM64)
 
-### Framework Integration
+### Framework Integration [integration] [frameworks]
 
 - **ASP.NET Core**: Fully compatible - used by Service.Api
 - **Blazor**: Compatible for use in Blazor Server or WebAssembly
 - **Console applications**: Compatible
 - **Desktop applications**: Compatible (WPF, WinForms, MAUI)
 
-## Performance Considerations
+## Performance Considerations [performance] [optimization] [efficiency]
 
-### Performance Characteristics
+### Performance Characteristics [performance] [metrics]
 
 - **Performance goals**: Sub-microsecond execution for basic operations
 - **Assembly size**: Minimal - approximately 4-6 KB compiled
 - **JIT optimization**: Methods are small enough for aggressive JIT inlining
 - **Performance benchmarks**: Not formally benchmarked (operations are trivial)
 
-### Optimization Tips
+### Optimization Tips [performance] [optimization] [tips]
 
 - Static methods avoid allocation overhead
 - Integer operations are processor-native and extremely fast
 - Methods are pure functions, safe for concurrent access without locks
 - Consider using `[MethodImpl(MethodImplOptions.AggressiveInlining)]` for performance-critical paths
 
-## Security
+## Security [security] [safety] [vulnerabilities]
 
-### Security Considerations
+### Security Considerations [security] [considerations]
 
 - **Input validation**: No validation needed - type system enforces integer inputs
 - **Security audits**: No special security concerns for pure mathematical functions
 - **Vulnerability reporting**: Not applicable for internal library
 
-### Safe Usage Patterns
+### Safe Usage Patterns [security] [patterns] [best-practices]
 
 - **Overflow handling**: Be aware that `int.MaxValue + 1` will overflow. Consider using `checked` arithmetic:
   ```csharp
@@ -465,9 +465,9 @@ If published as a NuGet package:
   ```
 - **Unchecked arithmetic**: By default, C# uses unchecked arithmetic which wraps on overflow
 
-## Migration and Upgrade Guides
+## Migration and Upgrade Guides [migration] [upgrade] [changelog]
 
-### Upgrading
+### Upgrading [upgrade] [migration]
 
 Not applicable - internal library with no published versions.
 
@@ -476,16 +476,16 @@ If this becomes a versioned package:
 - **Migration guides**: Create separate documentation for major version migrations
 - **Codemod tools**: Not applicable for simple API
 
-## Contributing
+## Contributing [contributing] [development] [guidelines]
 
-### How to Contribute
+### How to Contribute [contributing] [process]
 
 For internal development:
 - **Contribution process**: Follow standard team code review process
 - **Code style**: Follow C# coding conventions and existing patterns in the library
 - **Pull request process**: Create feature branch, implement changes, submit PR for review
 
-### Development Guidelines
+### Development Guidelines [guidelines] [best-practices]
 
 - Maintain pure function implementations (no side effects)
 - Add XML documentation for all public members
@@ -493,22 +493,26 @@ For internal development:
 - Consider edge cases (overflow, boundary conditions)
 - Keep methods simple and single-purpose
 
-## Support and Maintenance
+## Support and Maintenance [support] [maintenance] [status]
 
-### Support Channels
+### Support Channels [support] [contact]
 
 Internal library - contact development team through standard channels.
 
-### Maintenance Status
+### Maintenance Status [maintenance] [status] [support]
 
 - **Status**: Actively maintained as part of the DotnetCalculator solution
 - **Maintainers**: Development team maintaining the DotnetCalculator solution
 
-## Restricted Actions
+## Restricted Actions [security] [restrictions] [policies]
 
 *(Leave blank initially - user should review and populate with project-specific restrictions)*
 
-# Agent File Metadata
+# Agent File Maintenance [metadata] [maintenance]
+
+No LLM/AI/Agent may make changes to this file outside of the claude-context-system commands. This is a maintained file through automatic means.
+
+# Agent File Metadata [metadata] [tracking]
 
 - Revision Date: 2026-01-09T22:05:00Z
 - Last commit SHA built from: c643e25aed1a0e80acf49197d3072448b6e101f5
