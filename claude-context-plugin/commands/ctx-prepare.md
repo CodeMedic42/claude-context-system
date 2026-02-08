@@ -154,6 +154,86 @@ This section defines all supported languages, their file extensions, manifest fi
 - Workspace files: `mix.exs` (with umbrella app)
 - Exclusions: `_build/`, `deps/`
 
+### Step 3.0: Process .ctxignore Files
+
+**IMPORTANT: Process .ctxignore files BEFORE any file discovery to build exclusion patterns.**
+
+`.ctxignore` files work like `.gitignore` - they specify patterns for files and directories to exclude from context generation. Each `.ctxignore` file applies to its directory and all subdirectories.
+
+**Find all .ctxignore files:**
+
+```bash
+git ls-files | grep '\.ctxignore$'
+```
+
+**For each .ctxignore file found:**
+
+1. Read the file contents
+2. Parse patterns (one per line)
+3. Build find command exclusions based on the .ctxignore location
+
+**Pattern Syntax (follows .gitignore conventions):**
+
+- `*` - Ignore all files and directories in this location
+- `*/` - Ignore only directories (not files) in this location
+- `dirname/` - Ignore specific directory named "dirname"
+- `*.ext` - Ignore all files with extension .ext
+- `pattern*` - Ignore anything starting with "pattern"
+- `!pattern` - Negate (don't ignore) a previously ignored pattern
+- `#` at start of line - Comment (ignore this line)
+- Empty lines - Ignore
+
+**Building find exclusions:**
+
+For each pattern in a .ctxignore file at path `<dir>/.ctxignore`:
+
+- Pattern `*/` → Add to find: `-not -path "<dir>/*/" \`
+- Pattern `*` → Add to find: `-not -path "<dir>/*" \`
+- Pattern `dirname/` → Add to find: `-not -path "<dir>/dirname/*" \`
+- Pattern `*.ext` → Add to find: `-not -name "*.ext" \`
+
+**Example:**
+
+If `tests/plans/.ctxignore` contains:
+```
+*/
+```
+
+Add to find commands:
+```bash
+-not -path "tests/plans/*/" \
+```
+
+This excludes all subdirectories within `tests/plans/` but not files directly in `tests/plans/`.
+
+**Store the exclusion patterns for use throughout all steps.**
+
+**Important notes:**
+
+- `.ctxignore` exclusions apply to ALL file operations: manifest discovery, file counting, project structure detection, and git operations
+- When counting files for token estimation, exclude .ctxignore patterns
+- When checking for project-like structures, respect .ctxignore patterns
+- `.ctxignore` files are NOT ignored - they should be tracked in git and included in searches
+
+**Complete example:**
+
+Given this repository structure:
+```
+/
+├── src/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── plans/
+│       ├── .ctxignore (contains: "*/" )
+│       ├── plan1/
+│       ├── plan2/
+│       └── README.md
+└── package.json
+```
+
+The `.ctxignore` will exclude `tests/plans/plan1/` and `tests/plans/plan2/` but NOT `tests/plans/README.md`.
+
 ### Step 3.1: Detect Repository Languages
 
 **First, get all unique file extensions in the repository:**
@@ -179,7 +259,9 @@ Create a list of detected languages. For example:
 
 **CRITICAL: Find Command Syntax**
 
-When searching for multiple file types with `-o` (OR), you MUST use parentheses `\( ... \)` to group patterns correctly:
+When searching for multiple file types with `-o` (OR), you MUST use parentheses `\( ... \)` to group patterns correctly.
+
+**IMPORTANT: Apply .ctxignore exclusions from Step 3.0 to all find commands below.**
 
 **Build the search command based on detected languages:**
 
@@ -219,6 +301,7 @@ find . -maxdepth 4 -type f \( \
   -not -path "*/.gradle/*" \
   -not -path "*/_build/*" \
   -not -path "*/deps/*" \
+  [ADD .ctxignore exclusions here] \
 | sort
 ```
 
@@ -234,6 +317,7 @@ find . -maxdepth 4 -type f \( \
   -not -path "*/.git/*" \
   -not -path "*/node_modules/*" \
   -not -path "*/target/*" \
+  [ADD .ctxignore exclusions here] \
 | sort
 ```
 
@@ -309,7 +393,7 @@ For each project, record:
 - Project ID (directory name or package name from manifest)
 - Path (use absolute path)
 - Language(s) (from Step 3.1)
-- File count (for token estimation - count files in project directory, excluding dependency folders based on language exclusions from Language Registry)
+- File count (for token estimation - count files in project directory, excluding dependency folders based on language exclusions from Language Registry AND .ctxignore patterns from Step 3.0)
 
 ### Exclude Repository Root Unless It's the Only Project
 
