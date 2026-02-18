@@ -73,6 +73,19 @@
 
 ~:If there are no database schemas defined in this repository, remove this entire section:~
 
+## Infrastructure as Code [infrastructure] [iac] [cloud]
+
+~:List all infrastructure as code projects with @file references to their context files:~
+
+- **~:Infrastructure Name:~**: @file ./path/to/IAC.CLAUDE.md
+
+~:Example::~
+- **AWS Infrastructure (Terraform)**: @file ./infrastructure/aws/IAC.CLAUDE.md
+- **Kubernetes Configuration**: @file ./k8s/IAC.CLAUDE.md
+- **Azure Resources (ARM Templates)**: @file ./infra/azure/IAC.CLAUDE.md
+
+~:If there is no infrastructure as code in this repository, remove this entire section:~
+
 ## Environment Setup [setup] [environment] [prerequisites]
 
 ~:Provide any information needed to setup a working development environment.:~

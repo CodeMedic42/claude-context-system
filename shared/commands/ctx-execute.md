@@ -15,7 +15,7 @@ Execute context file generation based on an action plan created by `/ctx-prepare
 
 ## ⚠️ CRITICAL REQUIREMENT: Preserve User-Added Content
 
-**When updating existing context files (CLAUDE.md, SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md), you MUST preserve ALL user-added sections.**
+**When updating existing context files (CLAUDE.md, SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md, IAC.CLAUDE.md), you MUST preserve ALL user-added sections.**
 
 **What are user-added sections?**
 - Any `##` level heading that does NOT exist in the template
@@ -35,7 +35,7 @@ Execute context file generation based on an action plan created by `/ctx-prepare
 
 **This applies to:**
 - CLAUDE.md (Step 3.2)
-- All project context files: SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md (Step 2.4)
+- All project context files: SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md, IAC.CLAUDE.md (Step 2.4)
 
 **Failure to preserve user content will break the system and require manual fixes.**
 
@@ -115,6 +115,7 @@ Example:
 - ❌ DO NOT load `${TEMPLATE_PATH}/CLIENT.TEMPLATE.md`
 - ❌ DO NOT load `${TEMPLATE_PATH}/DATABASE.TEMPLATE.md`
 - ❌ DO NOT load `${TEMPLATE_PATH}/LIBRARY.TEMPLATE.md`
+- ❌ DO NOT load `${TEMPLATE_PATH}/IAC.TEMPLATE.md`
 
 **Why:** Loading all templates upfront wastes ~40,000-50,000 tokens. These templates will be loaded on-demand in Step 2.4 when processing projects of each specific type.
 
@@ -248,9 +249,16 @@ The project type defines what kind of context file to create. Analyze the projec
 - ORM models
 - Examples: Prisma schema, SQL migrations, TypeORM entities
 
+**IAC** - Infrastructure as Code:
+- Infrastructure definitions and configurations
+- Cloud resource provisioning
+- Infrastructure automation
+- Examples: Terraform modules, CloudFormation templates, Pulumi projects, Ansible playbooks
+
 **Multi-type examples:**
 - A utility library that also provides a CLI → `["LIBRARY", "CLIENT"]`
 - A service that defines database models → `["SERVICE", "DATABASE"]`
+- Infrastructure code with helper scripts → `["IAC", "LIBRARY"]`
 
 **Analyze project based on status:**
 
@@ -289,10 +297,11 @@ IF project.status is "new":
       - CLIENT → load `${TEMPLATE_PATH}/CLIENT.TEMPLATE.md`
       - DATABASE → load `${TEMPLATE_PATH}/DATABASE.TEMPLATE.md`
       - LIBRARY → load `${TEMPLATE_PATH}/LIBRARY.TEMPLATE.md`
+      - IAC → load `${TEMPLATE_PATH}/IAC.TEMPLATE.md`
       - If already loaded in memory, reuse it
     - **Create new context file: `{project.path}/{TYPE}.CLAUDE.md`**
-      - **CRITICAL**: The filename MUST be `{TYPE}.CLAUDE.md` where TYPE is SERVICE, CLIENT, DATABASE, or LIBRARY
-      - **Examples**: `SERVICE.CLAUDE.md`, `CLIENT.CLAUDE.md`, `DATABASE.CLAUDE.md`, `LIBRARY.CLAUDE.md`
+      - **CRITICAL**: The filename MUST be `{TYPE}.CLAUDE.md` where TYPE is SERVICE, CLIENT, DATABASE, LIBRARY, or IAC
+      - **Examples**: `SERVICE.CLAUDE.md`, `CLIENT.CLAUDE.md`, `DATABASE.CLAUDE.md`, `LIBRARY.CLAUDE.md`, `IAC.CLAUDE.md`
       - **WRONG**: Do NOT name it `CLAUDE_CONTEXT.md` or `CONTEXT.md` or `{projectName}.md`
       - **RIGHT**: If type is LIBRARY, filename is `LIBRARY.CLAUDE.md`
     - Use the template for this TYPE
@@ -305,7 +314,7 @@ IF project.status is "new":
 IF project.status is "updated":
   - FOR EACH type determined in Step 2.3:
     - Read existing context file: `{project.path}/{TYPE}.CLAUDE.md`
-      - **Remember**: filename is `{TYPE}.CLAUDE.md` (e.g., `SERVICE.CLAUDE.md`)
+      - **Remember**: filename is `{TYPE}.CLAUDE.md` (e.g., `SERVICE.CLAUDE.md`, `IAC.CLAUDE.md`)
     - **CRITICAL: Identify and preserve user-added sections:**
       1. **Load template for this TYPE** (to know which sections are standard)
       2. **Parse existing file** - extract all `##` level headings
