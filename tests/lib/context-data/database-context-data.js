@@ -3,7 +3,7 @@ const BaseData = require('./base-data');
 /**
  * Data class for database.claude.md files
  */
-class DatabaseClaudeData extends BaseData {
+class DatabaseContextData extends BaseData {
   constructor(filePath, projectName) {
     super(filePath);
     this.projectName = projectName;
@@ -26,11 +26,11 @@ class DatabaseClaudeData extends BaseData {
     // Method accesses instance for potential future customization per project
     return this.projectName ? [
       `Database Context: ${title}`,
-      'Database Overview',
-      'Schema Design',
+      'Database Overview [overview] [summary]',
+      'Schema Design [schema] [design] [architecture]',
       'Agent File Metadata [metadata] [tracking]',
     ] : [];
   }
 }
 
-module.exports = DatabaseClaudeData;
+module.exports = DatabaseContextData;

@@ -9,7 +9,7 @@ describe('react-client-only:context', () => {
 
   // Test CLAUDE.md
   testClaudeFile(contextData, {
-    subContextFileCount: 1,
+    techContextFileCount: 1,
   });
 
   // Test client.claude.md
@@ -19,20 +19,20 @@ describe('react-client-only:context', () => {
   // Custom tests specific to this test plan
   describe('Custom Validation', () => {
     test('should have exactly 1 client file', () => {
-      const subcontexts = contextData.getSubcontextList();
-      const clientFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ClientClaudeData');
+      const subcontexts = contextData.getTechnicalContextList();
+      const clientFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ClientContextData');
       expect(clientFiles.length).toBe(1);
     });
 
     test('should NOT have any service files', () => {
-      const subcontexts = contextData.getSubcontextList();
-      const serviceFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ServiceClaudeData');
+      const subcontexts = contextData.getTechnicalContextList();
+      const serviceFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ServiceContextData');
       expect(serviceFiles.length).toBe(0);
     });
 
     test('should NOT have any library files', () => {
-      const subcontexts = contextData.getSubcontextList();
-      const libraryFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'LibraryClaudeData');
+      const subcontexts = contextData.getTechnicalContextList();
+      const libraryFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'LibraryContextData');
       expect(libraryFiles.length).toBe(0);
     });
 

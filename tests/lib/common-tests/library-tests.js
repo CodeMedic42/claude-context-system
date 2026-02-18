@@ -6,7 +6,7 @@ const { testMetadata, testContentQuality, hasSectionMatching } = require('./base
 
 /**
  * Test library.claude.md file
- * @param {LibraryClaudeData} libraryData - LibraryClaudeData instance
+ * @param {LibraryContextData} libraryData - LibraryContextData instance
  */
 function testLibraryFile(libraryData, title) {
   if (!libraryData) {

@@ -12,7 +12,7 @@ describe('dotnet-update:context', () => {
 
   // Test CLAUDE.md
   testClaudeFile(contextData, {
-    subContextFileCount: 2,
+    techContextFileCount: 2,
   });
 
   // Test service.claude.md
@@ -69,9 +69,9 @@ describe('dotnet-update:context', () => {
     });
 
     test('should have exactly 1 service and 1 client file', () => {
-      const subcontexts = contextData.getSubcontextList();
-      const serviceFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ServiceClaudeData');
-      const clientFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ClientClaudeData');
+      const subcontexts = contextData.getTechnicalContextList();
+      const serviceFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ServiceContextData');
+      const clientFiles = subcontexts.filter((ctx) => ctx.constructor.name === 'ClientContextData');
       expect(serviceFiles.length).toBe(1);
       expect(clientFiles.length).toBe(1);
     });

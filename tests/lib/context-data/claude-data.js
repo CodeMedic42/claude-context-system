@@ -1,10 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const BaseData = require('./base-data');
-const ServiceClaudeData = require('./service-claude-data');
-const ClientClaudeData = require('./client-claude-data');
-const LibraryClaudeData = require('./library-claude-data');
-const DatabaseClaudeData = require('./database-claude-data');
+const ProjectContextData = require('./project-context-data');
+const ServiceContextData = require('./service-context-data');
+const ClientContextData = require('./client-context-data');
+const LibraryContextData = require('./library-context-data');
+const DatabaseContextData = require('./database-context-data');
+const IACContextData = require('./iac-context-data');
 
 /**
  * Data class for CLAUDE.md files
@@ -17,8 +19,10 @@ class ClaudeData extends BaseData {
     super(claudeMdPath);
 
     this.fixturePath = fixturePath;
-    this.subcontexts = [];
-    this.subcontextsByPath = new Map();
+    this.projectContexts = [];
+    this.technicalContexts = [];
+    this.projectContextsByPath = new Map();
+    this.technicalContextsByPath = new Map();
 
     this.parseSubcontexts();
   }
@@ -68,21 +72,28 @@ class ClaudeData extends BaseData {
           : path.basename(path.dirname(relativePath));
 
         // Create appropriate sub-context instance based on filename
-        let subcontext = null;
+        let techContext = null;
 
         if (lowerPath.includes('service.claude.md')) {
-          subcontext = new ServiceClaudeData(absolutePath, projectName);
+          techContext = new ServiceContextData(absolutePath, projectName);
         } else if (lowerPath.includes('client.claude.md')) {
-          subcontext = new ClientClaudeData(absolutePath, projectName);
+          techContext = new ClientContextData(absolutePath, projectName);
         } else if (lowerPath.includes('library.claude.md')) {
-          subcontext = new LibraryClaudeData(absolutePath, projectName);
+          techContext = new LibraryContextData(absolutePath, projectName);
         } else if (lowerPath.includes('database.claude.md')) {
-          subcontext = new DatabaseClaudeData(absolutePath, projectName);
+          techContext = new DatabaseContextData(absolutePath, projectName);
+        } else if (lowerPath.includes('iac.claude.md')) {
+          techContext = new IACContextData(absolutePath, projectName);
+        } else if (lowerPath.includes('project.claude.md')) {
+          const projectContext = new ProjectContextData(absolutePath, projectName);
+
+          this.projectContexts.push(projectContext);
+          this.projectContextsByPath.set(relativePath, projectContext);
         }
 
-        if (subcontext) {
-          this.subcontexts.push(subcontext);
-          this.subcontextsByPath.set(relativePath, subcontext);
+        if (techContext) {
+          this.technicalContexts.push(techContext);
+          this.technicalContextsByPath.set(relativePath, techContext);
         }
       }
     }
@@ -95,15 +106,23 @@ class ClaudeData extends BaseData {
    * @returns {BaseData|null} Sub-context instance or null if not found
    */
   getProjectContextData(filePath) {
-    return this.subcontextsByPath.get(filePath) || null;
+    return this.technicalContextsByPath.get(filePath) || null;
+  }
+
+  /**
+   * Get all project-context instances
+   * @returns {BaseData[]} Array of all sub-context instances
+   */
+  getProjectContextList() {
+    return [...this.projectContexts];
   }
 
   /**
    * Get all sub-context instances
    * @returns {BaseData[]} Array of all sub-context instances
    */
-  getSubcontextList() {
-    return [...this.subcontexts];
+  getTechnicalContextList() {
+    return [...this.technicalContexts];
   }
 
   /**

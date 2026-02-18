@@ -3,7 +3,7 @@ const BaseData = require('./base-data');
 /**
  * Data class for client.claude.md files
  */
-class ClientClaudeData extends BaseData {
+class ClientContextData extends BaseData {
   constructor(filePath, projectName) {
     super(filePath);
     this.projectName = projectName;
@@ -33,4 +33,4 @@ class ClientClaudeData extends BaseData {
   }
 }
 
-module.exports = ClientClaudeData;
+module.exports = ClientContextData;

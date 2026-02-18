@@ -26,7 +26,7 @@ describe('angular-components:context', () => {
 
   // Test CLAUDE.md
   testClaudeFile(contextData, {
-    subContextFileCount: 14,
+    techContextFileCount: 14,
   });
 
   testLibraryFile(cdkData);

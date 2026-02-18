@@ -15,7 +15,7 @@ Execute context file generation based on an action plan created by `/ctx-prepare
 
 ## ⚠️ CRITICAL REQUIREMENT: Preserve User-Added Content
 
-**When updating existing context files (CLAUDE.md, SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md, IAC.CLAUDE.md), you MUST preserve ALL user-added sections.**
+**When updating existing context files (CLAUDE.md, PROJECT.CLAUDE.md, SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md, IAC.CLAUDE.md), you MUST preserve ALL user-added sections.**
 
 **What are user-added sections?**
 - Any `##` level heading that does NOT exist in the template
@@ -35,7 +35,7 @@ Execute context file generation based on an action plan created by `/ctx-prepare
 
 **This applies to:**
 - CLAUDE.md (Step 3.2)
-- All project context files: SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md, IAC.CLAUDE.md (Step 2.4)
+- All project context files: PROJECT.CLAUDE.md, SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, LIBRARY.CLAUDE.md, DATABASE.CLAUDE.md, IAC.CLAUDE.md (Step 2.4)
 
 **Failure to preserve user content will break the system and require manual fixes.**
 
@@ -83,7 +83,7 @@ Example:
 **Load required files:**
 
 1. **Load CLAUDE.TEMPLATE.md:**
-   - Path: `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/CLAUDE.TEMPLATE.md`
+   - Path: `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/CLAUDE.TEMPLATE.md`
    - This is the main template for the repository-level context file
    - Load this upfront as it's always needed
    - Parse instruction placeholders (~:...:~) to understand topics
@@ -93,33 +93,51 @@ Example:
    - Inform the user:
      ```
      ❌ ERROR: Template file not accessible.
-     The CLAUDE.TEMPLATE.md file could not be loaded from https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates.
+     The CLAUDE.TEMPLATE.md file could not be loaded from /Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates.
      ```
    - DO NOT PROCEED without the template
    - EXIT IMMEDIATELY without creating any files
 
-2. **Load action plan:**
+2. **Load PROJECT.TEMPLATE.md:**
+   - Path: `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/PROJECT.TEMPLATE.md`
+   - This is the template for project-level context files
+   - Load this upfront as it's needed for ALL projects
+   - Parse instruction placeholders (~:...:~) to understand topics
+
+   **If this template cannot be fetched:**
+   - STOP IMMEDIATELY - indicates an installation or network problem
+   - Inform the user:
+     ```
+     ❌ ERROR: Template file not accessible.
+     The PROJECT.TEMPLATE.md file could not be loaded from /Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates.
+     ```
+   - DO NOT PROCEED without the template
+   - EXIT IMMEDIATELY without creating any files
+
+3. **Load action plan:**
    - Load `CLAUDE_CONTEXT_ACTION_PLAN.json`
    - Contains project list, dependencies, estimates
    - Note the project `status` field ("new", "updated", or "stable")
    - Note removedProjects array
 
-3. **Load progress file:**
+4. **Load progress file:**
    - Load `CLAUDE_CONTEXT_PROGRESS.json`
    - Contains completed projects, next project, discoveries, claudeMdData
 
-**CRITICAL: Do NOT load project-specific templates yet**
+**CRITICAL: Do NOT load type-specific templates yet**
 
 **DO NOT load these files in Phase 1:**
-- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/SERVICE.TEMPLATE.md`
-- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/CLIENT.TEMPLATE.md`
-- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/DATABASE.TEMPLATE.md`
-- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/LIBRARY.TEMPLATE.md`
-- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/IAC.TEMPLATE.md`
+- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/SERVICE.TEMPLATE.md`
+- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/CLIENT.TEMPLATE.md`
+- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/DATABASE.TEMPLATE.md`
+- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/LIBRARY.TEMPLATE.md`
+- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/IAC.TEMPLATE.md`
 
-**Why:** Loading all templates upfront wastes ~40,000-50,000 tokens. These templates will be loaded on-demand in Step 2.4 when processing projects of each specific type.
+**Why:** Loading all type-specific templates upfront wastes ~40,000-50,000 tokens. These templates will be loaded on-demand in Step 2.4 when processing projects of each specific type.
 
 **Only load them when needed:** When you encounter a project that needs SERVICE.TEMPLATE.md in Step 2.4, load it then. Not before.
+
+**Note:** PROJECT.TEMPLATE.md is loaded upfront because it's needed for ALL projects.
 
 **Calculate execution parameters:**
 - Max projects: `$2` (from command argument)
@@ -290,14 +308,106 @@ IF project.status is "stable":
 
 **Handle context files based on project status:**
 
+**IMPORTANT: Always create/update PROJECT.CLAUDE.md FIRST, then type-specific files.**
+
+**Step 2.4a: Create/Update PROJECT.CLAUDE.md**
+
+FOR ALL project statuses ("new", "updated", "stable"):
+
+IF project.status is "new":
+  - **Create new PROJECT.CLAUDE.md file: `{project.path}/PROJECT.CLAUDE.md`**
+  - Use PROJECT.TEMPLATE.md loaded in Phase 1
+  - **Extract and populate project metadata:**
+    - **Project Name:** From manifest (package.json name, Cargo.toml name, etc.) or directory name
+    - **Project Path:** Relative path from repository root (e.g., "./apps/user-service")
+    - **Version:** From manifest.version field
+    - **Status:** Detect using heuristics:
+      - Check for "deprecated" in README, package.json keywords
+      - Recent commits (< 1 month) = "active"
+      - Recent commits (< 6 months) = "stable"
+      - Older = "maintenance"
+      - Default: "active"
+    - **License:** From manifest.license field
+    - **Project Overview:** From manifest.description or README summary
+  - **Project Types & Technical Documentation:** Combine type description with documentation link
+    - For each type determined in Step 2.3, create one line with: type name, brief description, and @file link
+    - Format: `- **TYPE**: Brief description → @file ./TYPE.CLAUDE.md`
+    - Example: `- **SERVICE**: Backend REST API for user authentication → @file ./SERVICE.CLAUDE.md`
+  - **Documentation Links:**
+    - Check for README.md → add as `./README.md`
+    - Check for CHANGELOG.md → add if exists
+    - If neither README nor CHANGELOG found, remove "Project Documentation" subsection entirely
+    - Check for docs/ directory → add to "Additional Documentation" if exists
+    - Parse README for additional doc links (architecture docs, API docs, etc.)
+    - If no documentation found at all, remove entire "Documentation Links" section
+  - **Ownership & Team:**
+    - Parse CODEOWNERS file (if exists) for this project path
+    - Extract maintainers from package.json maintainers/contributors fields
+    - Extract contact info from package.json (bugs.url, repository.url, homepage)
+    - If no ownership information found at all, remove entire "Ownership & Team" section
+  - **Project Relationships:**
+    - **Depends On:** Analyze manifest dependencies, match to other projects in repo
+    - **Used By:** Find projects that depend on this one
+    - **Related:** Detect sibling/related projects (same parent dir, similar naming)
+    - For each relationship, add @file reference to their PROJECT.CLAUDE.md
+  - **Environments:**
+    - Parse .env.example, .env.sample for PORT or URLs
+    - Parse config files (config.js, config.json) for environment URLs
+    - Parse README for deployment URLs or badges
+    - Only include this section if URLs are detected, otherwise remove it
+  - Include metadata:
+    - Revision Date: current timestamp
+    - Last commit SHA built from: current HEAD commit (40-character full SHA)
+    - Template Version: (extract from PROJECT.TEMPLATE.md)
+    - Project Types: Array of types (e.g., ["SERVICE", "DATABASE"])
+
+IF project.status is "updated":
+  - **Read existing PROJECT.CLAUDE.md file**
+  - **CRITICAL: Identify and preserve user-added sections:**
+    1. Load PROJECT.TEMPLATE.md to know standard sections
+    2. Parse existing PROJECT.CLAUDE.md for all `##` level headings
+    3. Identify user-added sections (headings NOT in template)
+    4. Extract user-added content (full section until next `##` or `#`)
+  - **Update project metadata if changed:**
+    - Re-extract version, status, license from current manifest
+    - Update project types if changed (add/remove types)
+    - Update technical documentation links if types changed
+    - Re-scan for new documentation files
+    - Re-extract ownership information if changed
+    - Re-analyze project relationships (dependencies may have changed)
+    - Re-scan for environment URLs
+  - **CRITICAL: Preserve user-added sections:**
+    - Insert ALL user-added sections after "## Restricted Actions"
+    - Before "# Agent File Maintenance"
+    - Maintain exact heading text and content
+    - Preserve original order
+  - Update metadata:
+    - Revision Date: current timestamp
+    - Last commit SHA built from: current HEAD commit
+    - Keep Template Version unchanged
+    - Update Project Types array if types changed
+
+IF project.status is "stable":
+  - **Read existing PROJECT.CLAUDE.md file**
+  - Check if dependencies changed (affecting Project Relationships section)
+  - IF relationships need update:
+    - **CRITICAL: Preserve user-added sections** (same as "updated")
+    - Update only "Project Relationships" section
+    - Update metadata (Revision Date, commit SHA)
+  - ELSE:
+    - Do NOT modify PROJECT.CLAUDE.md
+    - Record existing file path for Phase 3 reference
+
+**Step 2.4b: Create/Update Type-Specific Context Files**
+
 IF project.status is "new":
   - FOR EACH type determined in Step 2.3:
     - **Load template for this TYPE if not already loaded:**
-      - SERVICE → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/SERVICE.TEMPLATE.md`
-      - CLIENT → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/CLIENT.TEMPLATE.md`
-      - DATABASE → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/DATABASE.TEMPLATE.md`
-      - LIBRARY → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/LIBRARY.TEMPLATE.md`
-      - IAC → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/IAC.TEMPLATE.md`
+      - SERVICE → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/SERVICE.TEMPLATE.md`
+      - CLIENT → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/CLIENT.TEMPLATE.md`
+      - DATABASE → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/DATABASE.TEMPLATE.md`
+      - LIBRARY → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/LIBRARY.TEMPLATE.md`
+      - IAC → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/IAC.TEMPLATE.md`
       - If already loaded in memory, reuse it
     - **Create new context file: `{project.path}/{TYPE}.CLAUDE.md`**
       - **CRITICAL**: The filename MUST be `{TYPE}.CLAUDE.md` where TYPE is SERVICE, CLIENT, DATABASE, LIBRARY, or IAC
@@ -459,11 +569,13 @@ After completing project:
      "status": "new|updated|stable",
      "types": ["SERVICE"],
      "contextFiles": [
+       {"type": "PROJECT", "path": "/full/path/to/repo/packages/project/PROJECT.CLAUDE.md"},
        {"type": "SERVICE", "path": "/full/path/to/repo/packages/project/SERVICE.CLAUDE.md"}
      ]
    }
    ```
    Note: Include status and types array for reference in Phase 3
+   Note: PROJECT.CLAUDE.md is ALWAYS first in contextFiles array, followed by type-specific files
 
 2. Update nextProject to next in action plan
 
@@ -541,25 +653,34 @@ IF CLAUDE.md already exists (updating, not creating new):
    - Synthesize notes from all projects into coherent content
    - Replace placeholder with synthesized content
 
-3. For project-type sections (Services, Clients, Libraries, Databases):
+3. For Projects section (NEW):
+   - List ALL projects (from completedProjects in progress file)
+   - Include projects with status "new", "updated", AND "stable"
+   - Do NOT include projects from removedProjects array
+   - Format: `- **Project Name**: @file ./path/to/PROJECT.CLAUDE.md`
+   - Order by priority/dependency (libraries first, services last) or alphabetically
+   - Each project appears once in this section
+
+4. For project-type sections (Services, Clients, Libraries, Databases, IAC):
    - List all CURRENT projects (from completedProjects in progress file)
    - Include projects with status "new", "updated", AND "stable"
    - Do NOT include projects from removedProjects array
    - Format: `- **Project Name**: @file ./path/to/TYPE.CLAUDE.md`
    - Group by type, alphabetically within each group
    - For projects with multiple types, list them in each relevant section
+   - **Important:** These sections reference TYPE-SPECIFIC files (SERVICE.CLAUDE.md, CLIENT.CLAUDE.md, etc.), NOT PROJECT.CLAUDE.md
 
-4. Handle removed projects:
+5. Handle removed projects:
    - Do NOT reference removed projects in CLAUDE.md
    - Their context files should be deleted or ignored
    - If needed, add note in discoveries about removed projects
 
-5. Update metadata section:
+6. Update metadata section:
    - Revision Date: current timestamp
    - Last commit SHA built from: current HEAD commit (40-character full SHA)
    - Template Version: (extract from template file)
 
-6. **CRITICAL: Preserve user-added sections (if updating existing file):**
+7. **CRITICAL: Preserve user-added sections (if updating existing file):**
    - After "## Restricted Actions" section
    - Before "# Agent File Maintenance" section
    - Insert ALL user-added sections that were identified above
@@ -567,7 +688,7 @@ IF CLAUDE.md already exists (updating, not creating new):
    - Maintain original order of user-added sections
    - Add blank line between each section
 
-7. Write CLAUDE.md to repository root
+8. Write CLAUDE.md to repository root
 
 **Example of preserved user section:**
 ```markdown

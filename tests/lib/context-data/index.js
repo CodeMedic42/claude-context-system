@@ -1,15 +1,15 @@
 const ClaudeData = require('./claude-data');
-const ServiceClaudeData = require('./service-claude-data');
-const ClientClaudeData = require('./client-claude-data');
-const LibraryClaudeData = require('./library-claude-data');
-const DatabaseClaudeData = require('./database-claude-data');
+const ServiceContextData = require('./service-claude-data');
+const ClientContextData = require('./client-claude-data');
+const LibraryContextData = require('./library-claude-data');
+const DatabaseContextData = require('./database-claude-data');
 const BaseData = require('./base-data');
 
 module.exports = {
   ClaudeData,
-  ServiceClaudeData,
-  ClientClaudeData,
-  LibraryClaudeData,
-  DatabaseClaudeData,
+  ServiceContextData,
+  ClientContextData,
+  LibraryContextData,
+  DatabaseContextData,
   BaseData,
 };

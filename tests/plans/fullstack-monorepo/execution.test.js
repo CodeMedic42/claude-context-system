@@ -18,43 +18,43 @@ describe('fullstack-monorepo:context', () => {
   const databaseSchemaData = contextData.getProjectContextData('./packages/database/DATABASE.CLAUDE.md');
 
   // Use common test functions for standard validation
-  testClaudeFile(contextData, { subContextFileCount: 4 });
-  testServiceFile(webServiceData);
-  testClientFile(webClientData);
-  testLibraryFile(databaseLibraryData);
-  testDatabaseFile(databaseSchemaData);
+  testClaudeFile(contextData, { techContextFileCount: 4, projectContextFileCount: 2 });
+  testServiceFile(webServiceData, '@monorepo/web API');
+  testClientFile(webClientData, '@monorepo/web Frontend');
+  testLibraryFile(databaseLibraryData, '@monorepo/database');
+  testDatabaseFile(databaseSchemaData, '@monorepo/database');
 
   describe('Custom Validation', () => {
     test('should have exactly 1 service file', () => {
-      const subcontexts = contextData.getSubcontextList();
+      const subcontexts = contextData.getTechnicalContextList();
       const serviceFiles = subcontexts.filter((sc) => sc.filePath.includes('SERVICE.CLAUDE.md'));
       expect(serviceFiles).toHaveLength(1);
     });
 
     test('should have exactly 1 client file', () => {
-      const subcontexts = contextData.getSubcontextList();
+      const subcontexts = contextData.getTechnicalContextList();
       const clientFiles = subcontexts.filter((sc) => sc.filePath.includes('CLIENT.CLAUDE.md'));
       expect(clientFiles).toHaveLength(1);
     });
 
     test('should have exactly 1 library file', () => {
-      const subcontexts = contextData.getSubcontextList();
+      const subcontexts = contextData.getTechnicalContextList();
       const libraryFiles = subcontexts.filter((sc) => sc.filePath.includes('LIBRARY.CLAUDE.md'));
       expect(libraryFiles).toHaveLength(1);
     });
 
     test('should have exactly 1 database file', () => {
-      const subcontexts = contextData.getSubcontextList();
+      const subcontexts = contextData.getTechnicalContextList();
       const databaseFiles = subcontexts.filter((sc) => sc.filePath.includes('DATABASE.CLAUDE.md'));
       expect(databaseFiles).toHaveLength(1);
     });
 
     test('should have Services and APIs section in CLAUDE.md', () => {
-      expect(contextData.hasSection('Services and APIs')).toBe(true);
+      expect(contextData.hasSection('Services and APIs [services] [apis] [backend]')).toBe(true);
     });
 
     test('should have User Interaction Clients section in CLAUDE.md', () => {
-      expect(contextData.hasSection('User Interaction Clients')).toBe(true);
+      expect(contextData.hasSection('User Interaction Clients [clients] [frontend] [ui]')).toBe(true);
     });
 
     test('should have Libraries and Plugins section in CLAUDE.md', () => {
@@ -62,11 +62,11 @@ describe('fullstack-monorepo:context', () => {
     });
 
     test('should have Databases section in CLAUDE.md', () => {
-      expect(contextData.hasSection('Databases')).toBe(true);
+      expect(contextData.hasSection('Databases [databases] [data] [schema]')).toBe(true);
     });
 
     test('web project should have both SERVICE and CLIENT files in same directory', () => {
-      const subcontexts = contextData.getSubcontextList();
+      const subcontexts = contextData.getTechnicalContextList();
       const webService = subcontexts.find((sc) => sc.filePath.includes('packages/web') && sc.filePath.includes('SERVICE'));
       const webClient = subcontexts.find((sc) => sc.filePath.includes('packages/web') && sc.filePath.includes('CLIENT'));
 
@@ -78,7 +78,7 @@ describe('fullstack-monorepo:context', () => {
     });
 
     test('database project should have both LIBRARY and DATABASE files in same directory', () => {
-      const subcontexts = contextData.getSubcontextList();
+      const subcontexts = contextData.getTechnicalContextList();
       const dbLibrary = subcontexts.find((sc) => sc.filePath.includes('packages/database') && sc.filePath.includes('LIBRARY'));
       const dbSchema = subcontexts.find((sc) => sc.filePath.includes('packages/database') && sc.filePath.includes('DATABASE'));
 

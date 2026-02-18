@@ -8,6 +8,6 @@ describe('small-monorepo:context', () => {
 
   // Test CLAUDE.md
   testClaudeFile(contextData, {
-    subContextFileCount: 5,
+    techContextFileCount: 5,
   });
 });

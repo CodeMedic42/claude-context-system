@@ -6,7 +6,7 @@ const { testMetadata, testContentQuality, hasSectionMatching } = require('./base
 
 /**
  * Test client.claude.md file
- * @param {ClientClaudeData} clientData - ClientClaudeData instance
+ * @param {ClientContextData} clientData - ClientContextData instance
  */
 function testClientFile(clientData, title) {
   if (!clientData) {

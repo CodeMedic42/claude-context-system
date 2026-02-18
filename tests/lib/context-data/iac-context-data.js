@@ -1,16 +1,16 @@
 const BaseData = require('./base-data');
 
 /**
- * Data class for service.claude.md files
+ * Data class for client.claude.md files
  */
-class ServiceClaudeData extends BaseData {
+class IACContextData extends BaseData {
   constructor(filePath, projectName) {
     super(filePath);
     this.projectName = projectName;
   }
 
   /**
-   * Get the project name this service belongs to
+   * Get the project name this client belongs to
    * @returns {string}
    */
   getProjectName() {
@@ -18,19 +18,16 @@ class ServiceClaudeData extends BaseData {
   }
 
   /**
-   * Get required sections for a service file
+   * Get required sections for a client file
    * Sections with '*' wildcard match any text after the prefix
    * @returns {string[]}
    */
   getRequiredSections(title) {
     // Method accesses instance for potential future customization per project
     return this.projectName ? [
-      `Service Context: ${title}`,
-      'Service Overview [overview] [summary]',
-      'API Endpoints [api] [endpoints] [routes]',
-      'Agent File Metadata [metadata] [tracking]',
+      `IAC Context: ${title}`,
     ] : [];
   }
 }
 
-module.exports = ServiceClaudeData;
+module.exports = IACContextData;

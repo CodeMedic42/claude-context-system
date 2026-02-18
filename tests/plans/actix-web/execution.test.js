@@ -8,6 +8,6 @@ describe('actix-web:context', () => {
 
   // Test CLAUDE.md
   testClaudeFile(contextData, {
-    subContextFileCount: 3, // Only 3 projects are identified by ctx-prepare
+    techContextFileCount: 3, // Only 3 projects are identified by ctx-prepare
   });
 });

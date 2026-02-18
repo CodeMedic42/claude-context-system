@@ -6,7 +6,7 @@ const { testMetadata, testContentQuality, hasSectionMatching } = require('./base
 
 /**
  * Test database.claude.md file
- * @param {DatabaseClaudeData} databaseData - DatabaseClaudeData instance
+ * @param {DatabaseContextData} databaseData - DatabaseContextData instance
  */
 function testDatabaseFile(databaseData, title) {
   if (!databaseData) {

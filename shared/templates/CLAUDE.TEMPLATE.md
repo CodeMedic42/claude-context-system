@@ -22,6 +22,21 @@
 - **Common patterns**: ~:Describe any architectural patterns used across projects - e.g., "All services use layered architecture", "Shared libraries in /packages":~
 - **Naming conventions**: ~:Describe file/folder naming conventions:~
 
+## Projects [projects] [overview]
+
+~:List all projects in this repository with @file references to their PROJECT.CLAUDE.md files:~
+
+- **~:Project Name:~**: @file ./path/to/PROJECT.CLAUDE.md
+
+~:Examples::~
+- **User Management Service**: @file ./apps/user-service/PROJECT.CLAUDE.md
+- **Admin Dashboard**: @file ./apps/admin-dashboard/PROJECT.CLAUDE.md
+- **Shared Utilities Library**: @file ./packages/utils/PROJECT.CLAUDE.md
+- **Payment Database Schema**: @file ./database/payment/PROJECT.CLAUDE.md
+- **AWS Infrastructure**: @file ./infrastructure/aws/PROJECT.CLAUDE.md
+
+~:Each PROJECT.CLAUDE.md file contains project metadata, business context, documentation links, and references to type-specific technical documentation (SERVICE, CLIENT, LIBRARY, DATABASE, IAC).:~
+
 ## Services and APIs [services] [apis] [backend]
 
 ~:List all backend services with @file references to their context files:~

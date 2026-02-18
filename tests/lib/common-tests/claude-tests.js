@@ -12,7 +12,8 @@ const { testMetadata, testContentQuality } = require('./base-tests');
  */
 function testClaudeFile(claudeData, expectedConfiguration) {
   const {
-    subContextFileCount,
+    techContextFileCount,
+    projectContextFileCount,
   } = expectedConfiguration;
 
   if (!claudeData) {
@@ -70,9 +71,14 @@ function testClaudeFile(claudeData, expectedConfiguration) {
     });
 
     describe('Subcontext Files', () => {
-      test(`should have exactly ${subContextFileCount} subcontext file(s)`, () => {
-        const subcontexts = claudeData.getSubcontextList();
-        expect(subcontexts.length).toBe(subContextFileCount);
+      test(`should have exactly ${projectContextFileCount} project context file(s)`, () => {
+        const projectContexts = claudeData.getProjectContextList();
+        expect(projectContexts.length).toBe(projectContextFileCount);
+      });
+
+      test(`should have exactly ${techContextFileCount} technical context file(s)`, () => {
+        const subcontexts = claudeData.getTechnicalContextList();
+        expect(subcontexts.length).toBe(techContextFileCount);
       });
     });
   });

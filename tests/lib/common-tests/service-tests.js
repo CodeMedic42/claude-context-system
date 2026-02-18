@@ -6,14 +6,14 @@ const { testMetadata, testContentQuality, hasSectionMatching } = require('./base
 
 /**
  * Test service.claude.md file
- * @param {ServiceClaudeData} serviceData - ServiceClaudeData instance
+ * @param {ServiceContextData} serviceData - ServiceContextData instance
  */
 function testServiceFile(serviceData, title) {
   if (!serviceData) {
     throw new Error('serviceData is required - file may not exist');
   }
 
-  describe(`Service File: ${serviceData.getProjectName()}`, () => {
+  describe(`Service File: ${serviceData.getContextFilePath()}`, () => {
     describe('Required Sections', () => {
       const requiredSections = serviceData.getRequiredSections(title);
 
