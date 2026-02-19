@@ -5,6 +5,7 @@ const {
   testClaudeFile,
   testServiceFile,
   testClientFile,
+  testProjectFile,
 } = require('../../lib/common-tests');
 
 describe('dotnet-update:context', () => {
@@ -13,15 +14,23 @@ describe('dotnet-update:context', () => {
   // Test CLAUDE.md
   testClaudeFile(contextData, {
     techContextFileCount: 2,
+    projectContextFileCount: 2,
   });
 
   // Test service.claude.md
   const serviceData = contextData.getProjectContextData('./Service.Api/SERVICE.CLAUDE.md');
-  testServiceFile(serviceData, 'Calculator API Service');
+  testServiceFile(serviceData, 'Service.Api');
 
   // Test client.claude.md
   const clientData = contextData.getProjectContextData('./Service.Cli/CLIENT.CLAUDE.md');
-  testClientFile(clientData, 'Calculator CLI Client');
+  testClientFile(clientData, 'Service.Cli');
+
+  // Test PROJECT.CLAUDE.md files
+  const serviceProjectData = contextData.getProjectContextData('./Service.Api/PROJECT.CLAUDE.md');
+  testProjectFile(serviceProjectData, 'Service.Api');
+
+  const clientProjectData = contextData.getProjectContextData('./Service.Cli/PROJECT.CLAUDE.md');
+  testProjectFile(clientProjectData, 'Service.Cli');
 
   // Custom tests for manual content preservation
   describe('Manual Content Preservation', () => {
