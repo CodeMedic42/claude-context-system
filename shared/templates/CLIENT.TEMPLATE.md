@@ -1,4 +1,4 @@
-# Client Context: ~:Client Name:~
+# Client Context: ~:Project Name:~
 
 ## Client Overview [overview] [summary]
 ~:Provide a clear description of what this client does, its primary purpose, and who uses it:~
@@ -174,24 +174,12 @@
 - **Accessibility features**: ~:Screen reader support, keyboard navigation, ARIA labels:~
 - **Testing approach**: ~:How accessibility is tested:~
 
-## Deployment [deployment] [release] [ci-cd]
+## Build for Production [build] [production]
 
-### Build for Production [build] [production] [deployment]
-~:Steps to build for production:~
-- **Production build**: ~:Command to create production build:~
+~:Commands to build for production:~
+- **Production build command**: ~:Command to create production build:~
+- **Build output**: ~:Where build artifacts are created:~
 - **Build verification**: ~:How to verify the build is correct:~
-
-### Deployment Process [deployment] [release] [process]
-~:Describe deployment approach:~
-- **Deployment target**: ~:Where the client is deployed - CDN, app stores, etc.:~
-- **Deployment command**: ~:If applicable, command or process for deployment:~
-- **CI/CD**: ~:If applicable, describe CI/CD pipeline:~
-
-### Release Process [release] [versioning] [distribution]
-~:For mobile/desktop apps, describe release process:~
-- **Version management**: ~:How versions are managed:~
-- **Release channels**: ~:e.g., "App Store", "Google Play", "TestFlight", "beta channels":~
-- **Update mechanism**: ~:How users receive updates:~
 
 ## Documentation [documentation] [reference]
 ~:Links to additional documentation specific to this client:~

@@ -15,6 +15,7 @@ const testServiceFile = require('./service-tests');
 const testClientFile = require('./client-tests');
 const testLibraryFile = require('./library-tests');
 const testDatabaseFile = require('./database-tests');
+const testProjectFile = require('./project-tests');
 const {
   testMetadata,
   testContentQuality,
@@ -39,6 +40,7 @@ module.exports = {
   testClientFile,
   testLibraryFile,
   testDatabaseFile,
+  testProjectFile,
 
   // Base test functions and validators
   testMetadata,

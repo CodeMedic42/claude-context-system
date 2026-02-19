@@ -2,6 +2,7 @@ const { ClaudeData } = require('../../lib/context-data');
 const {
   testClaudeFile,
   testLibraryFile,
+  testProjectFile,
 } = require('../../lib/common-tests');
 
 describe('library-package:context', () => {
@@ -10,11 +11,16 @@ describe('library-package:context', () => {
   // Test CLAUDE.md
   testClaudeFile(contextData, {
     techContextFileCount: 1,
+    projectContextFileCount: 1,
   });
 
   // Test library.claude.md
   const libraryData = contextData.getProjectContextData('./LIBRARY.CLAUDE.md');
   testLibraryFile(libraryData, '@test/utility-library');
+
+  // Test PROJECT.CLAUDE.md
+  const projectData = contextData.getProjectContextData('./PROJECT.CLAUDE.md');
+  testProjectFile(projectData, '@test/utility-library');
 
   // Custom tests specific to this test plan
   describe('Custom Validation', () => {
@@ -46,6 +52,22 @@ describe('library-package:context', () => {
 
     test('should NOT have User Interaction Clients section in CLAUDE.md', () => {
       expect(contextData.hasSection('User Interaction Clients')).toBe(false);
+    });
+
+    test('should have exactly 1 project file', () => {
+      const projectContexts = contextData.getProjectContextList();
+      expect(projectContexts).toHaveLength(1);
+    });
+
+    test('project should reference LIBRARY type', () => {
+      const types = projectData.getProjectTypes();
+      expect(types).toContain('LIBRARY');
+      expect(types).toHaveLength(1);
+    });
+
+    test('project @file reference should point to LIBRARY.CLAUDE.md', () => {
+      const refs = projectData.getTypeFileReferences();
+      expect(refs).toContain('./LIBRARY.CLAUDE.md');
     });
   });
 });

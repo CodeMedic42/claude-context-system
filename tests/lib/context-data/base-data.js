@@ -79,25 +79,26 @@ class BaseData {
       return;
     }
 
-    // Extract metadata fields (handle both plain and bold markdown formatting)
+    // Extract metadata fields with strict format matching template:
+    // Format: "- Field Name: value" (dash, space, no bold, colon, space, value)
     const revisionDateMatch = metadataSection.match(
-      /\*\*Revision Date\*\*:\s*(.+)|Revision Date:\s*(.+)/,
+      /^-\s+Revision Date:\s+(.+)$/m,
     );
     const commitShaMatch = metadataSection.match(
-      /\*\*Last commit SHA built from\*\*:\s*([a-f0-9]+)|Last commit SHA built from:\s*([a-f0-9]+)/,
+      /^-\s+Last commit SHA built from:\s+([a-f0-9]{40})$/m,
     );
     const templateVersionMatch = metadataSection.match(
-      /\*\*Template Version\*\*:\s*([\d.]+)|Template Version:\s*([\d.]+)/,
+      /^-\s+Template Version:\s+([\d.]+)$/m,
+    );
+    const projectTypesMatch = metadataSection.match(
+      /^-\s+Project Types:\s+(\[.+\])$/m,
     );
 
     this.metadata = {
-      revisionDate: revisionDateMatch
-        ? (revisionDateMatch[1] || revisionDateMatch[2]).trim()
-        : null,
-      commitSha: commitShaMatch ? (commitShaMatch[1] || commitShaMatch[2]).trim() : null,
-      templateVersion: templateVersionMatch
-        ? (templateVersionMatch[1] || templateVersionMatch[2]).trim()
-        : null,
+      revisionDate: revisionDateMatch ? revisionDateMatch[1].trim() : null,
+      commitSha: commitShaMatch ? commitShaMatch[1].trim() : null,
+      templateVersion: templateVersionMatch ? templateVersionMatch[1].trim() : null,
+      projectTypes: projectTypesMatch ? JSON.parse(projectTypesMatch[1]) : null,
     };
   }
 
@@ -165,6 +166,14 @@ class BaseData {
    */
   getTemplateVersion() {
     return this.metadata.templateVersion;
+  }
+
+  /**
+   * Get project types array (only present in PROJECT.CLAUDE.md files)
+   * @returns {string[]|null}
+   */
+  getProjectTypes() {
+    return this.metadata.projectTypes;
   }
 }
 

@@ -1,4 +1,4 @@
-# Service Context: ~:Service Name:~
+# Service Context: ~:Project Name:~
 
 ## Service Overview [overview] [summary]
 ~:Provide a clear description of what this service does, its primary responsibilities, and its role in the overall system:~
@@ -137,17 +137,13 @@
 ### Configuration Files [configuration] [files]
 ~:List configuration files and their purposes:~
 
-## Build and Deployment [build] [deployment] [ci-cd]
-~:Describe how to build and deploy this service:~
+## Build and Development [build] [development] [local]
 
 ### Build Process [build] [compilation]
 ~:Commands needed to build the service:~
 
 ### Run Locally [development] [local] [setup]
 ~:Commands and steps to run the service locally:~
-
-### Deployment [deployment] [release] [ci-cd]
-~:Brief overview of deployment process, environments, CI/CD:~
 
 ## Documentation [documentation] [reference]
 ~:Links to additional documentation specific to this service:~

@@ -6,6 +6,7 @@ const {
   testClientFile,
   testLibraryFile,
   testDatabaseFile,
+  testProjectFile,
 } = require('../../lib/common-tests');
 
 describe('fullstack-monorepo:context', () => {
@@ -16,13 +17,17 @@ describe('fullstack-monorepo:context', () => {
   const webClientData = contextData.getProjectContextData('./packages/web/CLIENT.CLAUDE.md');
   const databaseLibraryData = contextData.getProjectContextData('./packages/database/LIBRARY.CLAUDE.md');
   const databaseSchemaData = contextData.getProjectContextData('./packages/database/DATABASE.CLAUDE.md');
+  const webProjectData = contextData.getProjectContextData('./packages/web/PROJECT.CLAUDE.md');
+  const databaseProjectData = contextData.getProjectContextData('./packages/database/PROJECT.CLAUDE.md');
 
   // Use common test functions for standard validation
   testClaudeFile(contextData, { techContextFileCount: 4, projectContextFileCount: 2 });
-  testServiceFile(webServiceData, '@monorepo/web API');
-  testClientFile(webClientData, '@monorepo/web Frontend');
+  testServiceFile(webServiceData, '@monorepo/web');
+  testClientFile(webClientData, '@monorepo/web');
   testLibraryFile(databaseLibraryData, '@monorepo/database');
   testDatabaseFile(databaseSchemaData, '@monorepo/database');
+  testProjectFile(webProjectData, '@monorepo/web');
+  testProjectFile(databaseProjectData, '@monorepo/database');
 
   describe('Custom Validation', () => {
     test('should have exactly 1 service file', () => {
@@ -87,6 +92,34 @@ describe('fullstack-monorepo:context', () => {
 
       // Both should be in packages/database/
       expect(path.dirname(dbLibrary.filePath)).toBe(path.dirname(dbSchema.filePath));
+    });
+
+    // Project file validations
+    test('should have exactly 2 project files', () => {
+      const projectContexts = contextData.getProjectContextList();
+      expect(projectContexts).toHaveLength(2);
+    });
+
+    test('web project should reference SERVICE and CLIENT types', () => {
+      const types = webProjectData.getProjectTypes();
+      expect(types).toContain('SERVICE');
+      expect(types).toContain('CLIENT');
+    });
+
+    test('database project should reference LIBRARY and DATABASE types', () => {
+      const types = databaseProjectData.getProjectTypes();
+      expect(types).toContain('LIBRARY');
+      expect(types).toContain('DATABASE');
+    });
+
+    test('project @file references should point to existing technical files', () => {
+      const webRefs = webProjectData.getTypeFileReferences();
+      expect(webRefs).toContain('./SERVICE.CLAUDE.md');
+      expect(webRefs).toContain('./CLIENT.CLAUDE.md');
+
+      const dbRefs = databaseProjectData.getTypeFileReferences();
+      expect(dbRefs).toContain('./LIBRARY.CLAUDE.md');
+      expect(dbRefs).toContain('./DATABASE.CLAUDE.md');
     });
   });
 });

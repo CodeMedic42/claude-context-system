@@ -35,8 +35,8 @@ describe('library-package:preparation', () => {
     });
 
     describe('Progress', () => {
-      test('next project should be utility-library', () => {
-        expect(progress.getNextProject()).toBe('utility-library');
+      test('next project should be @test/utility-library', () => {
+        expect(progress.getNextProject()).toBe('@test/utility-library');
       });
     });
   });

@@ -2,8 +2,7 @@
 
 ## Repository Overview [overview] [summary]
 
-DotnetCalculator is a demonstration .NET solution showcasing a simple REST API architecture with a shared library. The solution consists of a calculator service that exposes HTTP endpoints for mathematical operations, leveraging a shared mathematical operations library. This serves as an example of clean separation between API controllers and reusable business logic in a .NET environment.
-
+The DotNet Calculator is a simple .NET solution demonstrating a REST API with a shared library. It consists of a backend service providing calculator endpoints and a shared mathematical operations library.
 ## Team Members
 
 - Alice Johnson (Lead Developer)
@@ -12,182 +11,121 @@ DotnetCalculator is a demonstration .NET solution showcasing a simple REST API a
 
 ## High-Level Repository Information [metadata] [technologies]
 
-- **Project Types**: ASP.NET Core Web API service, .NET Class Library
+- **Project Types**: ASP.NET Core Web API, .NET class library
 - **Languages**: C# (.NET 8.0)
 - **Frameworks/Libraries**:
-  - ASP.NET Core 8.0 - Web API framework
-  - Swashbuckle.AspNetCore - Swagger/OpenAPI documentation
-  - Microsoft.Extensions.Logging - Structured logging
+  - ASP.NET Core (Web API framework)
+  - Swashbuckle.AspNetCore (Swagger/OpenAPI documentation)
+  - Microsoft.Extensions.Logging (structured logging)
 
 ## Repository Structure [structure] [organization]
 
 ```
-dotnet-update/
-├── .git/                       # Git repository data
-├── DotnetCalculator.sln       # Visual Studio solution file
-├── README.md                  # Project documentation with API examples
-├── Service.Api/               # REST API service project
-│   ├── Service.Api.csproj     # Project file (.NET 8.0 Web SDK)
-│   ├── Program.cs             # Application entry point and configuration
-│   ├── service.claude.md      # Service-specific context documentation
-│   └── Controllers/           # API controllers
-│       └── CalculateController.cs  # Calculator endpoint controller
-└── Shared.Library/            # Shared mathematical operations library
-    ├── Shared.Library.csproj  # Class library project file
-    ├── Calculator.cs          # Static calculator class with operations
-    └── library.claude.md      # Library-specific context documentation
+DotnetCalculator/
+├── .gitignore                          # Git ignore patterns
+├── DotnetCalculator.sln                # Solution file
+├── README.md                           # Project documentation
+├── Service.Api/                        # REST API service
+│   ├── Controllers/                    # API controllers
+│   │   └── CalculateController.cs      # Calculator endpoints
+│   ├── Program.cs                      # Application startup
+│   └── Service.Api.csproj              # Project file
+└── Shared.Library/                     # Shared library
+    ├── Calculator.cs                   # Math operations
+    └── Shared.Library.csproj           # Project file
 ```
 
 ## Code Organization Patterns [architecture] [patterns]
 
-- **Architecture**: Simple solution with service and shared library pattern
+- **Architecture**: Solution with multiple projects - one service and one shared library
 - **Project organization**:
-  - `Service.Api/` - ASP.NET Core Web API providing calculator endpoints
-  - `Shared.Library/` - Reusable class library with mathematical operations
-  - Solution file at root coordinates both projects
+  - Service.Api/ - ASP.NET Core Web API providing REST endpoints
+  - Shared.Library/ - Reusable class library with mathematical operations
 - **Common patterns**:
-  - Controller-based routing with attribute routing (`[Route]`, `[HttpPost]`)
-  - Dependency injection for framework services (ILogger)
-  - Strongly-typed request/response DTOs
-  - Static utility classes for stateless operations
+  - Service uses MVC pattern with controllers
+  - Shared library provides static utility methods
   - Project references for internal dependencies
 - **Naming conventions**:
-  - PascalCase for namespaces, classes, and public members
-  - camelCase for parameters and local variables
-  - Project folders match project names (PascalCase with dots)
-  - Controller files end with "Controller" suffix
+  - Projects use PascalCase with dot notation (e.g., Service.Api, Shared.Library)
+  - Namespaces match project names
+
+## Projects [projects] [overview]
+
+- **Service.Api**: @file ./Service.Api/PROJECT.CLAUDE.md
+- **Shared.Library**: @file ./Shared.Library/PROJECT.CLAUDE.md
 
 ## Services and APIs [services] [apis] [backend]
 
-- **Calculator API Service**: @file ./Service.Api/service.claude.md
+- **Service.Api**: @file ./Service.Api/SERVICE.CLAUDE.md
 
 ## Libraries and Plugins [libraries] [packages] [reusable]
 
-- **Shared.Library (Mathematical Operations)**: @file ./Shared.Library/library.claude.md
+- **Shared.Library**: @file ./Shared.Library/LIBRARY.CLAUDE.md
 
 ## Environment Setup [setup] [environment] [prerequisites]
 
 ### Prerequisites [prerequisites] [requirements]
 
-**Required:**
-- .NET 8.0 SDK or later
-- A code editor (Visual Studio 2022, Visual Studio Code, or JetBrider Rider recommended)
-
-**Optional:**
-- Git for version control
-- Postman, curl, or similar tool for API testing (alternatively use Swagger UI)
+- **.NET 8.0 SDK**: Required for building and running the application
+- **IDE**: Visual Studio 2022, VS Code with C# extension, or Rider (optional but recommended)
 
 ### System Configuration [configuration] [environment] [setup]
 
-No special environment variables or system paths required beyond having the .NET 8.0 SDK in your PATH.
+No special environment variables or system paths are required for basic usage.
 
 ### External Dependencies [dependencies] [external] [services]
 
-No external services, databases, or programs need to be running. This is a self-contained stateless service.
+None required. The application runs standalone without external databases or services.
 
 ## Running the Application Locally [development] [local] [setup]
 
 ### 1. Environment Setup [setup] [installation]
 
 ```bash
-# Navigate to the repository root
-cd dotnet-update
-
-# Restore dependencies for all projects
+# From repository root
 dotnet restore
-
-# Build the entire solution
 dotnet build
 ```
 
-### 2. Run the Service
+To run the service:
 
 ```bash
-# Navigate to the service directory
 cd Service.Api
-
-# Run the service
 dotnet run
 ```
 
 The API will be available at:
 - **HTTPS**: https://localhost:5001
 - **HTTP**: http://localhost:5000
-- **Swagger UI**: https://localhost:5001/swagger (Development environment only)
-
-### 3. Test the API
-
-**Using Swagger UI:**
-Navigate to https://localhost:5001/swagger and use the interactive interface.
-
-**Using curl:**
-```bash
-curl -X POST https://localhost:5001/calculate/add \
-  -H "Content-Type: application/json" \
-  -d '{"value1": 5, "value2": 3}'
-```
-
-**Expected Response:**
-```json
-{
-  "result": 8
-}
-```
+- **Swagger UI**: https://localhost:5001/swagger (in Development mode)
 
 ## Repository Verification [testing] [verification] [quality]
 
 ### Unit Tests [testing] [unit-tests]
 
-Currently, no test projects are configured in the solution. To add tests:
-
 ```bash
-# Create a test project (from repository root)
-dotnet new xunit -n Service.Api.Tests
-dotnet sln add Service.Api.Tests/Service.Api.Tests.csproj
-cd Service.Api.Tests
-dotnet add reference ../Service.Api/Service.Api.csproj
-
-# Run tests (once created)
 dotnet test
 ```
 
-Recommended test structure:
-- `Service.Api.Tests/` - Unit tests for the API controllers
-- `Shared.Library.Tests/` - Unit tests for mathematical operations
+Note: No tests are currently implemented in this solution.
 
 ### Linting and Code Style [linting] [code-quality] [style]
 
-Standard .NET analyzers are enabled by default in .NET 8.0 projects.
+Standard .NET code style conventions apply. Use:
 
-```bash
-# Build with warnings as errors to enforce code quality
-dotnet build /p:TreatWarningsAsErrors=true
-
-# Check for code style issues
-dotnet format --verify-no-changes
-```
-
-To format code automatically:
 ```bash
 dotnet format
 ```
 
 ## Documentation [documentation] [reference]
 
-**Key documentation files:**
-- `README.md` - Main repository documentation with API endpoint examples
-- `Service.Api/service.claude.md` - Detailed context for the Calculator API service
-- `Shared.Library/library.claude.md` - Detailed context for the mathematical operations library
-
-**When to update documentation:**
-- When adding new API endpoints, update `Service.Api/service.claude.md` and `README.md`
-- When adding new mathematical operations, update `Shared.Library/library.claude.md`
-- When changing the solution structure, update this `claude.md` file
-- When modifying build or deployment processes, update relevant context files
+- **README.md**: Main repository documentation describing the project structure and API endpoints
+- Keep README.md updated when adding new endpoints or changing the API structure
+- Swagger/OpenAPI documentation is automatically generated and available at /swagger when running in Development mode
 
 ## Restricted Actions [security] [restrictions] [policies]
 
-*(This section is intentionally left blank for the user to fill in with project-specific restrictions)*
+
 
 # Agent File Maintenance [metadata] [maintenance]
 
@@ -195,6 +133,9 @@ No LLM/AI/Agent may make changes to this file outside of the claude-context-syst
 
 # Agent File Metadata [metadata] [tracking]
 
-- Revision Date: 2026-01-09T22:05:00Z
-- Last commit SHA built from: c643e25aed1a0e80acf49197d3072448b6e101f5
+- Revision Date: 2026-02-19T00:00:00.000Z
+- Last commit SHA built from: 0d63ad91f84901483b6a233cae73d56ad576aa5c
 - Template Version: 2.1.0
+- Last generated by: /ctx-execute command
+- Total projects: 2 (1 library, 1 service)
+- Generation status: Complete

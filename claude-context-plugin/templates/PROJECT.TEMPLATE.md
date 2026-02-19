@@ -4,12 +4,9 @@
 ~:Provide a clear description of what this project does, its primary purpose, and its role in the overall system:~
 
 ## Project Metadata [metadata] [identity]
-~:Basic project identification information:~
+~:Basic project identification for navigation:~
 - **Project Name**: ~:Official project name from manifest (package.json, Cargo.toml, etc.):~
 - **Project Path**: ~:Relative path from repository root:~
-- **Version**: ~:Current version from manifest:~
-- **Status**: ~:Project status: active, stable, maintenance, deprecated, or archived:~
-- **License**: ~:License from manifest (e.g., MIT, Apache-2.0, proprietary):~
 
 ## Project Types & Technical Documentation [types] [technical] [documentation]
 
@@ -48,23 +45,6 @@
 ~:Only include documentation links that can be automatically detected (README, CHANGELOG, docs/ directories, etc.). Remove lines for documentation that doesn't exist.:~
 ~:If no documentation is found at all, remove the entire "Documentation Links" section.:~
 
-## Ownership & Team [ownership] [team] [contacts]
-
-~:Information about who owns and maintains this project:~
-
-### Team Information [team] [ownership]
-~:Team and ownership details::~
-- **Owning Team**: ~:Team name from CODEOWNERS or package.json:~
-- **Primary Maintainers**: ~:Names, emails, or GitHub handles from package.json maintainers/contributors:~
-
-### Contact Information [contact] [communication]
-~:How to contact the team::~
-- **Repository Issues**: ~:Link to GitHub/GitLab issues:~
-- **Contact Method**: ~:Extracted from package.json homepage, bugs.url, or repository.url:~
-
-~:Only include information that can be automatically extracted from manifest files, CODEOWNERS, or git configuration. Remove lines that cannot be auto-populated.:~
-~:If no ownership information can be found at all (no CODEOWNERS, no maintainers, no contact info), remove the entire "Ownership & Team" section.:~
-
 ## Project Relationships [relationships] [dependencies]
 
 ~:How this project relates to other projects in the repository:~
@@ -90,17 +70,12 @@
 
 ~:Remove this subsection if there are no related projects:~
 
-## Environments [environments] [deployment] [urls]
+## Development Environment [development] [local] [testing]
 
-~:Where this project runs or can be accessed:~
+~:Local development URL for testing (if detected):~
+- **Development URL**: ~:Local development URL (e.g., http://localhost:3000):~
 
-### Environment URLs [urls] [endpoints]
-~:Detected URLs from configuration files, README, or code::~
-- **Production**: ~:Production URL if detected:~
-- **Staging**: ~:Staging URL if detected:~
-- **Development**: ~:Local development URL (e.g., http://localhost:3000):~
-
-~:Only include environment URLs that can be automatically detected from config files, .env.example files, README badges, or code. Remove this entire section if no URLs are detected.:~
+~:Only include if a development URL can be automatically detected from .env.example, config files, or README. Remove this entire section if no development URL is detected.:~
 
 ## Restricted Actions [security] [restrictions] [policies]
 

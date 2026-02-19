@@ -1,4 +1,4 @@
-# Library Context: ~:Library Name:~
+# Library Context: ~:Project Name:~
 
 ## Template Usage Guidelines [guidelines] [instructions]
 
@@ -489,11 +489,6 @@ Another example showing:
 ~:Patterns to ensure safe usage:~
 - ~:Pattern 1:~
 - ~:Pattern 2:~
-
-## Maintenance Status [maintenance] [status] [support]
-~:Current maintenance status:~
-- **Status**: ~:e.g., "Actively maintained", "Maintenance mode", "Stable", "Deprecated":~
-- **Maintainers**: ~:Who maintains this library - DELETE this line if not public information:~
 
 ## Restricted Actions [security] [restrictions] [policies]
 ~:Define actions that AI agents should NOT perform when working with this library:~

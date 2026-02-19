@@ -64,12 +64,10 @@ class ClaudeData extends BaseData {
 
       // Only process if file exists
       if (fs.existsSync(absolutePath)) {
-        // Extract project name from path
+        // Extract project name from path (parent directory of the file)
         // (e.g., "./Service.Api/service.claude.md" -> "Service.Api")
-        const pathParts = relativePath.split('/');
-        const projectName = pathParts.length > 1
-          ? pathParts[1]
-          : path.basename(path.dirname(relativePath));
+        // (e.g., "./packages/web/PROJECT.CLAUDE.md" -> "web")
+        const projectName = path.basename(path.dirname(absolutePath));
 
         // Create appropriate sub-context instance based on filename
         let techContext = null;
@@ -100,13 +98,15 @@ class ClaudeData extends BaseData {
   }
 
   /**
-   * Get a sub-context by file path
+   * Get a sub-context by file path (checks both technical and project contexts)
    * @param {string} filePath - Relative file path
-   *   (e.g., "./LIBRARY.CLAUDE.md" or "./Service.Api/service.claude.md")
+   *   (e.g., "./LIBRARY.CLAUDE.md", "./Service.Api/service.claude.md", or "./PROJECT.CLAUDE.md")
    * @returns {BaseData|null} Sub-context instance or null if not found
    */
   getProjectContextData(filePath) {
-    return this.technicalContextsByPath.get(filePath) || null;
+    return this.technicalContextsByPath.get(filePath)
+      || this.projectContextsByPath.get(filePath)
+      || null;
   }
 
   /**

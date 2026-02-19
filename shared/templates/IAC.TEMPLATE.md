@@ -1,4 +1,4 @@
-# Infrastructure as Code Context: ~:Infrastructure Name:~
+# Infrastructure as Code Context: ~:Project Name:~
 
 ## Infrastructure Overview [overview] [summary]
 ~:Provide a clear description of what infrastructure this code defines, its purpose, and what resources it manages:~
@@ -7,8 +7,6 @@
 ~:Specify the infrastructure platform and tools used:~
 - **Platform**: ~:e.g., AWS, Azure, GCP, On-premise, Multi-cloud:~
 - **IaC Tool**: ~:e.g., Terraform, CloudFormation, Pulumi, Ansible, ARM Templates, CDK:~
-- **Tool Version**: ~:Version of the IaC tool being used:~
-- **Provider Version**: ~:Version of the cloud provider plugin/SDK:~
 
 ## Technologies [technologies] [stack]
 ~:List key technologies, frameworks, and tools used in this infrastructure code:~
@@ -77,19 +75,11 @@
 
 ## Deployment Patterns [deployment] [provisioning] [workflow]
 
-### Deployment Process [deployment] [process] [workflow]
 ~:Describe how infrastructure is deployed:~
 - **Deployment workflow**: ~:Steps to deploy infrastructure changes:~
-- **Planning phase**: ~:How changes are previewed before applying:~
-- **Apply process**: ~:How changes are applied:~
+- **Planning phase**: ~:How changes are previewed before applying (e.g., terraform plan, pulumi preview):~
+- **Apply process**: ~:How changes are applied (e.g., terraform apply, pulumi up):~
 - **Rollback strategy**: ~:How to rollback failed deployments:~
-
-### CI/CD Integration [cicd] [automation] [pipeline]
-~:If automated, describe the CI/CD pipeline:~
-- **CI/CD platform**: ~:e.g., GitHub Actions, GitLab CI, Jenkins, Azure DevOps:~
-- **Pipeline triggers**: ~:What triggers infrastructure deployments:~
-- **Approval process**: ~:Manual approvals required for deployment:~
-- **Automation level**: ~:What's automated vs manual:~
 
 ## Initialization and Setup [setup] [initialization] [prerequisites]
 
@@ -115,35 +105,6 @@
 - **Encryption**: ~:Encryption at rest and in transit:~
 - **Secret management**: ~:How secrets are stored and accessed:~
 - **IAM patterns**: ~:Role and policy patterns used:~
-
-### Compliance Requirements [compliance] [governance] [policies]
-~:If applicable, describe compliance considerations:~
-- **Compliance frameworks**: ~:e.g., SOC2, HIPAA, PCI-DSS, GDPR requirements:~
-- **Policy enforcement**: ~:Tools like Sentinel, OPA, Cloud Custodian:~
-- **Audit logging**: ~:How infrastructure changes are logged:~
-- **Tagging strategy**: ~:Required tags for compliance and cost tracking:~
-
-## Cost Management [cost] [budget] [optimization]
-~:Describe cost considerations and optimization:~
-- **Cost tracking**: ~:Tags or labels used for cost allocation:~
-- **Budget alerts**: ~:Budget monitoring and alerts:~
-- **Cost optimization**: ~:Patterns for optimizing costs:~
-- **Right-sizing**: ~:How resource sizes are determined:~
-
-## Monitoring and Observability [monitoring] [observability] [alerting]
-~:Describe monitoring setup for the infrastructure:~
-- **Monitoring tools**: ~:e.g., CloudWatch, Azure Monitor, Datadog, Prometheus:~
-- **Metrics collected**: ~:Key infrastructure metrics monitored:~
-- **Alerting**: ~:Alert definitions and notification channels:~
-- **Logging**: ~:Infrastructure and application log aggregation:~
-- **Dashboards**: ~:Monitoring dashboards defined:~
-
-## Disaster Recovery [disaster-recovery] [backup] [high-availability]
-~:Describe disaster recovery and high availability setup:~
-- **Backup strategy**: ~:What's backed up and how often:~
-- **Recovery procedures**: ~:Steps to recover from failures:~
-- **High availability**: ~:Multi-AZ, multi-region setup:~
-- **RTO/RPO targets**: ~:Recovery time and point objectives:~
 
 ## Testing and Validation [testing] [validation] [quality]
 
@@ -175,18 +136,18 @@
 - **External docs**: ~:Links to external documentation:~
 
 ## Troubleshooting [troubleshooting] [debugging] [issues]
-~:Common issues and how to resolve them:~
-- **Common errors**: ~:Frequent errors and their solutions:~
-- **Debug commands**: ~:Commands to diagnose issues:~
-- **State issues**: ~:How to handle state file problems:~
-- **Resource conflicts**: ~:How to resolve resource conflicts:~
+
+~:How to debug infrastructure code errors:~
+- **Validation commands**: ~:Commands to validate infrastructure code (e.g., terraform validate, pulumi preview):~
+- **Common code errors**: ~:Frequent syntax or configuration errors in code:~
+- **State issues**: ~:How to diagnose state file problems (e.g., terraform state list):~
+- **Resource conflicts**: ~:How to identify and resolve resource conflicts in code:~
 
 ## Maintenance [maintenance] [updates] [lifecycle]
-~:Describe maintenance procedures:~
-- **Update process**: ~:How to update provider/tool versions:~
-- **Dependency updates**: ~:How to update module dependencies:~
-- **Resource lifecycle**: ~:How resources are created, updated, destroyed:~
-- **Deprecation handling**: ~:How deprecated resources are managed:~
+
+~:Describe resource lifecycle patterns in code:~
+- **Resource lifecycle**: ~:How resources are created, updated, destroyed in code:~
+- **Deprecation handling**: ~:How deprecated resources/APIs are managed in code:~
 
 ## Restricted Actions [security] [restrictions] [policies]
 ~:Define actions that AI agents should NOT perform when working with this infrastructure:~
