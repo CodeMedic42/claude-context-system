@@ -14,7 +14,6 @@ function formatClaudeLog(logFilePath) {
   const lines = content.split('\n').filter((line) => line.trim());
 
   let output = '';
-  let lastToolName = null;
 
   lines.forEach((line) => {
     try {
@@ -36,7 +35,6 @@ function formatClaudeLog(logFilePath) {
         if (streamEvent.type === 'content_block_start') {
           const contentBlock = streamEvent.content_block;
           if (contentBlock.type === 'tool_use') {
-            lastToolName = contentBlock.name;
             output += `\n${chalk.cyan.bold(`🔧 Using tool: ${contentBlock.name}`)}\n`;
           }
         }
@@ -44,8 +42,8 @@ function formatClaudeLog(logFilePath) {
 
       // Complete assistant message with tool details
       if (event.type === 'assistant') {
-        const content = event.message.content || [];
-        content.forEach((block) => {
+        const messageContent = event.message.content || [];
+        messageContent.forEach((block) => {
           if (block.type === 'tool_use') {
             if (block.name === 'Bash' && block.input.command) {
               const desc = block.input.description || '';
@@ -77,26 +75,11 @@ function formatClaudeLog(logFilePath) {
 }
 
 /**
- * Format Copilot CLI log (simpler format, likely just stdout)
- */
-function formatCopilotLog(logFilePath) {
-  if (!fs.existsSync(logFilePath)) {
-    return chalk.red('Log file not found');
-  }
-
-  const content = fs.readFileSync(logFilePath, 'utf8');
-  return content || chalk.gray('No output captured');
-}
-
-/**
  * Format tool log based on tool type
  */
 function formatToolLog(toolId, logFilePath) {
   if (toolId === 'plugin') {
     return formatClaudeLog(logFilePath);
-  }
-  if (toolId === 'cli') {
-    return formatCopilotLog(logFilePath);
   }
   return chalk.red(`Unknown tool: ${toolId}`);
 }
@@ -104,5 +87,4 @@ function formatToolLog(toolId, logFilePath) {
 module.exports = {
   formatToolLog,
   formatClaudeLog,
-  formatCopilotLog,
 };

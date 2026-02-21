@@ -1,5 +1,7 @@
 # PROJECT.TEMPLATE.md MVP Implementation - COMPLETE ✅
 
+> **Historical Note (2026-02-20)**: The copilot-context-cli package was removed from this repository as it was not being used. This document is preserved for historical reference. The Claude Code plugin (`claude-context-plugin`) remains the primary implementation.
+
 ## Implementation Summary
 
 The PROJECT.TEMPLATE.md MVP feature has been successfully implemented and synced to both packages (Claude Code plugin and Copilot CLI).

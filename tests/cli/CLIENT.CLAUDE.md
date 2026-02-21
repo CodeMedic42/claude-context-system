@@ -2,7 +2,7 @@
 
 ## Client Overview [overview] [summary]
 
-Contest CLI is a command-line test runner for the Claude Context System. It provides an interactive interface for running Jest-based integration tests against the context generation workflow, supporting both the Claude Code plugin and Copilot CLI implementations across various test plans (small, medium, and large monorepos).
+Contest CLI is a command-line test runner for the Claude Context System. It provides an interactive interface for running Jest-based integration tests against the context generation workflow, supporting the Claude Code plugin across various test plans (small, medium, and large monorepos).
 
 ## Client Type [metadata] [platform]
 
@@ -55,27 +55,19 @@ pnpm contest --help
 
 - **Prerequisites**:
   - Node.js (compatible with repository requirements)
-  - For plugin tests: Claude Code with `claude-context-updater` plugin installed
-  - For CLI tests: `copilot-plugin` executable available
+  - Claude Code with `claude-context-updater` plugin installed
 
 ## Testing Commands [testing] [commands]
 
 ### Running Tests [testing] [execution]
 
 ```bash
-# Run all tests (all tools × all plans)
+# Run all tests (all plans)
 pnpm contest test
-
-# Run specific tool
-pnpm contest test --tools plugin
-pnpm contest test --tools cli
 
 # Run specific plans
 pnpm contest test --plans small-monorepo
 pnpm contest test --plans small-monorepo,medium-monorepo
-
-# Combine options
-pnpm contest test --tools plugin --plans small-monorepo
 
 # Stop after preparation (for debugging)
 pnpm contest test --prepare-only
@@ -149,8 +141,8 @@ pnpm contest clean --force
 ## Restricted Actions [security] [restrictions] [policies]
 
 - Do not run tests with `--force` flag in production environments without understanding cleanup implications
-- Do not modify test infrastructure without verifying compatibility with both plugin and CLI tool runners
-- Do not remove prerequisite checks for Claude plugin or Copilot CLI availability
+- Do not modify test infrastructure without verifying compatibility with the plugin tool runner
+- Do not remove prerequisite checks for Claude plugin availability
 
 # Agent File Maintenance [metadata] [maintenance]
 

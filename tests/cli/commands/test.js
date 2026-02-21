@@ -39,7 +39,7 @@ function validatePlans(plans, allPlans) {
  * Validate that tools are valid
  */
 function validateTools(tools) {
-  const validTools = ['plugin', 'cli'];
+  const validTools = ['plugin'];
   const invalid = tools.filter((t) => !validTools.includes(t));
   if (invalid.length > 0) {
     throw new Error(`Invalid tool(s): ${invalid.join(', ')}\nAvailable: ${validTools.join(', ')}`);
@@ -57,7 +57,7 @@ async function testCommand(options) {
     const allPlans = getAllTestPlans(plansDir);
 
     // Parse options
-    const tools = parseList(options.tools, ['plugin', 'cli']);
+    const tools = parseList(options.tools, ['plugin']);
     const plans = parseList(options.plans, allPlans);
 
     // Validate

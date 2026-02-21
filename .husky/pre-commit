@@ -7,7 +7,6 @@ pnpm run sync
 # Stage the synced files so they're included in this commit
 echo "📦 Staging synced files..."
 git add claude-context-plugin/commands/ claude-context-plugin/templates/
-git add copilot-context-cli/commands/ copilot-context-cli/templates/
 
 # Simple pre-commit check: Ensure plugin directories match shared directory
 
@@ -76,19 +75,13 @@ if ! check_directory_sync "shared/templates" "claude-context-plugin/templates"; 
     has_errors=1
 fi
 
-# Check copilot-context-cli/templates
-echo "Checking copilot-context-cli/templates..."
-if ! check_directory_sync "shared/templates" "copilot-context-cli/templates"; then
-    has_errors=1
-fi
-
 echo "ℹ️  Note: Command files are not checked as they are processed during sync"
 echo "   - Plugin commands: placeholders replaced at sync time"
 echo "   - CLI commands: placeholders replaced at runtime"
 
 if [ $has_errors -eq 1 ]; then
     echo ""
-    echo "❌ ERROR: The contents of claude-context-plugin and copilot-context-cli do not match the shared folder."
+    echo "❌ ERROR: The contents of claude-context-plugin do not match the shared folder."
     echo ""
     echo "Please run: pnpm run sync"
     echo ""

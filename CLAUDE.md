@@ -2,16 +2,15 @@
 
 ## Repository Overview [overview] [summary]
 
-The Claude Context System is an automated context file manager for AI assistants, providing tools to create and maintain `claude.md` documentation across monorepos and multi-project repositories. It supports both Claude Code (via plugin) and GitHub Copilot (via CLI tool), enabling AI assistants to understand complex codebases through structured, automatically-generated context files.
+The Claude Context System is an automated context file manager for AI assistants, providing tools to create and maintain `claude.md` documentation across monorepos and multi-project repositories. It supports Claude Code via plugin, enabling AI assistants to understand complex codebases through structured, automatically-generated context files.
 
 ## High-Level Repository Information [metadata] [technologies]
 
-- **Project Types**: Claude Code plugin, Node.js CLI tools
+- **Project Types**: Claude Code plugin, Node.js testing tools
 - **Languages**: JavaScript, Markdown
 - **Frameworks/Libraries**:
   - Claude Code plugin system (v2.1.0)
   - Lerna v9.0.3 for monorepo management
-  - Commander.js v14.0.2 for CLI tools
   - Jest v29.7.0 for testing
   - Inquirer v8.2.7 for interactive prompts
 
@@ -28,15 +27,10 @@ claude-context-system/
 │   ├── templates/             # Auto-synced template files
 │   ├── rules/                 # Language/framework rules
 │   └── scripts/               # Plugin utility scripts
-├── copilot-context-cli/       # GitHub Copilot CLI tool
-│   ├── bin/                   # CLI entry point
-│   ├── commands/              # Auto-synced command files
-│   ├── templates/             # Auto-synced template files
-│   └── rules/                 # Language/framework rules
 ├── plugin-setup/              # Installation and sync scripts
 ├── shared/                    # Source of truth for templates/commands
-│   ├── commands/              # Command definitions (synced to packages)
-│   └── templates/             # Context file templates (synced to packages)
+│   ├── commands/              # Command definitions (synced to plugin)
+│   └── templates/             # Context file templates (synced to plugin)
 ├── tests/                     # Test infrastructure
 │   ├── cli/                   # Contest CLI test runner
 │   ├── jest-common/           # Shared Jest configuration
@@ -49,17 +43,15 @@ claude-context-system/
 
 ## Code Organization Patterns [architecture] [patterns]
 
-- **Architecture**: Lerna-managed monorepo with multiple independent packages (plugin, CLI, test infrastructure)
+- **Architecture**: Lerna-managed monorepo with plugin and test infrastructure
 - **Project organization**:
   - `/claude-context-plugin/` - Claude Code plugin implementation
-  - `/copilot-context-cli/` - GitHub Copilot CLI tool implementation
-  - `/shared/` - Source of truth for commands and templates, synced to packages
+  - `/shared/` - Source of truth for commands and templates, synced to plugin
   - `/tests/` - Comprehensive test infrastructure with CLI runner
   - `/plugin-setup/` - Installation and synchronization scripts
 - **Common patterns**:
-  - Auto-sync workflow: Commands and templates are authored in `/shared/` and automatically synced to packages via pre-commit hooks
+  - Auto-sync workflow: Commands and templates are authored in `/shared/` and automatically synced to plugin via pre-commit hooks
   - Template-based generation: All context files generated from markdown templates with instruction placeholders
-  - Dual-tool support: Same functionality available for both Claude Code and GitHub Copilot
 - **Naming conventions**:
   - Commands use kebab-case with `ctx-` prefix (`ctx-prepare`, `ctx-execute`, `ctx-rule`)
   - Templates use `{TYPE}.TEMPLATE.md` format
@@ -68,7 +60,6 @@ claude-context-system/
 
 ## User Interaction Clients [clients] [frontend] [ui]
 
-- **Copilot Context CLI**: @file ./copilot-context-cli/CLIENT.CLAUDE.md
 - **Contest CLI**: @file ./tests/cli/CLIENT.CLAUDE.md
 
 ## Libraries and Plugins [libraries] [packages] [reusable]
@@ -79,10 +70,9 @@ claude-context-system/
 
 ### Prerequisites [prerequisites] [requirements]
 
-- **Node.js**: v14.0.0 or higher (compatible with Claude Code runtime and GitHub Copilot CLI)
+- **Node.js**: v14.0.0 or higher (compatible with Claude Code runtime)
 - **pnpm**: Package manager for monorepo dependency management
 - **Claude Code**: Required for using the plugin (`claude-context-plugin`)
-- **GitHub Copilot CLI**: Required for using the Copilot CLI tool (`@github/copilot` package installed globally)
 
 ### System Configuration [configuration] [environment] [setup]
 
@@ -110,15 +100,10 @@ pnpm run plugin:install
 # Verify plugin installation
 claude plugin list
 # Should show: claude-context-updater
-
-# For Copilot CLI (optional - if using Copilot)
-# Ensure GitHub Copilot CLI is installed globally
-npm install -g @github/copilot
 ```
 
-### Using the Tools
+### Using the Plugin
 
-**Claude Code Plugin:**
 ```bash
 # Navigate to any repository
 cd /path/to/your/repo
@@ -130,16 +115,6 @@ cd /path/to/your/repo
 /ctx-execute --max-projects 10
 ```
 
-**Copilot CLI:**
-```bash
-# Navigate to any repository
-cd /path/to/your/repo
-
-# Use via copilot-plugin command
-copilot-plugin ctx-prepare
-copilot-plugin ctx-execute --max-projects 10
-```
-
 ## Repository Verification [testing] [verification] [quality]
 
 ### Unit Tests [testing] [unit-tests]
@@ -148,16 +123,9 @@ copilot-plugin ctx-execute --max-projects 10
 # Run integration tests using Contest CLI
 pnpm contest test
 
-# Run specific tool tests
-pnpm contest test --tools plugin
-pnpm contest test --tools cli
-
 # Run specific test plans
 pnpm contest test --plans small-monorepo
 pnpm contest test --plans medium-monorepo,large-monorepo
-
-# Combine filters
-pnpm contest test --tools plugin --plans small-monorepo
 ```
 
 ### Linting and Code Style [linting] [code-quality] [style]
@@ -192,5 +160,5 @@ No LLM/AI/Agent may make changes to this file outside of the claude-context-syst
 - Last commit SHA built from: 6684ab3d1d822df39e33e648286066130a30f747
 - Template Version: 2.1.0
 - Last generated by: /ctx-execute command
-- Total projects: 3 (1 library, 2 clients)
+- Total projects: 2 (1 library, 1 client)
 - Generation status: Complete
