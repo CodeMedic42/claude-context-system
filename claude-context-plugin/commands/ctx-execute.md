@@ -83,7 +83,7 @@ Example:
 **Load required files:**
 
 1. **Load CLAUDE.TEMPLATE.md:**
-   - Path: `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/CLAUDE.TEMPLATE.md`
+   - Path: `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/CLAUDE.TEMPLATE.md`
    - This is the main template for the repository-level context file
    - Load this upfront as it's always needed
    - Parse instruction placeholders (~:...:~) to understand topics
@@ -93,13 +93,13 @@ Example:
    - Inform the user:
      ```
      ❌ ERROR: Template file not accessible.
-     The CLAUDE.TEMPLATE.md file could not be loaded from /Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates.
+     The CLAUDE.TEMPLATE.md file could not be loaded from https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates.
      ```
    - DO NOT PROCEED without the template
    - EXIT IMMEDIATELY without creating any files
 
 2. **Load PROJECT.TEMPLATE.md:**
-   - Path: `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/PROJECT.TEMPLATE.md`
+   - Path: `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/PROJECT.TEMPLATE.md`
    - This is the template for project-level context files
    - Load this upfront as it's needed for ALL projects
    - Parse instruction placeholders (~:...:~) to understand topics
@@ -109,7 +109,7 @@ Example:
    - Inform the user:
      ```
      ❌ ERROR: Template file not accessible.
-     The PROJECT.TEMPLATE.md file could not be loaded from /Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates.
+     The PROJECT.TEMPLATE.md file could not be loaded from https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates.
      ```
    - DO NOT PROCEED without the template
    - EXIT IMMEDIATELY without creating any files
@@ -127,11 +127,11 @@ Example:
 **CRITICAL: Do NOT load type-specific templates yet**
 
 **DO NOT load these files in Phase 1:**
-- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/SERVICE.TEMPLATE.md`
-- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/CLIENT.TEMPLATE.md`
-- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/DATABASE.TEMPLATE.md`
-- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/LIBRARY.TEMPLATE.md`
-- ❌ DO NOT load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/IAC.TEMPLATE.md`
+- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/SERVICE.TEMPLATE.md`
+- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/CLIENT.TEMPLATE.md`
+- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/DATABASE.TEMPLATE.md`
+- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/LIBRARY.TEMPLATE.md`
+- ❌ DO NOT load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/IAC.TEMPLATE.md`
 
 **Why:** Loading all type-specific templates upfront wastes ~40,000-50,000 tokens. These templates will be loaded on-demand in Step 2.4 when processing projects of each specific type.
 
@@ -391,11 +391,11 @@ IF project.status is "stable":
 IF project.status is "new":
   - FOR EACH type determined in Step 2.3:
     - **Load template for this TYPE if not already loaded:**
-      - SERVICE → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/SERVICE.TEMPLATE.md`
-      - CLIENT → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/CLIENT.TEMPLATE.md`
-      - DATABASE → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/DATABASE.TEMPLATE.md`
-      - LIBRARY → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/LIBRARY.TEMPLATE.md`
-      - IAC → load `/Users/miclec/source/github.com/codemedic42/claude-context-system/claude-context-plugin/templates/IAC.TEMPLATE.md`
+      - SERVICE → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/SERVICE.TEMPLATE.md`
+      - CLIENT → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/CLIENT.TEMPLATE.md`
+      - DATABASE → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/DATABASE.TEMPLATE.md`
+      - LIBRARY → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/LIBRARY.TEMPLATE.md`
+      - IAC → load `https://raw.githubusercontent.com/CodeMedic42/claude-context-system/main/shared/templates/IAC.TEMPLATE.md`
       - If already loaded in memory, reuse it
     - **Create new context file: `{project.path}/{TYPE}.CLAUDE.md`**
       - **CRITICAL**: The filename MUST be `{TYPE}.CLAUDE.md` where TYPE is SERVICE, CLIENT, DATABASE, LIBRARY, or IAC

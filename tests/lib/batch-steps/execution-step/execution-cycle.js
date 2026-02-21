@@ -90,6 +90,9 @@ class ExecutionCycle {
         cycleNumber: this.cycleNumber,
       });
 
+      // Save snapshot of progress file before executing
+      this.saveProgressSnapshot();
+
       // Execute the tool
       const {
         success,
@@ -162,6 +165,32 @@ class ExecutionCycle {
       logFilePath: this.logFilePath,
       error: this.error,
     };
+  }
+
+  saveProgressSnapshot() {
+    const snapshotPath = path.join(
+      this.batch.batchDir,
+      `progress-snapshot-cycle-${this.cycleNumber}.json`,
+    );
+
+    const progressFilePath = path.join(
+      this.batch.fixtureDir,
+      'CLAUDE_CONTEXT_PROGRESS.json',
+    );
+
+    // Copy progress file to snapshot
+    if (fs.existsSync(progressFilePath)) {
+      const progressContent = fs.readFileSync(progressFilePath, 'utf8');
+      fs.writeFileSync(snapshotPath, progressContent);
+      console.log(`  ✓ Saved progress snapshot for cycle ${this.cycleNumber}`);
+    }
+  }
+
+  getSnapshotPath() {
+    return path.join(
+      this.batch.batchDir,
+      `progress-snapshot-cycle-${this.cycleNumber}.json`,
+    );
   }
 }
 

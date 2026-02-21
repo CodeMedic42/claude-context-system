@@ -22,26 +22,27 @@ describe('angular-components:context', () => {
   const e2eAppData = contextData.getProjectContextData('./src/e2e-app/CLIENT.CLAUDE.md');
   const devAppData = contextData.getProjectContextData('./src/dev-app/CLIENT.CLAUDE.md');
   const docsData = contextData.getProjectContextData('./docs/CLIENT.CLAUDE.md');
-  const integrationData = contextData.getProjectContextData('./integration/CLIENT.CLAUDE.md');
+  const integrationData = contextData.getProjectContextData('./integration/LIBRARY.CLAUDE.md');
 
   // Test CLAUDE.md
   testClaudeFile(contextData, {
-    techContextFileCount: 14,
+    techContextFileCount: 25,
+    projectContextFileCount: 25,
   });
 
-  testLibraryFile(cdkData);
-  testLibraryFile(ariaData);
-  testLibraryFile(materialData);
-  testLibraryFile(materialExperimentalData);
-  testLibraryFile(cdkExperimentalData);
-  testLibraryFile(googleMapsData);
-  testLibraryFile(materialDateFnsAdapterData);
-  testLibraryFile(materialLuxonAdapterData);
-  testLibraryFile(materialMomentAdapterData);
-  testLibraryFile(componentsExamplesData);
+  testLibraryFile(cdkData, '@angular/cdk');
+  testLibraryFile(ariaData, '@angular/aria');
+  testLibraryFile(materialData, '@angular/material');
+  testLibraryFile(materialExperimentalData, '@angular/material-experimental');
+  testLibraryFile(cdkExperimentalData, '@angular/cdk-experimental');
+  testLibraryFile(googleMapsData, '@angular/google-maps');
+  testLibraryFile(materialDateFnsAdapterData, '@angular/material-date-fns-adapter');
+  testLibraryFile(materialLuxonAdapterData, '@angular/material-luxon-adapter');
+  testLibraryFile(materialMomentAdapterData, '@angular/material-moment-adapter');
+  testLibraryFile(componentsExamplesData, '@angular/components-examples');
+  testLibraryFile(integrationData, 'Integration Tests');
 
-  testClientFile(e2eAppData);
-  testClientFile(devAppData);
-  testClientFile(docsData);
-  testClientFile(integrationData);
+  testClientFile(e2eAppData, 'End-to-End Test Application');
+  testClientFile(devAppData, 'Development Demo Application');
+  testClientFile(docsData, 'Material Angular Documentation Website');
 });

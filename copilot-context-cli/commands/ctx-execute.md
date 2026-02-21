@@ -320,38 +320,29 @@ IF project.status is "new":
   - **Extract and populate project metadata:**
     - **Project Name:** From manifest (package.json name, Cargo.toml name, etc.) or directory name
     - **Project Path:** Relative path from repository root (e.g., "./apps/user-service")
-    - **Version:** From manifest.version field
-    - **Status:** Detect using heuristics:
-      - Check for "deprecated" in README, package.json keywords
-      - Recent commits (< 1 month) = "active"
-      - Recent commits (< 6 months) = "stable"
-      - Older = "maintenance"
-      - Default: "active"
-    - **License:** From manifest.license field
     - **Project Overview:** From manifest.description or README summary
-  - **Project Types:** List all types determined in Step 2.3 (e.g., ["SERVICE", "DATABASE"])
-  - **Technical Documentation links:**
-    - For each type, add @file reference to {TYPE}.CLAUDE.md
-    - Example: `- **Service Implementation**: @file ./SERVICE.CLAUDE.md`
+  - **Project Types & Technical Documentation:** Combine type description with documentation link
+    - For each type determined in Step 2.3, create one line with: type name, brief description, and @file link
+    - Format: `- **TYPE**: Brief description → @file ./TYPE.CLAUDE.md`
+    - Example: `- **SERVICE**: Backend REST API for user authentication → @file ./SERVICE.CLAUDE.md`
   - **Documentation Links:**
     - Check for README.md → add as `./README.md`
     - Check for CHANGELOG.md → add if exists
-    - Check for docs/ directory → add if exists
+    - If neither README nor CHANGELOG found, remove "Project Documentation" subsection entirely
+    - Check for docs/ directory → add to "Additional Documentation" if exists
     - Parse README for additional doc links (architecture docs, API docs, etc.)
-  - **Ownership & Team:**
-    - Parse CODEOWNERS file (if exists) for this project path
-    - Extract maintainers from package.json maintainers/contributors fields
-    - Extract contact info from package.json (bugs.url, repository.url, homepage)
+    - If no documentation found at all, remove entire "Documentation Links" section
   - **Project Relationships:**
     - **Depends On:** Analyze manifest dependencies, match to other projects in repo
     - **Used By:** Find projects that depend on this one
     - **Related:** Detect sibling/related projects (same parent dir, similar naming)
     - For each relationship, add @file reference to their PROJECT.CLAUDE.md
-  - **Environments:**
-    - Parse .env.example, .env.sample for PORT or URLs
-    - Parse config files (config.js, config.json) for environment URLs
-    - Parse README for deployment URLs or badges
-    - Only include this section if URLs are detected, otherwise remove it
+  - **Development Environment:**
+    - Parse .env.example, .env.sample for PORT or local development URLs
+    - Parse config files (config.js, config.json) for development URLs
+    - Only include development/local URLs (e.g., http://localhost:3000)
+    - Remove production/staging URLs (operational, not needed for coding)
+    - Only include this section if development URL is detected, otherwise remove it
   - Include metadata:
     - Revision Date: current timestamp
     - Last commit SHA built from: current HEAD commit (40-character full SHA)

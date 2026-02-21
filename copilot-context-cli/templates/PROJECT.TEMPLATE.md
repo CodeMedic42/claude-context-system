@@ -4,57 +4,36 @@
 ~:Provide a clear description of what this project does, its primary purpose, and its role in the overall system:~
 
 ## Project Metadata [metadata] [identity]
-~:Basic project identification information:~
+~:Basic project identification for navigation:~
 - **Project Name**: ~:Official project name from manifest (package.json, Cargo.toml, etc.):~
 - **Project Path**: ~:Relative path from repository root:~
-- **Version**: ~:Current version from manifest:~
-- **Status**: ~:Project status: active, stable, maintenance, deprecated, or archived:~
-- **License**: ~:License from manifest (e.g., MIT, Apache-2.0, proprietary):~
 
-## Project Types [types] [classification]
-~:List the types this project implements. A project can have multiple types:~
+## Project Types & Technical Documentation [types] [technical] [documentation]
 
-~:For each type, provide a brief description::~
-- **~:TYPE:~**: ~:Brief description of this aspect of the project:~
+~:List each type this project implements along with a link to its technical documentation:~
+
+~:Format for each type::~
+- **~:TYPE:~**: ~:Brief description:~ → @file ./~:TYPE:~.CLAUDE.md
 
 ~:Examples::~
-- **SERVICE**: Backend REST API for user authentication
-- **DATABASE**: PostgreSQL schema definitions and migrations
-- **CLIENT**: Web-based admin dashboard
-- **LIBRARY**: Shared utility functions for date manipulation
-- **IAC**: Terraform configuration for AWS infrastructure
+- **SERVICE**: Backend REST API for user authentication → @file ./SERVICE.CLAUDE.md
+- **DATABASE**: PostgreSQL schema definitions and migrations → @file ./DATABASE.CLAUDE.md
+- **CLIENT**: Web-based admin dashboard → @file ./CLIENT.CLAUDE.md
+- **LIBRARY**: Shared utility functions for date manipulation → @file ./LIBRARY.CLAUDE.md
+- **IAC**: Terraform configuration for AWS infrastructure → @file ./IAC.CLAUDE.md
 
-~:Only list types that this project actually implements:~
-
-## Technical Documentation [technical] [implementation]
-
-~:Link to the type-specific CLAUDE files for detailed technical implementation:~
-
-~:For SERVICE projects, include::~
-- **Service Implementation**: @file ./SERVICE.CLAUDE.md
-
-~:For CLIENT projects, include::~
-- **Client Implementation**: @file ./CLIENT.CLAUDE.md
-
-~:For LIBRARY projects, include::~
-- **Library Implementation**: @file ./LIBRARY.CLAUDE.md
-
-~:For DATABASE projects, include::~
-- **Database Schema**: @file ./DATABASE.CLAUDE.md
-
-~:For IAC projects, include::~
-- **Infrastructure Configuration**: @file ./IAC.CLAUDE.md
-
-~:Only include @file references for types this project actually implements. Remove unused lines.:~
+~:Only include types that this project actually implements:~
 
 ## Documentation Links [documentation] [external] [reference]
 
 ~:Links to documentation files and resources for this project:~
 
 ### Project Documentation [documentation] [project]
-~:Core project documentation::~
+~:Core project documentation. Remove this entire subsection if no README or CHANGELOG found::~
 - **README**: ~:Path to README.md (e.g., ./README.md):~
 - **Changelog**: ~:Path to CHANGELOG.md if it exists:~
+
+~:If both README and CHANGELOG are missing, remove the "Project Documentation" subsection entirely:~
 
 ### Additional Documentation [documentation] [additional]
 ~:Additional documentation resources if they exist. Remove this subsection if no additional docs found::~
@@ -64,22 +43,7 @@
 - **Developer Guides**: ~:Links to developer setup, contribution guides:~
 
 ~:Only include documentation links that can be automatically detected (README, CHANGELOG, docs/ directories, etc.). Remove lines for documentation that doesn't exist.:~
-
-## Ownership & Team [ownership] [team] [contacts]
-
-~:Information about who owns and maintains this project:~
-
-### Team Information [team] [ownership]
-~:Team and ownership details::~
-- **Owning Team**: ~:Team name from CODEOWNERS or package.json:~
-- **Primary Maintainers**: ~:Names, emails, or GitHub handles from package.json maintainers/contributors:~
-
-### Contact Information [contact] [communication]
-~:How to contact the team::~
-- **Repository Issues**: ~:Link to GitHub/GitLab issues:~
-- **Contact Method**: ~:Extracted from package.json homepage, bugs.url, or repository.url:~
-
-~:Only include information that can be automatically extracted from manifest files, CODEOWNERS, or git configuration. Remove lines that cannot be auto-populated.:~
+~:If no documentation is found at all, remove the entire "Documentation Links" section.:~
 
 ## Project Relationships [relationships] [dependencies]
 
@@ -106,23 +70,21 @@
 
 ~:Remove this subsection if there are no related projects:~
 
-## Environments [environments] [deployment] [urls]
+## Development Environment [development] [local] [testing]
 
-~:Where this project runs or can be accessed:~
+~:Local development URL for testing (if detected):~
+- **Development URL**: ~:Local development URL (e.g., http://localhost:3000):~
 
-### Environment URLs [urls] [endpoints]
-~:Detected URLs from configuration files, README, or code::~
-- **Production**: ~:Production URL if detected:~
-- **Staging**: ~:Staging URL if detected:~
-- **Development**: ~:Local development URL (e.g., http://localhost:3000):~
-
-~:Only include environment URLs that can be automatically detected from config files, .env.example files, README badges, or code. Remove this entire section if no URLs are detected.:~
+~:Only include if a development URL can be automatically detected from .env.example, config files, or README. Remove this entire section if no development URL is detected.:~
 
 ## Restricted Actions [security] [restrictions] [policies]
 
 ~:Define actions that AI agents should NOT perform in this project:~
 
-~:Leave blank initially - user should review and populate based on their specific requirements:~
+~:If no restrictions are defined, include this note::~
+(No restrictions defined yet. You can add project-specific restrictions here, such as: "Do not modify database schemas without approval" or "Do not commit directly to main branch")
+
+~:If restrictions exist, replace the note with the actual restrictions:~
 
 # Agent File Maintenance [metadata] [maintenance]
 

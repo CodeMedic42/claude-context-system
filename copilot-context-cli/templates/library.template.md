@@ -1,4 +1,4 @@
-# Library Context: ~:Library Name:~
+# Library Context: ~:Project Name:~
 
 ## Template Usage Guidelines [guidelines] [instructions]
 
@@ -69,19 +69,19 @@ dotnet add package MyLibrary
 3. ~:Feature 3:~: ~:Brief description:~
 
 ### Public API [api] [exports] [interface]
-~:Describe the public API surface - EXCLUDE subsections with no exports:~
-- **Exported plugins**: ~:List plugins/middleware and their purposes - DELETE this line if none:~
-  - `~:PluginName:~`: ~:Brief purpose:~
+~:ALWAYS include this subsection. Describe the public API surface. For each export type below, DELETE the bullet point if that type has no exports. If NO exports at all, replace the bullet list with a note like "No public exports. This library is for internal use only." or "No public exports. This is a testing utility library.":~
 - **Exported functions**: ~:List key exported functions and their purposes - DELETE this line if none:~
   - `~:functionName:~`: ~:Brief purpose:~
 - **Exported classes**: ~:List key classes/types - DELETE this line if none:~
   - `~:ClassName:~`: ~:Brief purpose:~
-- **Exported constants**: ~:List key constants or enums - DELETE this line if none:~
-  - `~:CONSTANT_NAME:~`: ~:Brief purpose:~
 - **Exported types**: ~:List key TypeScript types/interfaces if applicable - DELETE this line if none:~
   - `~:TypeName:~`: ~:Brief purpose:~
+- **Exported constants**: ~:List key constants or enums - DELETE this line if none:~
+  - `~:CONSTANT_NAME:~`: ~:Brief purpose:~
 - **Exported utilities**: ~:List utility objects or helper collections - DELETE this line if none:~
   - `~:UtilObject:~`: ~:Brief purpose:~
+- **Exported plugins**: ~:List plugins/middleware and their purposes - DELETE this line if none:~
+  - `~:PluginName:~`: ~:Brief purpose:~
 
 ## Generated/Registered APIs [api] [generated] [routes]
 ~:EXCLUDE THIS ENTIRE SECTION if the library doesn't automatically create routes, services, or APIs when initialized:~
@@ -489,11 +489,6 @@ Another example showing:
 ~:Patterns to ensure safe usage:~
 - ~:Pattern 1:~
 - ~:Pattern 2:~
-
-## Maintenance Status [maintenance] [status] [support]
-~:Current maintenance status:~
-- **Status**: ~:e.g., "Actively maintained", "Maintenance mode", "Stable", "Deprecated":~
-- **Maintainers**: ~:Who maintains this library - DELETE this line if not public information:~
 
 ## Restricted Actions [security] [restrictions] [policies]
 ~:Define actions that AI agents should NOT perform when working with this library:~

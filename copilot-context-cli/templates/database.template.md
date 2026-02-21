@@ -1,4 +1,4 @@
-# Database Context: ~:Database Name:~
+# Database Context: ~:Project Name:~
 
 ## Database Overview [overview] [summary]
 ~:Provide a clear description of what this database stores, its primary purpose, and its role in the system:~
@@ -6,8 +6,6 @@
 ## Database Type and Technology [metadata] [technology]
 - **Database Type**: ~:e.g., "Relational (SQL)", "Document", "Key-Value", "Graph", "Time-series":~
 - **Database System**: ~:e.g., "PostgreSQL", "MongoDB", "Redis", "Cassandra", "Neo4j":~
-- **Version**: ~:Version number:~
-- **Hosting**: ~:e.g., "Self-hosted", "AWS RDS", "MongoDB Atlas", "Azure SQL":~
 
 ## Connection Information [connection] [access] [configuration]
 
@@ -164,50 +162,14 @@
 - **Test data generation**: ~:How test data is generated:~
 - **Test database**: ~:Separate test database strategy:~
 
-## Backup and Recovery [backup] [recovery] [disaster-recovery]
+## Security and Sensitive Data [security] [data-privacy] [pii]
 
-### Backup Strategy [backup] [strategy]
-~:Describe backup approach:~
-- **Backup frequency**: ~:How often backups occur:~
-- **Backup method**: ~:e.g., "Automated snapshots", "pg_dump", "mongodump":~
-- **Backup location**: ~:Where backups are stored:~
-- **Retention policy**: ~:How long backups are kept:~
-
-### Recovery Process [recovery] [restore]
-~:Steps to recover from backup:~
-1. ~:Step 1:~
-2. ~:Step 2:~
-3. ~:Step 3:~
-
-### Point-in-Time Recovery [recovery] [pitr]
-~:If applicable, describe PITR capabilities:~
-- **PITR availability**: ~:Whether PITR is available:~
-- **Recovery granularity**: ~:How precise recovery can be:~
-
-## Security and Access Control [security] [access-control] [encryption]
-
-### Authentication [security] [authentication]
-~:How users authenticate to the database:~
-- **Authentication method**: ~:e.g., "Password", "Certificate", "IAM":~
-- **User management**: ~:How database users are managed:~
-
-### Authorization [security] [authorization] [permissions]
-~:How permissions are managed:~
-- **Role-based access**: ~:If roles are used:~
-- **Permissions model**: ~:How permissions are structured:~
-- **Least privilege**: ~:How least privilege is enforced:~
-
-### Data Encryption [security] [encryption]
-~:Describe encryption approach:~
-- **Encryption at rest**: ~:Whether/how data is encrypted at rest:~
-- **Encryption in transit**: ~:SSL/TLS configuration:~
+~:Identify sensitive data that requires special handling when writing queries or code:~
+- **PII fields**: ~:List fields containing personal information (e.g., email, name, SSN):~
+- **Protected data**: ~:Other sensitive data types (e.g., passwords, API keys, financial data):~
 - **Encrypted columns**: ~:If specific columns are encrypted:~
 
-### Sensitive Data [security] [data-privacy] [pii]
-~:Define sensitive data in this database:~
-- **PII fields**: ~:List fields containing personal information:~
-- **Protected data**: ~:Other sensitive data types:~
-- **Data masking**: ~:Whether/how sensitive data is masked:~
+~:This helps LLM avoid logging, displaying, or mishandling sensitive data in code:~
 
 ## Data Integrity and Validation [data-integrity] [validation] [constraints]
 
@@ -236,79 +198,13 @@
 ~:If applicable, list important triggers:~
 - **~:Trigger Name:~**: ~:What event triggers it and what it does:~
 
-## Monitoring and Maintenance [monitoring] [maintenance] [operations]
+## Troubleshooting [troubleshooting] [debugging] [queries]
 
-### Monitoring [monitoring] [observability]
-~:How database health is monitored:~
-- **Monitoring tools**: ~:e.g., "CloudWatch", "Datadog", "pgAdmin":~
-- **Key metrics**: ~:Important metrics to watch:~
-- **Alerting**: ~:What alerts are configured:~
-
-### Regular Maintenance [maintenance] [operations]
-~:Routine maintenance tasks:~
-- **Vacuum/Optimize**: ~:If applicable, optimization schedule:~
-- **Index maintenance**: ~:Index rebuilding or optimization:~
-- **Statistics updates**: ~:Keeping query planner statistics current:~
-
-## Scaling and Performance [scaling] [performance] [capacity]
-
-### Scaling Strategy [scaling] [strategy]
-~:Describe scaling approach:~
-- **Vertical scaling**: ~:Instance size considerations:~
-- **Horizontal scaling**: ~:Read replicas, sharding, etc.:~
-- **Caching**: ~:Database-level caching strategies:~
-
-### Performance Tuning [performance] [tuning] [optimization]
-~:Performance tuning considerations:~
-- **Configuration**: ~:Important configuration parameters:~
-- **Query optimization**: ~:Ongoing optimization approach:~
-- **Resource limits**: ~:Connection limits, memory limits, etc.:~
-
-## Data Lifecycle [data-lifecycle] [retention] [archival]
-
-### Data Retention [retention] [policy]
-~:Describe data retention policies:~
-- **Retention periods**: ~:How long different data types are kept:~
-- **Archival strategy**: ~:How old data is archived:~
-- **Data deletion**: ~:How data is permanently deleted when required:~
-
-### Data Purging [purging] [cleanup]
-~:If applicable, describe data purging:~
-- **Purge strategy**: ~:How old data is purged:~
-- **Purge schedule**: ~:When purging occurs:~
-- **Purge scripts**: ~:Where purge scripts are located:~
-
-## Environment-Specific Configuration [environment] [configuration] [deployment]
-
-### Development Environment [environment] [development]
-~:Development database configuration:~
-- **Database location**: ~:Where dev database runs:~
-- **Seed data**: ~:What seed data is available:~
-- **Access**: ~:How developers access dev database:~
-
-### Staging Environment [environment] [staging]
-~:Staging database configuration:~
-- **Database location**: ~:Where staging database runs:~
-- **Data sync**: ~:How staging data is kept current:~
-
-### Production Environment [environment] [production]
-~:Production database configuration:~
-- **Database location**: ~:Where production database runs:~
-- **High availability**: ~:HA configuration:~
-- **Disaster recovery**: ~:DR setup:~
-
-## Troubleshooting [troubleshooting] [debugging] [issues]
-
-### Common Issues [troubleshooting] [issues]
-~:Document common issues and solutions:~
-- **Issue 1**: ~:Description and solution:~
-- **Issue 2**: ~:Description and solution:~
-
-### Debugging Queries [debugging] [queries] [performance]
-~:How to debug problematic queries:~
+~:How to debug problematic queries and common database code issues:~
 - **Query logging**: ~:How to enable query logging:~
-- **Explain plans**: ~:How to analyze query plans:~
+- **Explain plans**: ~:How to analyze query plans (e.g., EXPLAIN, EXPLAIN ANALYZE):~
 - **Performance profiling**: ~:Tools for profiling queries:~
+- **Common code errors**: ~:Common mistakes when writing queries or using ORM:~
 
 ## Documentation and Resources [documentation] [reference] [diagrams]
 
